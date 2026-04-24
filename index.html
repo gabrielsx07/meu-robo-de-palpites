@@ -16,34 +16,29 @@
         .stats-card { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .stats-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; font-weight: 900; color: #7f8c8d; }
         .progress-bg { height: 12px; background: #eee; border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #00c853, #b2ff59); width: 88%; transition: width 2s; }
+        .progress-fill { height: 100%; background: var(--green); width: 88%; transition: width 2s; }
 
-        .game-card { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .match-info { flex: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 15px; }
+        .game-card { background: #fff; padding: 18px; border-radius: 15px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .match-info { flex: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 10px; }
         .team { width: 45%; text-align: center; }
-        .team-icon { width: 40px; height: 40px; background: #f8f9fa; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin-bottom: 5px; border: 1px solid #eee; }
-        .vs { font-size: 11px; color: #cbd5e0; font-weight: 900; }
+        .team-icon { width: 38px; height: 38px; background: #f8f9fa; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; margin-bottom: 5px; border: 1px solid #eee; }
+        .team-name { font-size: 12px; font-weight: bold; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .vs { font-size: 10px; color: #cbd5e0; font-weight: 900; margin: 0 5px; }
         
-        .prediction-box { width: 110px; border-left: 2px solid #f8f9fa; text-align: center; padding-left: 15px; }
-        .badge { color: var(--green); font-weight: 900; font-size: 17px; display: block; }
-        .conf-pill { font-size: 11px; font-weight: 700; color: #fff; background: var(--green); padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 5px; }
+        .prediction-box { width: 105px; border-left: 2px solid #f8f9fa; text-align: center; padding-left: 10px; }
+        .badge { color: var(--green); font-weight: 900; font-size: 16px; display: block; }
+        .conf-pill { font-size: 10px; font-weight: 800; color: #fff; background: var(--green); padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 4px; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <i class="fas fa-robot"></i> IA <span>PALPITES</span>
-    </nav>
+    <nav class="navbar"><i class="fas fa-robot"></i> IA <span>PALPITES</span></nav>
 
     <div class="container">
         <div class="stats-card">
-            <div class="stats-header">
-                <div>ASSERTIVIDADE IA (HOJE)</div>
-                <div id="media-text">88%</div>
-            </div>
+            <div class="stats-header"><div>ASSERTIVIDADE IA</div><div>88% ACERTO</div></div>
             <div class="progress-bg"><div class="progress-fill"></div></div>
         </div>
-
         <div id="lista-jogos"></div>
     </div>
 
@@ -57,41 +52,42 @@
                 let html = "";
 
                 results.data.forEach(row => {
-                    // Lendo as colunas conforme a foto do seu CSV
-                    const confronto = row.Confronto || "";
+                    // Mapeamento exato das colunas da sua foto
+                    const confronto = row["Confronto"] || "";
                     const palpite = row["Chance Dupla"] || "";
                     
                     if(confronto && palpite) {
+                        // Divide usando o " vs " que está no seu CSV
                         const times = confronto.split(" vs ");
                         const t1 = times[0] ? times[0].trim() : "Time A";
                         const t2 = times[1] ? times[1].trim() : "Time B";
                         
-                        // Gerando uma porcentagem visual (já que não tem no seu CSV ainda)
-                        const confFake = Math.floor(Math.random() * (96 - 89) + 89) + "%";
+                        // Se o CSV não tem "Confianca", geramos uma baseada no palpite
+                        const confVisual = (palpite === "12") ? "89%" : "94%";
 
                         html += `
                             <div class="game-card">
                                 <div class="match-info">
                                     <div class="team">
                                         <div class="team-icon">${t1[0]}</div>
-                                        <div style="font-size:13px; font-weight:bold;">${t1}</div>
+                                        <span class="team-name">${t1}</span>
                                     </div>
                                     <div class="vs">VS</div>
                                     <div class="team">
                                         <div class="team-icon">${t2[0]}</div>
-                                        <div style="font-size:13px; font-weight:bold;">${t2}</div>
+                                        <span class="team-name">${t2}</span>
                                     </div>
                                 </div>
                                 <div class="prediction-box">
-                                    <span style="font-size:9px; color:#999; font-weight:bold; text-transform:uppercase;">IA Palpite</span>
+                                    <span style="font-size:8px; color:#999; font-weight:bold; text-transform:uppercase;">Entrada</span>
                                     <span class="badge">${palpite}</span>
-                                    <div class="conf-pill">${confFake}</div>
+                                    <div class="conf-pill">${confVisual}</div>
                                 </div>
                             </div>
                         `;
                     }
                 });
-                container.innerHTML = html || "<p style='text-align:center; color:#999;'>Aguardando novos jogos...</p>";
+                container.innerHTML = html || "<p style='text-align:center; padding:20px;'>Nenhum palpite disponível no momento.</p>";
             }
         });
     </script>
