@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Palpites - Grandes Ligas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; text-align: center; }
+        table { margin: 20px auto; border-collapse: collapse; width: 90%; max-width: 800px; background: #1e1e1e; }
+        th, td { padding: 12px; border: 1px solid #333; text-align: left; }
+        th { background: #00ff88; color: black; }
+        tr:nth-child(even) { background: #252525; }
+        .logo { font-size: 24px; font-weight: bold; color: #00ff88; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="logo">⚽ ROBÔ DE PALPITES IA</div>
+    <p>Atualizado automaticamente todos os dias</p>
+    <div id="tabela-container">Carregando palpites de hoje...</div>
+
+    <script>
+        Papa.parse("palpites.csv", {
+            download: true,
+            header: true,
+            complete: function(results) {
+                if(results.data.length > 0) {
+                    let html = "<table><thead><tr>";
+                    Object.keys(results.data[0]).forEach(key => html += `<th>${key}</th>`);
+                    html += "</tr></thead><tbody>";
+                    results.data.forEach(row => {
+                        if(row.Liga) {
+                            html += "<tr>";
+                            Object.values(row).forEach(val => html += `<td>${val}</td>`);
+                            html += "</tr>";
+                        }
+                    });
+                    html += "</tbody></table>";
+                    document.getElementById("tabela-container").innerHTML = html;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
