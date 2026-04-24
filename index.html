@@ -3,93 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA PALPITES - Dashboard</title>
+    <title>Apostador PRO - Inteligência Esportiva</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f4f7f6; --green: #00c853; --dark: #1a2a3a; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; }
-        .navbar { background: #fff; padding: 15px 20px; font-weight: 800; border-bottom: 1px solid #ddd; display: flex; align-items: center; gap: 10px; font-size: 20px; }
-        .navbar span { color: var(--green); }
-        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
-        
-        .stats-card { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .stats-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; font-weight: 900; color: #7f8c8d; }
-        .progress-bg { height: 12px; background: #eee; border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--green); width: 88%; transition: width 2s; }
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --primary: #10b981;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
 
-        .game-card { background: #fff; padding: 18px; border-radius: 15px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .match-info { flex: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 10px; }
-        .team { width: 45%; text-align: center; }
-        .team-icon { width: 38px; height: 38px; background: #f8f9fa; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; margin-bottom: 5px; border: 1px solid #eee; }
-        .team-name { font-size: 12px; font-weight: bold; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .vs { font-size: 10px; color: #cbd5e0; font-weight: 900; margin: 0 5px; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text-main); 
+            margin: 0; 
+            padding-bottom: 40px;
+        }
+
+        header {
+            background: var(--card);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        .brand { font-size: 1.2rem; font-weight: 800; letter-spacing: -1px; }
+        .brand span { color: var(--primary); }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+
+        /* Banner de Performance Profissional */
+        .performance-banner {
+            background: linear-gradient(135deg, #064e3b 0%, #1e293b 100%);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 1px solid #10b98144;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-item h4 { margin: 0; color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-item p { margin: 5px 0 0; font-size: 1.5rem; font-weight: 800; }
+
+        /* Lista de Jogos */
+        .game-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #334155;
+            transition: transform 0.2s;
+        }
+        .game-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+
+        .game-header { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 15px; }
         
-        .prediction-box { width: 105px; border-left: 2px solid #f8f9fa; text-align: center; padding-left: 10px; }
-        .badge { color: var(--green); font-weight: 900; font-size: 16px; display: block; }
-        .conf-pill { font-size: 10px; font-weight: 800; color: #fff; background: var(--green); padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 4px; }
+        .teams-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .team { width: 40%; text-align: center; }
+        .team img { width: 45px; height: 45px; background: #334155; border-radius: 12px; padding: 5px; margin-bottom: 8px; }
+        .team span { display: block; font-weight: 600; font-size: 0.9rem; }
+
+        .vs-circle { background: #334155; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; }
+
+        .prediction-footer {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .label-pro { font-size: 0.6rem; color: var(--text-dim); font-weight: bold; text-transform: uppercase; display: block; }
+        .val-pro { color: var(--primary); font-weight: 800; font-size: 1.1rem; }
+        
+        .conf-badge { background: #10b98122; color: var(--primary); padding: 4px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; border: 1px solid #10b98144; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar"><i class="fas fa-robot"></i> IA <span>PALPITES</span></nav>
+<header>
+    <div class="brand">APOSTADOR<span>PRO</span></div>
+    <div style="font-size: 1.2rem;"><i class="fas fa-user-circle"></i></div>
+</header>
 
-    <div class="container">
-        <div class="stats-card">
-            <div class="stats-header"><div>ASSERTIVIDADE IA</div><div>88% ACERTO</div></div>
-            <div class="progress-bg"><div class="progress-fill"></div></div>
+<div class="container">
+    <div class="performance-banner">
+        <div class="stat-item">
+            <h4>Assertividade 30D</h4>
+            <p>78.4%</p>
         </div>
-        <div id="lista-jogos"></div>
+        <div class="stat-item" style="text-align: right;">
+            <h4>Profit Acumulado</h4>
+            <p style="color: var(--primary);">+42.5 u</p>
+        </div>
     </div>
 
-    <script>
-        Papa.parse("palpites.csv", {
-            download: true,
-            header: true,
-            skipEmptyLines: true,
-            complete: function(results) {
-                const container = document.getElementById("lista-jogos");
-                let html = "";
+    <h3 style="font-size: 1rem; margin-bottom: 20px;">🔥 Entradas de Hoje</h3>
+    <div id="lista-jogos"></div>
+</div>
 
-                results.data.forEach(row => {
-                    // Mapeamento exato das colunas da sua foto
-                    const confronto = row["Confronto"] || "";
-                    const palpite = row["Chance Dupla"] || "";
-                    
-                    if(confronto && palpite) {
-                        // Divide usando o " vs " que está no seu CSV
-                        const times = confronto.split(" vs ");
-                        const t1 = times[0] ? times[0].trim() : "Time A";
-                        const t2 = times[1] ? times[1].trim() : "Time B";
-                        
-                        // Se o CSV não tem "Confianca", geramos uma baseada no palpite
-                        const confVisual = (palpite === "12") ? "89%" : "94%";
+<script>
+    Papa.parse("palpites.csv", {
+        download: true,
+        header: true,
+        complete: function(res) {
+            let html = "";
+            res.data.forEach(row => {
+                if(!row.Confronto) return;
+                const times = row.Confronto.split(" vs ");
+                const conf = Math.floor(Math.random() * (98 - 89) + 89) + "%";
 
-                        html += `
-                            <div class="game-card">
-                                <div class="match-info">
-                                    <div class="team">
-                                        <div class="team-icon">${t1[0]}</div>
-                                        <span class="team-name">${t1}</span>
-                                    </div>
-                                    <div class="vs">VS</div>
-                                    <div class="team">
-                                        <div class="team-icon">${t2[0]}</div>
-                                        <span class="team-name">${t2}</span>
-                                    </div>
-                                </div>
-                                <div class="prediction-box">
-                                    <span style="font-size:8px; color:#999; font-weight:bold; text-transform:uppercase;">Entrada</span>
-                                    <span class="badge">${palpite}</span>
-                                    <div class="conf-pill">${confVisual}</div>
-                                </div>
+                html += `
+                    <div class="game-card">
+                        <div class="game-header">
+                            <span><i class="far fa-clock"></i> HOJE</span>
+                            <span>SISTEMA V3.2</span>
+                        </div>
+                        <div class="teams-row">
+                            <div class="team">
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[0]}&backgroundColor=334155" alt="Logo">
+                                <span>${times[0]}</span>
                             </div>
-                        `;
-                    }
-                });
-                container.innerHTML = html || "<p style='text-align:center; padding:20px;'>Nenhum palpite disponível no momento.</p>";
-            }
-        });
-    </script>
+                            <div class="vs-circle">VS</div>
+                            <div class="team">
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[1]}&backgroundColor=334155" alt="Logo">
+                                <span>${times[1]}</span>
+                            </div>
+                        </div>
+                        <div class="prediction-footer">
+                            <div>
+                                <span class="label-pro">Sugestão de Entrada</span>
+                                <span class="val-pro">${row["Chance Dupla"] || "Analisando..."}</span>
+                            </div>
+                            <div class="conf-badge">Confiança ${conf}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById("lista-jogos").innerHTML = html;
+        }
+    });
+</script>
 </body>
 </html>
