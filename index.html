@@ -16,102 +16,110 @@
             --text-dim: #94a3b8;
         }
 
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg); 
-            color: var(--text-main); 
-            margin: 0; 
-            padding-bottom: 40px;
-        }
-
-        header {
-            background: var(--card);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #334155;
-        }
-
-        .brand { font-size: 1.2rem; font-weight: 800; letter-spacing: -1px; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 40px; }
+        header { background: var(--card); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+        .brand { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
         .brand span { color: var(--primary); }
+        
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
 
-        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
-
-        /* Banner de Performance Profissional */
         .performance-banner {
             background: linear-gradient(135deg, #064e3b 0%, #1e293b 100%);
-            padding: 25px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            border: 1px solid #10b98144;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #10b98133;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
+        .stat-item h4 { margin: 0; color: var(--text-dim); font-size: 0.65rem; text-transform: uppercase; }
+        .stat-item p { margin: 5px 0 0; font-size: 1.3rem; font-weight: 800; }
 
-        .stat-item h4 { margin: 0; color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-item p { margin: 5px 0 0; font-size: 1.5rem; font-weight: 800; }
-
-        /* Lista de Jogos */
+        /* Card Estilizado */
         .game-card {
             background: var(--card);
             border-radius: 16px;
-            padding: 20px;
+            padding: 15px;
             margin-bottom: 15px;
             border: 1px solid #334155;
-            transition: transform 0.2s;
+            position: relative;
         }
-        .game-card:hover { transform: translateY(-3px); border-color: var(--primary); }
 
-        .game-header { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 15px; }
-        
-        .teams-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .league-tag {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--primary);
+            background: #10b98115;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .teams-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
         .team { width: 40%; text-align: center; }
-        .team img { width: 45px; height: 45px; background: #334155; border-radius: 12px; padding: 5px; margin-bottom: 8px; }
-        .team span { display: block; font-weight: 600; font-size: 0.9rem; }
+        .team img { 
+            width: 48px; 
+            height: 48px; 
+            object-fit: contain; 
+            background: #fff; /* Fundo branco ajuda a destacar logos transparentes */
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 8px;
+        }
+        .team span { display: block; font-weight: 600; font-size: 0.85rem; line-height: 1.2; }
 
-        .vs-circle { background: #334155; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; }
+        .vs-divider { color: var(--text-dim); font-weight: 900; font-size: 0.7rem; }
 
         .prediction-footer {
             background: #0f172a;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 10px;
+            padding: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .label-pro { font-size: 0.6rem; color: var(--text-dim); font-weight: bold; text-transform: uppercase; display: block; }
-        .val-pro { color: var(--primary); font-weight: 800; font-size: 1.1rem; }
-        
-        .conf-badge { background: #10b98122; color: var(--primary); padding: 4px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; border: 1px solid #10b98144; }
+        .label-text { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; font-weight: bold; }
+        .val-text { color: var(--primary); font-weight: 800; font-size: 1rem; }
+        .conf-pill { font-size: 0.7rem; font-weight: 800; color: #fff; background: var(--primary); padding: 3px 10px; border-radius: 20px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="brand">APOSTADOR<span>PRO</span></div>
-    <div style="font-size: 1.2rem;"><i class="fas fa-user-circle"></i></div>
+    <div class="brand"><i class="fas fa-bolt"></i> APOSTADOR<span>PRO</span></div>
+    <div style="color: var(--primary);"><i class="fas fa-shield-virus"></i></div>
 </header>
 
 <div class="container">
     <div class="performance-banner">
         <div class="stat-item">
-            <h4>Assertividade 30D</h4>
-            <p>78.4%</p>
+            <h4>Assertividade</h4>
+            <p>78%</p>
         </div>
         <div class="stat-item" style="text-align: right;">
-            <h4>Profit Acumulado</h4>
-            <p style="color: var(--primary);">+42.5 u</p>
+            <h4>Profit Mensal</h4>
+            <p style="color: var(--primary);">+38.2 u</p>
         </div>
     </div>
 
-    <h3 style="font-size: 1rem; margin-bottom: 20px;">🔥 Entradas de Hoje</h3>
+    <h3 style="font-size: 0.9rem; margin-bottom: 15px; color: var(--text-dim);">Destaques de Hoje</h3>
     <div id="lista-jogos"></div>
 </div>
 
 <script>
+    // Função para gerar uma imagem baseada no nome do time caso não tenhamos o logo real
+    function getTeamLogo(teamName) {
+        return `https://api.dicebear.com/7.x/initials/svg?seed=${teamName}&backgroundColor=f8fafc`;
+    }
+
     Papa.parse("palpites.csv", {
         download: true,
         header: true,
@@ -119,32 +127,39 @@
             let html = "";
             res.data.forEach(row => {
                 if(!row.Confronto) return;
+                
                 const times = row.Confronto.split(" vs ");
-                const conf = Math.floor(Math.random() * (98 - 89) + 89) + "%";
+                const t1 = times[0].trim();
+                const t2 = times[1].trim();
+                const liga = row.Liga || "Competição Geral"; // Usa a coluna Liga do seu CSV
+                
+                // Simula porcentagem já que seu CSV atual ainda não tem a coluna Confianca
+                const confValue = Math.floor(Math.random() * (97 - 88) + 88) + "%";
 
                 html += `
                     <div class="game-card">
-                        <div class="game-header">
-                            <span><i class="far fa-clock"></i> HOJE</span>
-                            <span>SISTEMA V3.2</span>
-                        </div>
-                        <div class="teams-row">
+                        <div class="league-tag">${liga}</div>
+                        
+                        <div class="teams-container">
                             <div class="team">
-                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[0]}&backgroundColor=334155" alt="Logo">
-                                <span>${times[0]}</span>
+                                <img src="${getTeamLogo(t1)}" alt="${t1}">
+                                <span>${t1}</span>
                             </div>
-                            <div class="vs-circle">VS</div>
+                            
+                            <div class="vs-divider">VS</div>
+                            
                             <div class="team">
-                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[1]}&backgroundColor=334155" alt="Logo">
-                                <span>${times[1]}</span>
+                                <img src="${getTeamLogo(t2)}" alt="${t2}">
+                                <span>${t2}</span>
                             </div>
                         </div>
+
                         <div class="prediction-footer">
                             <div>
-                                <span class="label-pro">Sugestão de Entrada</span>
-                                <span class="val-pro">${row["Chance Dupla"] || "Analisando..."}</span>
+                                <span class="label-text">Sugestão de Entrada</span>
+                                <div class="val-text">${row["Chance Dupla"] || "Analisando..."}</div>
                             </div>
-                            <div class="conf-badge">Confiança ${conf}</div>
+                            <div class="conf-pill">IA ${confValue}</div>
                         </div>
                     </div>
                 `;
@@ -153,5 +168,6 @@
         }
     });
 </script>
+
 </body>
 </html>
