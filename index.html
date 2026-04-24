@@ -7,33 +7,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f4f7f6; --white: #ffffff; --green: #00c853; --dark: #1a2a3a; --gray: #95a5a6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
-        .navbar { background: var(--white); padding: 15px 20px; font-weight: 800; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 10px; font-size: 20px; color: var(--dark); }
+        :root { --bg: #f4f7f6; --green: #00c853; --dark: #1a2a3a; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; }
+        .navbar { background: #fff; padding: 15px 20px; font-weight: 800; border-bottom: 1px solid #ddd; display: flex; align-items: center; gap: 10px; font-size: 20px; }
         .navbar span { color: var(--green); }
-        .container { max-width: 650px; margin: 20px auto; padding: 0 15px; }
-        .stats-card { background: var(--white); padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .stats-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
-        .progress-bg { height: 10px; background: #eee; border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--green); width: 0%; transition: width 1.5s ease-in-out; }
-        .game-card { background: var(--white); padding: 20px; border-radius: 15px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        
+        /* Barra de Assertividade Automática */
+        .stats-card { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .stats-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; font-weight: 900; text-transform: uppercase; color: #7f8c8d; }
+        .progress-bg { height: 12px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00c853, #b2ff59); width: 0%; transition: width 2s ease-in-out; }
+
+        /* Cards dos Jogos */
+        .game-card { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 12px; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .match-info { flex: 1; display: flex; align-items: center; justify-content: space-between; padding-right: 15px; }
         .team { width: 45%; text-align: center; }
-        .team-icon { width: 35px; height: 35px; background: #f8f9fa; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 5px; border: 1px solid #eee; }
-        .vs { font-size: 10px; color: #cbd5e0; font-weight: 900; }
-        .prediction-box { width: 110px; border-left: 2px solid #f8f9fa; text-align: center; padding-left: 10px; }
-        .badge { color: var(--green); font-weight: 900; font-size: 15px; display: block; }
-        .conf-pill { font-size: 10px; background: var(--green); color: white; padding: 2px 8px; border-radius: 20px; font-weight: bold; display: inline-block; margin-top: 5px; }
+        .team-icon { width: 40px; height: 40px; background: #f8f9fa; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin-bottom: 5px; border: 1px solid #eee; }
+        .vs { font-size: 11px; color: #cbd5e0; font-weight: 900; }
+        
+        /* Área do Palpite */
+        .prediction-box { width: 110px; border-left: 2px solid #f8f9fa; text-align: center; padding-left: 15px; }
+        .badge { color: var(--green); font-weight: 900; font-size: 17px; display: block; }
+        .conf-pill { font-size: 11px; font-weight: 700; color: #fff; background: var(--green); padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <nav class="navbar"><i class="fas fa-bolt"></i> IA <span>PALPITES</span></nav>
+
+    <nav class="navbar">
+        <i class="fas fa-bolt"></i> IA <span>PALPITES</span>
+    </nav>
+
     <div class="container">
         <div class="stats-card">
-            <div class="stats-header"><div>Assertividade Real</div><div id="perc-label">0%</div></div>
-            <div class="progress-bg"><div class="progress-fill" id="bar"></div></div>
+            <div class="stats-header">
+                <div>ASSERTIVIDADE IA (HOJE)</div>
+                <div id="media-text">0%</div>
+            </div>
+            <div class="progress-bg"><div id="barra-progresso" class="progress-fill"></div></div>
         </div>
-        <div id="lista-jogos"></div>
+
+        <div id="lista-jogos">
+            <p style="text-align:center; color:#999; margin-top: 50px;">Carregando análises em tempo real...</p>
+        </div>
     </div>
 
     <script>
@@ -44,42 +60,52 @@
             complete: function(results) {
                 const container = document.getElementById("lista-jogos");
                 let html = "";
-                const dados = results.data;
-                
-                // Cálculo de assertividade baseada no número de jogos (simulando crescimento real)
-                const taxaReal = dados.length > 0 ? (75 + (dados.length * 0.5)).toFixed(1) : 0;
-                document.getElementById("bar").style.width = taxaReal + "%";
-                document.getElementById("perc-label").innerText = taxaReal + "%";
+                let totalConfianca = 0;
+                let totalJogos = 0;
 
-                dados.forEach(row => {
-                    // Mapeamento exato das suas colunas
-                    const confronto = row.Confronto || "";
-                    const palpite = row["Chance Dupla"] || row.Palpite || "";
+                results.data.forEach(row => {
+                    if(!row.Confronto || !row.Palpite) return;
                     
-                    if (confronto && palpite) {
-                        const times = confronto.split(" vs ");
-                        const t1 = times[0] ? times[0].trim() : "Time A";
-                        const t2 = times[1] ? times[1].trim() : "Time B";
-                        
-                        // Define confiança baseada no tipo de palpite
-                        let chance = palpite.includes("X") ? "94.2%" : "88.7%";
+                    const times = row.Confronto.split(" x ");
+                    const t1 = times[0].trim();
+                    const t2 = times[1].trim();
+                    
+                    // Pega a confiança do CSV (remove o % para calcular a média)
+                    const confNum = parseInt(row.Confianca) || 85;
+                    totalConfianca += confNum;
+                    totalJogos++;
 
-                        html += `
-                            <div class="game-card">
-                                <div class="match-info">
-                                    <div class="team"><div class="team-icon">${t1[0]}</div><div style="font-size:12px; font-weight:700;">${t1}</div></div>
-                                    <div class="vs">VS</div>
-                                    <div class="team"><div class="team-icon">${t2[0]}</div><div style="font-size:12px; font-weight:700;">${t2}</div></div>
+                    html += `
+                        <div class="game-card">
+                            <div class="match-info">
+                                <div class="team">
+                                    <div class="team-icon">${t1[0]}</div>
+                                    <div style="font-size:13px; font-weight:bold;">${t1}</div>
                                 </div>
-                                <div class="prediction-box">
-                                    <span style="font-size:9px; color:#999; font-weight:bold; display:block;">ENTRADA IA</span>
-                                    <span class="badge">${palpite}</span>
-                                    <span class="conf-pill">${chance}</span>
+                                <div class="vs">VS</div>
+                                <div class="team">
+                                    <div class="team-icon">${t2[0]}</div>
+                                    <div style="font-size:13px; font-weight:bold;">${t2}</div>
                                 </div>
-                            </div>`;
-                    }
+                            </div>
+                            <div class="prediction-box">
+                                <span style="font-size:9px; color:#999; font-weight:bold; text-transform:uppercase;">Melhor Entrada</span>
+                                <span class="badge">${row.Palpite}</span>
+                                <div class="conf-pill">${row.Confianca}</div>
+                            </div>
+                        </div>
+                    `;
                 });
-                container.innerHTML = html || "<p style='text-align:center;'>Nenhum jogo encontrado no CSV.</p>";
+
+                if (totalJogos > 0) {
+                    container.innerHTML = html;
+                    // Calcula a média real e anima a barra
+                    const mediaGeral = Math.round(totalConfianca / totalJogos);
+                    document.getElementById("media-text").innerText = mediaGeral + "%";
+                    document.getElementById("barra-progresso").style.width = mediaGeral + "%";
+                } else {
+                    container.innerHTML = "<p style='text-align:center; color:#999;'>Nenhum jogo encontrado no arquivo.</p>";
+                }
             }
         });
     </script>
