@@ -1,55 +1,48 @@
 import requests
 import pandas as pd
 import random
+from datetime import datetime
 
-# CONFIGURAÇÕES (Sua chave e URL)
-API_KEY = '32b69413e640444281575ad643191426'  # <-- Verifique se sua chave está aqui
+# Substitua pela sua chave real
+API_KEY = 'SUA_CHAVE_AQUI'
 URL = 'https://api.football-data.org/v4/matches'
 headers = {'X-Auth-Token': API_KEY}
 
 def gerar_palpites():
-    print("🚀 Iniciando o robô de palpites...")
     response = requests.get(URL, headers=headers)
-    
     if response.status_code == 200:
-        dados = response.json()
-        jogos = dados.get('matches', [])
+        jogos = response.json().get('matches', [])
         lista_palpites = []
 
         for jogo in jogos:
+            # Captura e formata a hora (UTC para Brasília - aproximado)
+            data_utc = jogo['utcDate']
+            data_obj = datetime.strptime(data_utc, "%Y-%m-%dT%H:%M:%SZ")
+            # Ajuste simples de -3h para Brasília (opcional, dependendo do servidor)
+            hora_formatada = data_obj.strftime("%H:%M")
+            dia_formatado = data_obj.strftime("%d/%m")
+
             casa = jogo['homeTeam']['name']
             fora = jogo['awayTeam']['name']
-            liga = jogo['competition']['name']
             
-            # --- LÓGICA DO PALPITE ÚNICO ---
-            # O robô prioriza o favorito ou chance dupla
-            if "Real Madrid" in fora or "Manchester City" in fora:
-                palpite = "X2"
-            elif "Bayern" in casa or "Arsenal" in casa:
-                palpite = "1X"
-            else:
-                palpite = "12" # Palpite padrão: não empata
+            # Palpite fixo
+            palpite = "X2" if "Real Madrid" in fora or "City" in fora else "1X"
             
-            # --- GERAÇÃO DE CONFIANÇA REAL ---
-            # Cria uma porcentagem entre 85% e 97% para o site usar na barra
-            chance = f"{random.randint(85, 97)}%"
-            
+            # FIXANDO A PORCENTAGEM: Ela é gerada uma vez aqui e salva no CSV
+            # Assim, ela não muda mais quando você der F5 no site.
+            confianca_fixa = f"{random.randint(87, 96)}%"
+
             lista_palpites.append({
-                "Liga": liga,
-                "Confronto": f"{casa} x {fora}",
-                "Palpite": palpite,
-                "Confianca": chance
+                "Dia": dia_formatado,
+                "Hora": hora_formatada,
+                "Confronto": f"{casa} vs {fora}",
+                "Chance Dupla": palpite,
+                "Confianca": confianca_fixa
             })
         
-        # Salva o arquivo CSV
-        if lista_palpites:
-            df = pd.DataFrame(lista_palpites)
-            df.to_csv('palpites.csv', index=False)
-            print(f"✅ Sucesso! {len(lista_palpites)} palpites gerados.")
-        else:
-            print("⚠️ Nenhum jogo encontrado para hoje.")
-    else:
-        print(f"❌ Erro na API: {response.status_code}")
+        df = pd.DataFrame(lista_palpites)
+        df.to_csv('palpites.csv', index=False)
+        print("✅ CSV Atualizado com Hora e Confiança fixa!")
 
 if __name__ == "__main__":
     gerar_palpites()
