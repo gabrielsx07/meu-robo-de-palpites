@@ -1,8 +1,42 @@
-Confronto,Chance Dupla,Gols,Escanteios
-RB Leipzig vs 1. FC Union Berlin,X2,Over 1.5,8.5+
-Stade Brestois 29 vs Racing Club de Lens,12,Over 1.5,8.5+
-SSC Napoli vs US Cremonese,12,Over 1.5,8.5+
-Sunderland AFC vs Nottingham Forest FC,12,Over 1.5,8.5+
-Real Betis Balompié vs Real Madrid CF,X2,Over 1.5,8.5+
-Leicester City FC vs Millwall FC,12,Over 1.5,8.5+
-FC Alverca vs FC Arouca,12,Over 1.5,8.5+
+Dia,Hora,Confronto,Vencedor,Dupla,Gols,Escanteios,Confianca
+25/04,11:30,Middlesbrough FC vs Watford FC,Empate,12,Ambas Marcam,+8.5 Escanteios,96%
+25/04,11:30,West Bromwich Albion FC vs Ipswich Town FC,Vitória West Bromwich Albion FC,12,Ambas Marcam,+10.5 Escanteios,94%
+25/04,11:30,Charlton Athletic FC vs Hull City AFC,Empate,1X,Over 2.5,+8.5 Escanteios,87%
+25/04,11:30,Fulham FC vs Aston Villa FC,Vitória Fulham FC,X2,Over 2.5,+9.5 Escanteios,87%
+25/04,12:00,Deportivo Alavés vs RCD Mallorca,Vitória RCD Mallorca,12,Ambas Marcam,+9.5 Escanteios,89%
+25/04,13:00,Olympique Lyonnais vs AJ Auxerre,Vitória AJ Auxerre,X2,Ambas Marcam,+10.5 Escanteios,95%
+25/04,13:00,Parma Calcio 1913 vs AC Pisa 1909,Vitória Parma Calcio 1913,12,Over 1.5,+8.5 Escanteios,95%
+25/04,13:30,FC Augsburg vs Eintracht Frankfurt,Vitória Eintracht Frankfurt,X2,Over 2.5,+8.5 Escanteios,87%
+25/04,13:30,1. FC Heidenheim 1846 vs FC St. Pauli 1910,Empate,X2,Ambas Marcam,+9.5 Escanteios,91%
+25/04,13:30,1. FSV Mainz 05 vs FC Bayern München,Empate,X2,Over 2.5,+10.5 Escanteios,86%
+25/04,13:30,1. FC Köln vs Bayer 04 Leverkusen,Vitória 1. FC Köln,1X,Over 2.5,+10.5 Escanteios,93%
+25/04,13:30,VfL Wolfsburg vs Borussia Mönchengladbach,Vitória Borussia Mönchengladbach,1X,Ambas Marcam,+9.5 Escanteios,88%
+25/04,14:00,Birmingham City FC vs Bristol City FC,Vitória Birmingham City FC,1X,Ambas Marcam,+9.5 Escanteios,98%
+25/04,14:00,Wolverhampton Wanderers FC vs Tottenham Hotspur FC,Vitória Tottenham Hotspur FC,1X,Over 2.5,+10.5 Escanteios,98%
+25/04,14:00,Sheffield United FC vs Preston North End FC,Vitória Preston North End FC,1X,Ambas Marcam,+10.5 Escanteios,89%
+25/04,14:00,Liverpool FC vs Crystal Palace FC,Vitória Crystal Palace FC,12,Over 1.5,+9.5 Escanteios,91%
+25/04,14:00,Oxford United FC vs Sheffield Wednesday FC,Vitória Sheffield Wednesday FC,X2,Over 2.5,+10.5 Escanteios,88%
+25/04,14:00,West Ham United FC vs Everton FC,Vitória West Ham United FC,X2,Ambas Marcam,+10.5 Escanteios,93%
+25/04,14:00,Queens Park Rangers FC vs Derby County FC,Vitória Derby County FC,X2,Over 1.5,+8.5 Escanteios,91%
+25/04,14:00,Stoke City FC vs Portsmouth FC,Vitória Portsmouth FC,X2,Over 2.5,+8.5 Escanteios,90%
+25/04,14:00,Norwich City FC vs Swansea City AFC,Empate,1X,Over 1.5,+8.5 Escanteios,86%
+25/04,14:15,Getafe CF vs FC Barcelona,Vitória Getafe CF,X2,Over 2.5,+10.5 Escanteios,98%
+25/04,14:30,Feyenoord Rotterdam vs FC Groningen,Vitória FC Groningen,12,Over 2.5,+9.5 Escanteios,87%
+25/04,14:30,CD Tondela vs CD Nacional,Vitória CD Nacional,1X,Over 2.5,+8.5 Escanteios,93%
+25/04,16:00,Bologna FC 1909 vs AS Roma,Empate,X2,Over 1.5,+10.5 Escanteios,92%
+25/04,16:30,Valencia CF vs Girona FC,Vitória Girona FC,12,Ambas Marcam,+9.5 Escanteios,92%
+25/04,16:30,Arsenal FC vs Newcastle United FC,Vitória Arsenal FC,1X,Ambas Marcam,+9.5 Escanteios,87%
+25/04,16:30,Hamburger SV vs TSG 1899 Hoffenheim,Vitória TSG 1899 Hoffenheim,1X,Over 2.5,+9.5 Escanteios,92%
+25/04,16:45,SC Heerenveen vs Fortuna Sittard,Vitória Fortuna Sittard,X2,Over 1.5,+8.5 Escanteios,92%
+25/04,17:00,Sport Lisboa e Benfica vs Moreirense FC,Vitória Moreirense FC,X2,Over 1.5,+9.5 Escanteios,90%
+25/04,17:00,Angers SCO vs Paris Saint-Germain FC,Vitória Angers SCO,12,Ambas Marcam,+9.5 Escanteios,89%
+25/04,18:00,NAC Breda vs AFC Ajax,Vitória NAC Breda,X2,Over 2.5,+8.5 Escanteios,89%
+25/04,18:45,Hellas Verona FC vs US Lecce,Vitória US Lecce,12,Over 2.5,+8.5 Escanteios,88%
+25/04,19:00,Club Atlético de Madrid vs Athletic Club,Empate,X2,Over 1.5,+9.5 Escanteios,88%
+25/04,19:00,FC Twente '65 vs NEC,Vitória FC Twente '65,X2,Over 1.5,+8.5 Escanteios,87%
+25/04,19:05,Toulouse FC vs AS Monaco FC,Empate,X2,Over 2.5,+9.5 Escanteios,95%
+25/04,19:30,Vitória SC vs Rio Ave FC,Vitória Rio Ave FC,1X,Over 1.5,+8.5 Escanteios,86%
+25/04,21:30,Botafogo FR vs SC Internacional,Vitória Botafogo FR,1X,Ambas Marcam,+8.5 Escanteios,93%
+25/04,21:30,Clube do Remo vs Cruzeiro EC,Vitória Clube do Remo,1X,Over 2.5,+10.5 Escanteios,93%
+25/04,21:30,EC Bahia vs Santos FC,Empate,12,Ambas Marcam,+10.5 Escanteios,92%
+26/04,00:00,São Paulo FC vs Mirassol FC,Vitória Mirassol FC,X2,Over 2.5,+9.5 Escanteios,86%
