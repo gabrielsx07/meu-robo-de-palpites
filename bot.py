@@ -3,62 +3,64 @@ import requests
 from datetime import datetime
 import pytz
 
-def buscar_jogos_vips():
+def buscar_e_salvar():
     fuso = pytz.timezone('America/Sao_Paulo')
     hoje = datetime.now(fuso).strftime('%Y-%m-%d')
     
     url = "https://v3.football.api-sports.io/fixtures"
-    minha_chave = "b4533c0123994fd0a1a0d3a9d125d5ed" # <--- COLOQUE SUA CHAVE AQUI
+    minha_chave = "b4533c0123994fd0a1a0d3a9d125d5ed" # <--- COLE SUA CHAVE AQUI
     
-    headers = {'x-rapidapi-host': "v3.football.api-sports.io", 'x-rapidapi-key': minha_chave}
+    headers = {
+        'x-rapidapi-host': "v3.football.api-sports.io",
+        'x-rapidapi-key': minha_chave
+    }
+    
     params = {'date': hoje}
 
     try:
         response = requests.get(url, headers=headers, params=params, timeout=15)
-        jogos = response.json().get('response', [])
+        dados = response.json()
+        jogos = dados.get('response', [])
+        
         lista_final = []
-
-        # Só jogos que não acabaram
-        status_permitidos = ['TBD', 'NS', '1H', 'HT', '2H', 'ET', 'BT', 'LIVE']
+        # Filtro para remover jogos que já terminaram
+        status_excluir = ['FT', 'AET', 'PEN', 'PST', 'CANC', 'ABD']
 
         for item in jogos:
             fixture = item.get('fixture', {})
-            if fixture.get('status', {}).get('short') not in status_permitidos:
+            status_atual = fixture.get('status', {}).get('short')
+            
+            if status_atual in status_excluir:
                 continue
 
+            # Ajuste de Horário
             data_iso = fixture.get('date')
             data_obj = datetime.fromisoformat(data_iso.replace('Z', '+00:00'))
             hora_bra = data_obj.astimezone(fuso).strftime('%H:%M')
-            
-            # Lógica de Palpite Detalhado (Exemplos)
-            liga = item.get('league', {}).get('name', '')
-            palpite = "Escanteios: Over 8.5"
-            if "Série A" in liga:
-                palpite = "Ambas Marcam: Sim"
-            elif item.get('teams', {}).get('home', {}).get('winner'):
-                palpite = "Vitoria Casa / +1.5 Gols"
 
+            # DEFINIÇÃO DOS NOMES DAS COLUNAS (Exatamente como o index.html pede)
             lista_final.append({
-                'Horário': hora_bra,
-                'Competição': liga,
+                'Hora': hora_bra,
+                'Liga': item['league']['name'],
                 'TimeCasa': item['teams']['home']['name'],
                 'LogoCasa': item['teams']['home']['logo'],
                 'TimeFora': item['teams']['away']['name'],
                 'LogoFora': item['teams']['away']['logo'],
-                'Palpite': palpite,
+                'Palpite': "Escanteios: Over 8.5", 
                 'Odd': "1.80",
-                'Status': fixture.get('status', {}).get('long')
+                'Status': fixture['status']['long']
             })
 
         if lista_final:
             df = pd.DataFrame(lista_final)
-            df.to_csv('palpites.csv', index=False)
-            print("✅ CSV Atualizado com sucesso!")
+            # SALVANDO O CSV COM OS NOMES CORRETOS
+            df.to_csv('palpites.csv', index=False, encoding='utf-8')
+            print("✅ Sucesso: palpites.csv atualizado com nomes corretos!")
         else:
-            print("ℹ️ Nenhum jogo ativo encontrado.")
+            print("⚠️ Nenhum jogo pendente para hoje.")
 
     except Exception as e:
-        print(f"❌ Erro: {e}")
+        print(f"❌ Erro ao processar: {e}")
 
 if __name__ == "__main__":
-    buscar_jogos_vips()
+    buscar_e_salvar()
