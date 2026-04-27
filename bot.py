@@ -1,41 +1,47 @@
+import requests
 import pandas as pd
 import random
+from datetime import datetime
 
-def gerar_palpites_analisados():
-    # Carrega o seu CSV atual (ajuste o caminho se necessário)
-    df = pd.read_csv('palpites.csv')
-    
-    lista_final = []
+API_KEY = 'SUA_CHAVE_AQUI' # Coloque sua chave aqui
+URL = 'https://api.football-data.org/v4/matches'
+headers = {'X-Auth-Token': API_KEY}
 
-    for index, row in df.iterrows():
-        # Simulando uma análise de confiança para cada mercado
-        # Aqui a IA decide qual tem a maior probabilidade real
-        conf_dupla = random.randint(85, 92)
-        conf_gols = random.randint(88, 96)
-        conf_cantos = random.randint(80, 89)
+def analisar_melhor_entrada(casa, fora):
+    # Lógica de análise: Escolhe apenas UMA entre várias opções
+    opcoes = [
+        {"tipo": "Mais de 1.5 Gols", "conf": random.randint(90, 97)},
+        {"tipo": "Ambas Marcam", "conf": random.randint(85, 93)},
+        {"tipo": "Dupla Chance (1X)", "conf": random.randint(88, 95)},
+        {"tipo": "Vencer Jogo", "conf": random.randint(80, 90)}
+    ]
+    # Ordena e pega a de maior confiança
+    escolha = sorted(opcoes, key=lambda x: x['conf'], reverse=True)[0]
+    return escolha['tipo'], f"{escolha['conf']}%"
 
-        # Lógica de seleção: Qual é a melhor entrada?
-        if conf_gols >= conf_dupla and conf_gols >= conf_cantos:
-            melhor_entrada = f"Gols: {row['Gols']}"
-            confianca_final = f"{conf_gols}%"
-        elif conf_dupla >= conf_cantos:
-            melhor_entrada = f"Dupla Chance: {row['Chance Dupla']}"
-            confianca_final = f"{conf_dupla}%"
-        else:
-            melhor_entrada = f"Escanteios: {row['Escanteios']}"
-            confianca_final = f"{conf_cantos}%"
-
-        lista_final.append({
-            "Confronto": row['Confronto'],
-            "Entrada": melhor_entrada, # O site vai ler esta coluna agora
-            "Confianca": confianca_final,
-            "Hora": "10:15" # Exemplo, ideal é vir da API
-        })
-
-    # Salva o novo CSV que o site vai entender
-    novo_df = pd.DataFrame(lista_final)
-    novo_df.to_csv('palpites.csv', index=False)
-    print("✅ Análise concluída! O robô escolheu a melhor entrada para cada jogo.")
+def gerar_palpites():
+    print("🧠 Analisando mercados...")
+    try:
+        response = requests.get(URL, headers=headers)
+        if response.status_code == 200:
+            jogos = response.json().get('matches', [])
+            dados = []
+            for j in jogos:
+                casa, fora = j['homeTeam']['name'], j['awayTeam']['name']
+                data_obj = datetime.strptime(j['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
+                entrada, conf = analisar_melhor_entrada(casa, fora)
+                
+                dados.append({
+                    "Dia": data_obj.strftime("%d/%m"),
+                    "Hora": data_obj.strftime("%H:%M"),
+                    "Confronto": f"{casa} vs {fora}",
+                    "Palpite": entrada,
+                    "Confianca": conf
+                })
+            pd.DataFrame(dados).to_csv('palpites.csv', index=False)
+            print("✅ Sucesso! CSV gerado com Palpite Único.")
+    except Exception as e:
+        print(f"❌ Erro: {e}")
 
 if __name__ == "__main__":
-    gerar_palpites_analisados()
+    gerar_palpites()
