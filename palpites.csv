@@ -1,6 +1,6 @@
-Hora,Liga,Confronto,Palpite,Confianca
-16:30,Serie A,Cagliari Calcio x Atalanta BC,1X + Mais de 1.5 Gols,91%
-18:45,Serie A,SS Lazio x Udinese Calcio,Mais de 9.5 Escanteios,94%
-19:00,Premier League,Manchester United FC x Brentford FC,Mais de 9.5 Escanteios,92%
-19:00,Primera Division,RCD Espanyol de Barcelona x Levante UD,Over 2.5 Gols (xG de Valor),89%
-19:15,Primeira Liga,Gil Vicente FC x Casa Pia AC,1X + Mais de 1.5 Gols,92%
+Hora,Confronto,MelhorEntrada,Confianca
+16:30,Cagliari Calcio vs Atalanta BC,Vencer um dos Tempos: Cagliari Calcio,98%
+18:45,SS Lazio vs Udinese Calcio,Vencer um dos Tempos: SS Lazio,97%
+19:00,Manchester United FC vs Brentford FC,Vencer um dos Tempos: Manchester United FC,92%
+19:00,RCD Espanyol de Barcelona vs Levante UD,Mais de 1.5 Gols,97%
+19:15,Gil Vicente FC vs Casa Pia AC,Mais de 1.5 Gols,95%
