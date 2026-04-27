@@ -3,94 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apostador PRO - IA Analysis</title>
+    <title>Apostador PRO - Elite</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --bg: #ffffff;
-            --card-bg: #ffffff;
-            --primary: #34c759; /* Verde Apple */
-            --text-dark: #1c1c1e;
-            --text-light: #8e8e93;
-            --border: #f2f2f7;
-        }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg); 
-            color: var(--text-dark); 
-            margin: 0; padding: 0;
-            line-height: 1.4;
-        }
-
-        header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .container { max-width: 480px; margin: 0 auto; padding: 20px; }
-
-        /* Card de Performance do Topo */
-        .stats-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        }
-        .stats-label { font-size: 11px; font-weight: 800; color: var(--text-light); letter-spacing: 0.5px; }
-        .win-rate { font-size: 32px; font-weight: 800; color: var(--primary); margin: 5px 0; }
-        .bar-container { height: 8px; background: #f2f2f7; border-radius: 10px; margin-top: 15px; overflow: hidden; display: flex; }
-        .bar-green { background: var(--primary); width: 76%; }
-        .bar-red { background: #ff3b30; width: 24%; }
-
-        /* Filtros */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab { 
-            padding: 10px 20px; border-radius: 12px; border: none; 
-            background: #f2f2f7; font-weight: 700; font-size: 13px; color: var(--text-dark);
-        }
-        .tab.active { background: #000; color: #fff; }
-
-        /* Card de Jogo (O "Hit" Único) */
-        .match-card {
-            background: #fff;
-            border-radius: 24px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-            transition: transform 0.2s;
-        }
-        .match-card:active { transform: scale(0.98); }
-
-        .match-info { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--text-light); margin-bottom: 15px; }
-        .badge-live { color: var(--primary); display: flex; align-items: center; gap: 4px; }
-
-        .teams { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .team { display: flex; align-items: center; gap: 12px; width: 42%; }
-        .team img { width: 35px; height: 35px; border-radius: 50%; background: #f2f2f7; }
-        .team span { font-weight: 800; font-size: 14px; }
-
-        /* Área da Entrada Analisada (xG, Cantos, etc) */
-        .prediction-box {
-            background: #f8f9fa;
-            border-radius: 18px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .prediction-text span { display: block; font-size: 10px; color: var(--text-light); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
-        .prediction-text strong { font-size: 15px; font-weight: 800; color: #000; }
+        :root { --bg: #ffffff; --card: #f8f9fa; --green: #34c759; --text: #1a1a1a; --dim: #8e8e93; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        .container { max-width: 500px; margin: 0 auto; }
         
-        .conf-circle { 
-            background: var(--primary); color: #fff; 
-            width: 45px; height: 45px; border-radius: 12px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-size: 12px; font-
+        header { padding: 10px 0 25px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 800; font-size: 20px; letter-spacing: -1px; }
+
+        .match-card {
+            background: #fff; border-radius: 24px; padding: 20px; margin-bottom: 15px;
+            border: 1px solid #efeff4; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .meta { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--dim); margin-bottom: 15px; }
+        
+        .teams { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .team { width: 40%; text-align: center; }
+        .team-icon { width: 45px; height: 45px; background: #f2f2f7; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--green); }
+        .team-name { font-size: 14px; font-weight: 700; }
+
+        /* Box de Análise de Valor (xG, Escanteios, etc) */
+        .prediction-box {
+            background: #f2f2f7; border-radius: 18px; padding: 16px; position: relative;
+        }
+        .label { font-size: 9px; color: var(--dim); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+        .entry { font-size: 16px; font-weight: 800; color: var(--text); display: block; }
+        
+        .trust-row { display: flex; justify-content: space-between; margin-top: 12px; font-size: 10px; font-weight: 800; }
+        .bar-bg { height: 6px; background: #e5e5ea; border-radius: 10px; margin-top: 8px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--green); transition: width 1s; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">Apostador <span style="color:var(--green)">PRO</span></div>
+        <div style="font-size: 12px; font-weight: 700; background: #000; color: #fff; padding: 5px 12px; border-radius: 8px;">IA Ativa</div>
+    </header>
+
+    <div id="lista-jogos">
+        </div>
+</div>
+
+<script>
+    // Carrega o CSV gerado pelo VS Code
+    Papa.parse("palpites.csv", {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            let html = "";
+            results.data.forEach(row => {
+                // Verifica se a linha tem o confronto pra não bugar
+                if(!row.Confronto) return;
+
+                const times = row.Confronto.split(" vs ");
+                // Usa o nome da coluna que o bot.py novo cria: "MelhorEntrada"
+                const palpite = row.MelhorEntrada || "Analisando mercado...";
+                const confianca = row.Confianca || "90%";
+
+                html += `
+                    <div class="match-card">
+                        <div class="meta">
+                            <span><i class="far fa-clock"></i> HOJE • ${row.Hora}</span>
+                            <span style="color:var(--green)">ANALISADO (xG)</span>
+                        </div>
+                        <div class="teams">
+                            <div class="team">
+                                <div class="team-icon">${times[0][0]}</div>
+                                <div class="team-name">${times[0]}</div>
+                            </div>
+                            <div style="font-weight:900; color:#eee">VS</div>
+                            <div class="team">
+                                <div class="team-icon">${times[1][0]}</div>
+                                <div class="team-name">${times[1]}</div>
+                            </div>
+                        </div>
+                        <div class="prediction-box">
+                            <span class="label">Entrada de Valor</span>
+                            <span class="entry">${palpite}</span>
+                            <div class="trust-row">
+                                <span>CONFIANÇA DO ALGORITMO</span>
+                                <span style="color:var(--green)">${confianca}</span>
+                            </div>
+                            <div class="bar-bg">
+                                <div class="bar-fill" style="width: ${confianca}"></div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            document.getElementById("lista-jogos").innerHTML = html;
+        },
+        error: function(err) {
+            console.error("Erro ao ler o CSV:", err);
+            document.getElementById("lista-jogos").innerHTML = "<p style='text-align:center; color:red;'>Erro ao carregar dados. Verifique o arquivo palpites.csv</p>";
+        }
+    });
+</script>
+</body>
+</html>
