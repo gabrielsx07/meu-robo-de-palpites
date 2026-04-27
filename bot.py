@@ -39,8 +39,8 @@ def buscar_jogos_vips():
                 palpite = "Vitoria Casa / +1.5 Gols"
 
             lista_final.append({
-                'Hora': hora_bra,
-                'Liga': liga,
+                'Horário': hora_bra,
+                'Competição': liga,
                 'TimeCasa': item['teams']['home']['name'],
                 'LogoCasa': item['teams']['home']['logo'],
                 'TimeFora': item['teams']['away']['name'],
