@@ -1,4 +1,4 @@
-Hora,Jogo,Liga
-16:00,Time Casa x Time Fora,Série A
-19:00,Time B x Time C,Série B
-21:30,Time D x Time E,Copa
+Horario,Liga,Evento,Status
+16:30:00,Italian Serie A,Cagliari vs Atalanta,2H
+18:45:00,Italian Serie A,Lazio vs Udinese,Not Started
+19:00:00,English Premier League,Manchester United vs Brentford,Not Started
