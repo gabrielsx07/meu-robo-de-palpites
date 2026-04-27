@@ -2,6 +2,15 @@ import pandas as pd
 import requests
 from datetime import datetime
 
+from datetime import datetime
+import pytz
+
+# Define o fuso horário de Brasília
+fuso = pytz.timezone('America/Sao_Paulo')
+hoje = datetime.now(fuso).strftime('%Y-%m-%d') # Ou o formato que seu site usa
+
+print(f"Buscando jogos para a data: {hoje}")
+
 def buscar_palpites():
     print("📡 Conectando ao servidor de esportes...")
     
