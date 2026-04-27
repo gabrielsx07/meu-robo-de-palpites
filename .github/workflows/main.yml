@@ -1,21 +1,21 @@
-name: Robo de Palpites Autonomo
+name: Autonomia Total
 
 on:
   schedule:
-    - cron: '0 * * * *' # Roda sozinho toda hora
-  workflow_dispatch:     # Permite rodar manualmente se quiser
+    - cron: '0 * * * *' # Roda sozinho de 1 em 1 hora
+  workflow_dispatch:     # Deixa o botão de rodar manual se você quiser
 
 jobs:
-  build:
+  executar:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # IMPORTANTE: Permissão para o robô salvar o arquivo
+      contents: write  # Dá permissão para o robô salvar arquivos
     
     steps:
-      - name: Baixar codigo do GitHub
+      - name: Baixar Codigo
         uses: actions/checkout@v3
 
-      - name: Instalar Python
+      - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
@@ -23,13 +23,13 @@ jobs:
       - name: Instalar Bibliotecas
         run: pip install pandas requests pytz
 
-      - name: Executar o Robo
+      - name: Rodar o Bot
         run: python bot.py
 
-      - name: Salvar resultados no GitHub
+      - name: Salvar Resultados (Autonomia)
         run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "Robo Autonomo"
+          git config --global user.email "bot@github.com"
           git add palpites.csv
-          git commit -m "Atualização Automática: $(date)" || exit 0
+          git commit -m "Palpites Atualizados: $(date)" || exit 0
           git push
