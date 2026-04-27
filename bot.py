@@ -18,7 +18,7 @@ def buscar_jogos_vips():
         jogos = response.json().get('response', [])
         lista_final = []
 
-        # Filtro de status: só aceita jogos que não acabaram
+        # Só jogos que não acabaram
         status_permitidos = ['TBD', 'NS', '1H', 'HT', '2H', 'ET', 'BT', 'LIVE']
 
         for item in jogos:
@@ -26,31 +26,37 @@ def buscar_jogos_vips():
             if fixture.get('status', {}).get('short') not in status_permitidos:
                 continue
 
-            data_obj = datetime.fromisoformat(fixture.get('date').replace('Z', '+00:00'))
+            data_iso = fixture.get('date')
+            data_obj = datetime.fromisoformat(data_iso.replace('Z', '+00:00'))
             hora_bra = data_obj.astimezone(fuso).strftime('%H:%M')
             
-            # Lógica de Palpite Detalhado
+            # Lógica de Palpite Detalhado (Exemplos)
+            liga = item.get('league', {}).get('name', '')
             palpite = "Escanteios: Over 8.5"
-            if item.get('teams', {}).get('home', {}).get('winner'):
-                palpite = "Vitória Casa / +1.5 Gols"
-            elif "Série A" in item.get('league', {}).get('name'):
-                palpite = "Ambas Marcam / 1º Tempo +0.5 Gols"
+            if "Série A" in liga:
+                palpite = "Ambas Marcam: Sim"
+            elif item.get('teams', {}).get('home', {}).get('winner'):
+                palpite = "Vitoria Casa / +1.5 Gols"
 
             lista_final.append({
                 'Hora': hora_bra,
-                'Liga': item.get('league', {}).get('name'),
+                'Liga': liga,
                 'TimeCasa': item['teams']['home']['name'],
                 'LogoCasa': item['teams']['home']['logo'],
                 'TimeFora': item['teams']['away']['name'],
                 'LogoFora': item['teams']['away']['logo'],
                 'Palpite': palpite,
-                'Odd': "1.85", # Valor simulado (API gratuita limita Odds reais)
+                'Odd': "1.80",
                 'Status': fixture.get('status', {}).get('long')
             })
 
-        df = pd.DataFrame(lista_final)
-        df.to_csv('palpites.csv', index=False)
-        print("✅ CSV Atualizado!")
+        if lista_final:
+            df = pd.DataFrame(lista_final)
+            df.to_csv('palpites.csv', index=False)
+            print("✅ CSV Atualizado com sucesso!")
+        else:
+            print("ℹ️ Nenhum jogo ativo encontrado.")
+
     except Exception as e:
         print(f"❌ Erro: {e}")
 
