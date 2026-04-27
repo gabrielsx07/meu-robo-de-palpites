@@ -1,4 +1,167 @@
-Horario,Liga,Evento,Status
-16:30:00,Italian Serie A,Cagliari vs Atalanta,2H
-18:45:00,Italian Serie A,Lazio vs Udinese,Not Started
-19:00:00,English Premier League,Manchester United vs Brentford,Not Started
+Horario_BR,Liga,Casa,Fora,Placar,Status,Minutos
+2026-04-27T00:00:00+00:00,USA - NWSL Women,Seattle Reign FC,Utah Royals W,0 x 3,Match Finished,90.0
+2026-04-27T00:00:00+00:00,Chile - Primera B,Union Espanola,Deportes Santa Cruz,2 x 0,Match Finished,90.0
+2026-04-27T00:00:00+00:00,USA - MLS Next Pro,Sporting KC II,Houston Dynamo FC II,1 x 2,Match Finished,90.0
+2026-04-27T00:00:00+00:00,Aruba - Division di Honor,Jong Aruba,Estrella,0 x 0,Match Finished,90.0
+2026-04-27T01:00:00+00:00,Mexico - Liga de Expansión MX,Cancún,Tapatío,1 x 0,Match Finished,90.0
+2026-04-27T01:05:00+00:00,Mexico - Liga MX,Cruz Azul,Necaxa,4 x 1,Match Finished,90.0
+2026-04-27T01:20:00+00:00,Colombia - Primera A,Internacional de Bogota,Chico,4 x 0,Match Finished,90.0
+2026-04-27T01:30:00+00:00,Honduras - Liga Nacional,Juticalpa,Lobos Upnfm,1 x 0,Match Finished,90.0
+2026-04-27T01:30:00+00:00,Colombia - Primera B,Barranquilla,Real Cartagena,0 x 0,Match Finished,90.0
+2026-04-27T03:00:00+00:00,USA - MLS Next Pro,Tacoma Defiance,Los Angeles FC II,4 x 1,Match Finished,90.0
+2026-04-27T07:00:00+00:00,Australia - Western Australia State League 1,Floreat Athena,Curtin University,3 x 1,Match Finished,90.0
+2026-04-27T08:30:00+00:00,Indonesia - Liga 1,Bali United,PSM Makassar,2 x 0,Match Finished,90.0
+2026-04-27T08:30:00+00:00,Indonesia - Liga 2,Persiku Kudus,Deltras,1 x 2,Match Finished,90.0
+2026-04-27T10:00:00+00:00,Ukraine - Premier League,Epitsentr Dunayivtsi,Oleksandria,1 x 1,Match Finished,90.0
+2026-04-27T10:00:00+00:00,Armenia - First League,Mika,Banants II,2 x 3,Match Finished,90.0
+2026-04-27T10:30:00+00:00,India - I-League - 2nd Division,Sudeva,Bengaluru United,1 x 0,Match Finished,90.0
+2026-04-27T10:30:00+00:00,India - I-League - 2nd Division,SC Bengaluru,Karbi Anglong Morning Star FC,0 x 1,Match Finished,90.0
+2026-04-27T11:00:00+00:00,Norway - 3. Division - Girone 4,Haugesund II,Stabæk II,3 x 2,Match Finished,90.0
+2026-04-27T11:00:00+00:00,Macedonia - First League,Struga,Sileks,2 x 0,Match Finished,90.0
+2026-04-27T11:30:00+00:00,Singapore - Premier League,Balestier Khalsa,Hougang United,0 x 3,Match Finished,90.0
+2026-04-27T11:30:00+00:00,Ukraine - Druha Liga,Polissya II,Skala 1911 Stryi,3 x 0,Match Finished,90.0
+2026-04-27T12:00:00+00:00,Indonesia - Liga 1,Persija Jakarta,Persis Solo,4 x 0,Match Finished,90.0
+2026-04-27T12:00:00+00:00,Armenia - First League,Hayq,Sardarapat,0 x 0,Match Finished,90.0
+2026-04-27T12:30:00+00:00,Ukraine - Premier League,Zorya Luhansk,Veres Rivne,2 x 0,Match Finished,90.0
+2026-04-27T13:00:00+00:00,Italy - Campionato Primavera - 1,Bologna U20,Genoa U20,1 x 0,Match Finished,90.0
+2026-04-27T13:00:00+00:00,Burundi - Ligue A,Inter Star,Olympic Star,1 x 2,Match Finished,90.0
+2026-04-27T13:00:00+00:00,Eswatini - Premier League,Nsingizini Hotspurs,Ezulwini United,None x None,Not Started,
+2026-04-27T13:00:00+00:00,Turkey - 3. Lig - Play-offs,Çorluspor 1947,Bursa Yıldırımspor,1 x 1,Match Finished,90.0
+2026-04-27T13:00:00+00:00,Turkey - 3. Lig - Play-offs,Küçükçekmece Sinopspor,Etimesgut SK,2 x 0,Match Finished,120.0
+2026-04-27T13:50:00+00:00,Oman - Professional League,Bahla,Oman Club,1 x 1,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Turkey - Süper Lig,Alanyaspor,Samsunspor,2 x 3,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Germany - Regionalliga - West,Bochum II,Borussia M'gladbach II,1 x 1,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Azerbaijan - Premyer Liqa,Turan,Zira,1 x 1,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Uzbekistan - Super League,Mash'al,Buxoro,0 x 1,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Uzbekistan - Super League,Olmaliq,Lokomotiv,2 x 1,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Macedonia - First League,Shkendija,Bashkimi Kumanovo,2 x 3,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Egypt - Premier League,Smouha SC,AL Masry,0 x 1,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Egypt - Premier League,Zamalek SC,Enppi,0 x 0,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Serbia - Prva Liga,Dubočica,Kabel Novi Sad,1 x 1,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Serbia - Prva Liga,FK Vozdovac,Zemun,3 x 0,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Iraq - Iraqi League,Al Kahrabaa,Al Karkh,1 x 3,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Iraq - Iraqi League,Al Quwa Al Jawiya,Newroz,1 x 1,Match Finished,90.0
+2026-04-27T14:00:00+00:00,Iraq - Iraqi League,Naft,Zakho,1 x 1,Match Finished,90.0
+2026-04-27T14:15:00+00:00,Norway - 3. Division - Girone 6,Gjøvik-Lyn,Sandefjord II,1 x 0,Match Finished,90.0
+2026-04-27T14:15:00+00:00,Qatar - Stars League,Al-Gharafa,Al Shahaniya,1 x 1,Match Finished,90.0
+2026-04-27T14:15:00+00:00,Qatar - Stars League,Al-Rayyan SC,Al-Arabi SC,4 x 0,Match Finished,90.0
+2026-04-27T14:15:00+00:00,Qatar - Stars League,Al Wakrah,Al-Sailiya,3 x 1,Match Finished,90.0
+2026-04-27T14:15:00+00:00,Qatar - Stars League,Qatar SC,Al-Duhail SC,1 x 2,Match Finished,90.0
+2026-04-27T14:15:00+00:00,Qatar - Stars League,UMM Salal,Al Ahli Doha,1 x 3,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Kyrgyzstan - Premier League,Bishkek City,Ilbirs,0 x 0,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Kyrgyzstan - Premier League,Abdish-Ata,OshMU Aldier,1 x 2,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Kyrgyzstan - Premier League,Asiagoal,Neftchi,0 x 1,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Romania - Liga I,Metaloglobus,Unirea Slobozia,1 x 1,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Russia - First League,Torpedo Moskva,Fakel,2 x 2,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Bulgaria - First League,Montana,Dobrudzha,1 x 0,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Tunisia - Ligue 2,Bouselem,AS Agareb,1 x 1,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Tunisia - Ligue 2,BS Bouhajla,CS Chebba,3 x 0,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Tunisia - Ligue 2,EM Mahdia,US Tataouine,0 x 1,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Tunisia - Ligue 2,CS Hammam-Lif,Menzel Bourguiba,1 x 0,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Tunisia - Ligue 2,M'saken,Sfax Railways,1 x 3,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Tunisia - Ligue 2,Kerkennah,ES Hammam-Sousse,2 x 1,Match Finished,90.0
+2026-04-27T14:30:00+00:00,Tunisia - Ligue 2,Sporting Ben Arous,Mégrine,1 x 1,Match Finished,90.0
+2026-04-27T15:00:00+00:00,Italy - Campionato Primavera - 1,Fiorentina U20,Monza U20,3 x 1,Match Finished,90.0
+2026-04-27T15:00:00+00:00,Georgia - Erovnuli Liga,Gagra,Meshakhte,1 x 1,Match Finished,90.0
+2026-04-27T15:00:00+00:00,Latvia - Virsliga,BFC Daugavpils,Super Nova,0 x 1,Match Finished,90.0
+2026-04-27T15:00:00+00:00,Estonia - Esiliiga B,Legion,Johvi Phoenix,2 x 1,Match Finished,90.0
+2026-04-27T15:00:00+00:00,Latvia - 1. Liga,Tukums II,Skanste,2 x 0,Match Finished,90.0
+2026-04-27T15:00:00+00:00,Serbia - Super Liga,IMT Novi Beograd,Radnicki NIS,2 x 0,Match Finished,90.0
+2026-04-27T15:10:00+00:00,Oman - Professional League,Al Nasr,Sohar,0 x 1,Match Finished,90.0
+2026-04-27T15:20:00+00:00,Finland - Suomen Cup,StaPa De Royale,PK-35,1 x 8,Match Finished,90.0
+2026-04-27T15:30:00+00:00,Bulgaria - Second League,Hebar 1918,Chernomorets 1919 Burgas,1 x 3,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Poland - I Liga,Ruch Chorzów,Pogoń Grod. Mazowiecki,2 x 2,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Croatia - HNL,HNK Gorica,Istra 1961,1 x 0,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Germany - Frauen Bundesliga,1899 Hoffenheim W,FC Koln W,6 x 2,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Azerbaijan - Premyer Liqa,Sabah FA,Karvan,2 x 0,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Burkina-Faso - Ligue 1,Rahimo,RCK,2 x 0,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Norway - 3. Division - Girone 6,Lillehammer,Sarpsborg 08 II,6 x 1,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Saudi-Arabia - Division 1,Al Anwar,Al Ula,1 x 2,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Latvia - Virsliga,Ogre United,FS Jelgava,0 x 1,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Estonia - Esiliiga A,FC Tallinn,FCI Levadia II,4 x 2,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Estonia - Esiliiga A,Nõmme Kalju II,Tallinna Kalev,0 x 4,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Estonia - Esiliiga A,Tartu Welco,Elva,3 x 3,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Bahrain - Premier League,Khalidiya,Al-Hidd,2 x 1,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Bahrain - Premier League,A'Ali,Sitra,0 x 2,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Cyprus - 1. Division,AEL,Anorthosis,0 x 1,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Jordan - League,Al Ramtha,Sama Al Sarhan,2 x 0,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Peru - Segunda División,Molinos El Pirata,Cesar Vallejo,2 x 1,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Serbia - Prva Liga,Macva,OFK Vršac,3 x 0,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Serbia - Super Liga,Javor,Napredak,4 x 0,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Serbia - Super Liga,Radnicki 1923,FK Spartak Zdrepceva KRV,4 x 0,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Mali - Première Division,Diarra,Binga,None x None,Not Started,
+2026-04-27T16:00:00+00:00,Israel - Liga Leumit,Hapoel Ramat Gan,Bnei Yehuda,1 x 1,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Israel - Liga Leumit,Hapoel Rishon LeZion,Hapoel Kfar Saba,0 x 5,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Israel - Liga Leumit,Maccabi Herzliya,Kiryat Yam SC,0 x 0,Match Finished,90.0
+2026-04-27T16:00:00+00:00,Ivory-Coast - Ligue 1,Stella,Zoman,1 x 0,Match Finished,90.0
+2026-04-27T16:10:00+00:00,Saudi-Arabia - Division 1,Al-Raed,Al-Faisaly FC,1 x 2,Match Finished,90.0
+2026-04-27T16:20:00+00:00,Saudi-Arabia - Division 1,Al Jabalain,Al-Adalah,1 x 2,Match Finished,90.0
+2026-04-27T16:30:00+00:00,Italy - Serie A,Cagliari,Atalanta,3 x 2,Match Finished,90.0
+2026-04-27T16:30:00+00:00,Qatar - Stars League,Al Sadd,Al Shamal,3 x 2,Match Finished,90.0
+2026-04-27T16:30:00+00:00,Iraq - Iraqi League,Al Najaf,Duhok,1 x 2,Match Finished,90.0
+2026-04-27T16:30:00+00:00,Iraq - Iraqi League,Al Talaba,Erbil,2 x 3,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Poland - Ekstraklasa,Piast Gliwice,Arka Gdynia,4 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Turkey - Süper Lig,Beşiktaş,Fatih Karagümrük,0 x 0,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Turkey - Süper Lig,Konyaspor,Trabzonspor,2 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Portugal - Segunda Liga,Chaves,Oliveirense,2 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Russia - Premier League,Baltika,Akron,0 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Albania - Superliga,AF Elbasani,Vllaznia Shkodër,3 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Albania - Superliga,Flamurtari,Dinamo Tirana,3 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Sweden - Allsvenskan,AIK Stockholm,Malmo FF,0 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Sweden - Allsvenskan,BK Hacken,Sirius,2 x 2,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Sweden - Allsvenskan,Kalmar FF,IF Elfsborg,2 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Sweden - Allsvenskan,Mjallby AIF,Halmstad,2 x 0,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Sweden - Allsvenskan,Orgryte IS,Degerfors IF,1 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Norway - 1. Division,Egersund,Ranheim,3 x 0,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Norway - 3. Division - Girone 1,IF Ready,KFUM II,2 x 0,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Norway - 3. Division - Girone 2,Melhus,Kvik Trondheim,4 x 0,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Sweden - Ettan - Norra,Hammarby Talang,Vasalund,2 x 2,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Georgia - Erovnuli Liga,Dinamo Batumi,Torpedo Kutaisi,0 x 3,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Denmark - Superliga,FC Copenhagen,Vejle,3 x 0,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Egypt - Premier League,Pyramids FC,Al Ahly,3 x 0,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Serbia - Super Liga,TSC Backa Topola,Mladost Lucani,1 x 2,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Bulgaria - First League,Lokomotiv Sofia,Septemvri Sofia,1 x 1,Match Finished,90.0
+2026-04-27T17:00:00+00:00,Turkey - 3. Lig - Play-offs,Talasgücü Belediyespor,Mazıdağı Fosfatspor,2 x 0,Second Half,90.0
+2026-04-27T17:00:00+00:00,Turkey - 3. Lig - Play-offs,Silifke Belediyespor,Yeşilyurt Belediyespor,1 x 1,Second Half,90.0
+2026-04-27T17:30:00+00:00,Iceland - Úrvalsdeild,Fram Reykjavik,IBV Vestmannaeyjar,3 x 1,Second Half,72.0
+2026-04-27T17:30:00+00:00,Romania - Liga I,Arges Pitesti,Universitatea Craiova,0 x 1,Second Half,68.0
+2026-04-27T17:50:00+00:00,Saudi-Arabia - Division 1,Al Jandal,Al Orubah,1 x 2,Second Half,51.0
+2026-04-27T18:00:00+00:00,Hungary - NB II,Budapest Honved,Soroksar,0 x 0,Halftime,45.0
+2026-04-27T18:00:00+00:00,Norway - 3. Division - Girone 6,Lyn II,Elverum,2 x 0,Halftime,45.0
+2026-04-27T18:00:00+00:00,Iceland - Úrvalsdeild,KR Reykjavik,FH hafnarfjordur,4 x 2,Halftime,45.0
+2026-04-27T18:00:00+00:00,Brazil - Paranaense U20,Parana Clube U20,Operário PR U20,1 x 1,Halftime,45.0
+2026-04-27T18:00:00+00:00,Brazil - Paranaense U20,Galo Maringá U20,Cianorte U20,2 x 1,Halftime,45.0
+2026-04-27T18:00:00+00:00,Argentina - Torneo Federal A,Olimpo Bahia Blanca,Circulo Deportivo,1 x 0,Halftime,45.0
+2026-04-27T18:30:00+00:00,Spain - Segunda División,Cadiz,Las Palmas,1 x 1,First Half,30.0
+2026-04-27T18:30:00+00:00,Argentina - Primera C,Central Ballester,El Porvenir,0 x 0,First Half,24.0
+2026-04-27T18:30:00+00:00,Argentina - Primera C,Sportivo Barracas,Central Cordoba,0 x 2,First Half,29.0
+2026-04-27T18:30:00+00:00,Brazil - Paranaense U20,Cascavel U20,Araucaria U20,None x None,Not Started,
+2026-04-27T18:30:00+00:00,Belgium - Jupiler Pro League,Beerschot VA,Patro Eisden,1 x 0,First Half,29.0
+2026-04-27T18:30:00+00:00,Belgium - Jupiler Pro League,Liège,Lommel United,1 x 2,First Half,30.0
+2026-04-27T18:45:00+00:00,Italy - Serie A,Lazio,Udinese,0 x 0,First Half,14.0
+2026-04-27T18:45:00+00:00,France - Ligue 2,Boulogne,Dunkerque,1 x 1,First Half,15.0
+2026-04-27T19:00:00+00:00,England - Premier League,Manchester United,Brentford,None x None,Not Started,
+2026-04-27T19:00:00+00:00,Spain - La Liga,Espanyol,Levante,None x None,Not Started,
+2026-04-27T19:00:00+00:00,Ecuador - Liga Pro Serie B,LDU Portoviejo,Deportivo Cuenca Juniors,None x None,Not Started,
+2026-04-27T19:00:00+00:00,Chile - Segunda División,Provincial Ovalle,Santiago City,0 x 0,First Half,1.0
+2026-04-27T19:00:00+00:00,Brazil - Matogrossense 2,Atlético Matogrossense,Paulistano MT,None x None,Not Started,
+2026-04-27T19:15:00+00:00,Portugal - Primeira Liga,GIL Vicente,Casa Pia,None x None,Not Started,
+2026-04-27T19:15:00+00:00,Iceland - Úrvalsdeild,Breidablik,Thor Akureyri,None x None,Not Started,
+2026-04-27T19:15:00+00:00,Iceland - Úrvalsdeild,Stjarnan,Valur Reykjavik,None x None,Not Started,
+2026-04-27T19:15:00+00:00,Iceland - Úrvalsdeild,Vikingur Reykjavik,IA Akranes,None x None,Not Started,
+2026-04-27T20:00:00+00:00,Peru - Primera División,ADT,Club Deportivo Los Chankas,None x None,Not Started,
+2026-04-27T20:00:00+00:00,Paraguay - Division Intermedia,Atlético Tembetary,3 de Noviembre,None x None,Not Started,
+2026-04-27T21:00:00+00:00,Brazil - Brasileiro Women,America Mineiro W,São Paulo W,None x None,Not Started,
+2026-04-27T21:30:00+00:00,Ecuador - Liga Pro,Manta FC,Universidad Catolica,None x None,Not Started,
+2026-04-27T21:30:00+00:00,Honduras - Liga Nacional,Génesis,Victoria,None x None,Not Started,
+2026-04-27T21:45:00+00:00,Argentina - Liga Profesional Argentina,Velez Sarsfield,Union Santa Fe,None x None,Not Started,
+2026-04-27T22:00:00+00:00,Brazil - Serie B,Athletic Club,Nautico Recife,None x None,Not Started,
+2026-04-27T22:00:00+00:00,Uruguay - Segunda División,Atenas,Fenix,None x None,Not Started,
+2026-04-27T22:00:00+00:00,Colombia - Primera B,Bogota FC,Union Magdalena,None x None,Not Started,
+2026-04-27T22:00:00+00:00,Jamaica - Premier League,Molynes United,Tivoli Gardens,None x None,Not Started,
+2026-04-27T22:30:00+00:00,Paraguay - Division Intermedia,Sportivo Carapeguá,Deportivo Santani,None x None,Not Started,
+2026-04-27T22:30:00+00:00,Uruguay - Primera División - Apertura,Defensor Sporting,Progreso,None x None,Not Started,
+2026-04-27T23:00:00+00:00,Barbados - Premier League,Ellerton,Bagatelle,None x None,Not Started,
+2026-04-27T23:00:00+00:00,Brazil - Brasileiro Women,Palmeiras W,Santos W,None x None,Not Started,
+2026-04-27T23:00:00+00:00,Brazil - Serie C,Ferroviária,Guarani Campinas,None x None,Not Started,
+2026-04-27T23:00:00+00:00,Brazil - Serie C,Caxias,Ypiranga-RS,None x None,Not Started,
