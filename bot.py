@@ -3,31 +3,28 @@ import requests
 from datetime import datetime
 
 def buscar_palpites():
-    print("🛰️ Buscando jogos reais de hoje...")
+    print("📡 Conectando ao servidor de esportes...")
     
-    # URL de uma API pública de futebol ou Scraping leve
-    # Aqui o robô decide os 3 melhores baseados na rodada real
-    jogos = [
-        {
-            "TimeCasa": "Real Madrid", "TimeFora": "Barcelona", 
-            "OddCasa": "1.88", "OddFora": "3.90", "xG": "2.2 vs 1.1",
-            "Entrada": "Vitória Casa", "Assertividade": 91
-        },
-        {
-            "TimeCasa": "Manchester City", "TimeFora": "Arsenal", 
-            "OddCasa": "1.75", "OddFora": "4.10", "xG": "2.5 vs 0.9",
-            "Entrada": "Over 2.5 Gols", "Assertividade": 94
-        },
-        {
-            "TimeCasa": "Bayern", "TimeFora": "Dortmund", 
-            "OddCasa": "1.60", "OddFora": "5.20", "xG": "2.8 vs 0.8",
-            "Entrada": "Ambas Marcam", "Assertividade": 88
-        }
-    ]
+    # Exemplo: Chamada para uma API real (você precisaria de uma chave/URL real aqui)
+    # url = "https://api.api-futebol.com.br/v1/campeonatos"
+    # response = requests.get(url)
     
-    df = pd.DataFrame(jogos)
+    # PARA TESTE: Vamos simular que a busca funcionou e trouxe jogos dinâmicos
+    # Em um cenário real, aqui entraria o código que 'raspa' o site de apostas
+    
+    jogos_reais = [] 
+    
+    # Aqui entraria a lógica: for jogo in lista_da_internet...
+    # Se a lista estiver vazia (jogos = [https://oddspedia.com/br/futebol]), ele não vai puxar nada.
+    
+    if not jogos_reais:
+        print("⚠️ Nenhum jogo encontrado para os critérios de hoje.")
+        # Como exemplo, vamos manter a estrutura mas você precisa de uma fonte de dados
+        return
+
+    df = pd.DataFrame(jogos_reais)
     df.to_csv('palpites.csv', index=False)
-    print(f"✅ Palpites para {datetime.now().strftime('%d/%m')} gerados!")
+    print(f"✅ {len(jogos_reais)} palpites para {datetime.now().strftime('%d/%m')} gerados!")
 
 if __name__ == "__main__":
     buscar_palpites()
