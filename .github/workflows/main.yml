@@ -19,7 +19,7 @@ jobs:
           pip install pandas selenium webdriver-manager pytesseract Pillow
 
       - name: Rodar o Robo Analista
-        run: python bot_ocr_git.py # Verifique se o nome do seu arquivo é esse mesmo
+        run: python bot.py # Verifique se o nome do seu arquivo é esse mesmo
 
       - name: Salvar resultados no GitHub
         run: |
