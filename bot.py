@@ -3,49 +3,61 @@ import requests
 from datetime import datetime
 import pytz
 
-def buscar_jogos_reais():
-    # 1. Configura fuso de Brasília para pegar o dia certo
+def buscar_jogos_profissionais():
+    # 1. Configurações de Data e Fuso de Brasília
     fuso = pytz.timezone('America/Sao_Paulo')
     hoje = datetime.now(fuso).strftime('%Y-%m-%d')
-    print(f"⚽ Buscando jogos reais para: {hoje}")
+    print(f"⚽ Buscando jogos de hoje ({hoje}) com a API oficial...")
 
-    # Fonte de dados aberta (Jogos Internacionais e Principais Ligas)
-    url = "https://www.thesportsdb.com/api/v1/json/3/eventsday.php"
-    params = {'d': hoje, 's': 'Soccer'}
+    # 2. Configurações da API com a sua chave
+    url = "https://v3.football.api-sports.io/fixtures"
+    headers = {
+        'x-rapidapi-host': "v3.football.api-sports.io",
+        'x-rapidapi-key': "b4533c0123994fd0a1a0d3a9d125d5ed" # Sua chave da foto
+    }
+    
+    # Buscamos todos os jogos da data de hoje
+    params = {'date': hoje}
 
     try:
-        response = requests.get(url, params=params, timeout=15)
+        response = requests.get(url, headers=headers, params=params, timeout=20)
         
         if response.status_code == 200:
             dados = response.json()
-            eventos = dados.get('events')
-
-            if not eventos:
-                print(f"⚠️ Sem jogos registrados para {hoje} nesta fonte.")
-                # Cria um arquivo vazio para não dar erro no commit
-                df = pd.DataFrame([{'Aviso': 'Sem jogos para hoje'}])
-                df.to_csv('palpites.csv', index=False)
+            jogos = dados.get('response', [])
+            
+            if not jogos:
+                print("⚠️ A API não retornou jogos para hoje. Verifique se há rodadas hoje.")
                 return
 
             lista_final = []
-            for jogo in eventos:
+            for item in jogos:
+                fixture = item.get('fixture', {})
+                league = item.get('league', {})
+                teams = item.get('teams', {})
+                goals = item.get('goals', {})
+                status = fixture.get('status', {})
+
                 lista_final.append({
-                    'Horario': jogo.get('strTime'),
-                    'Liga': jogo.get('strLeague'),
-                    'Evento': jogo.get('strEvent'),
-                    'Status': jogo.get('strStatus')
+                    'Horario_BR': fixture.get('date'),
+                    'Liga': f"{league.get('country')} - {league.get('name')}",
+                    'Casa': teams.get('home', {}).get('name'),
+                    'Fora': teams.get('away', {}).get('name'),
+                    'Placar': f"{goals.get('home')} x {goals.get('away')}",
+                    'Status': status.get('long'), # Ex: 'Match Finished', 'In Play', 'Not Started'
+                    'Minutos': status.get('elapsed') # Tempo de jogo se estiver rolando
                 })
 
-            # 2. Salva o CSV
+            # 3. Gera o arquivo CSV
             df = pd.DataFrame(lista_final)
             df.to_csv('palpites.csv', index=False)
-            print(f"✅ Sucesso! {len(lista_final)} jogos encontrados.")
-
+            print(f"✅ Sucesso! {len(lista_final)} jogos salvos no arquivo 'palpites.csv'.")
         else:
-            print(f"❌ Erro no site: {response.status_code}")
+            print(f"❌ Erro na API: Status {response.status_code}")
+            print(response.text)
 
     except Exception as e:
-        print(f"❌ Falha técnica: {e}")
+        print(f"❌ Falha no robô: {e}")
 
 if __name__ == "__main__":
-    buscar_jogos_reais()
+    buscar_jogos_profissionais()
