@@ -3,75 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apostador PRO</title>
+    <title>Apostador PRO - IA Analysis</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #ffffff; --primary: #34c759; --text: #1a1a1a; --light: #8e8e93; --border: #efeff4; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 480px; margin: 0 auto; }
-        
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 800; }
-        .summary { border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-        .win-rate { font-size: 32px; font-weight: 800; color: var(--primary); margin: 10px 0; }
-
-        .card { border: 1px solid var(--border); border-radius: 18px; padding: 16px; margin-bottom: 12px; }
-        .card-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--light); font-weight: 700; margin-bottom: 12px; }
-        
-        .teams { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
-        .team { width: 45%; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-        .dot { width: 8px; height: 8px; background: #eee; border-radius: 50%; }
-
-        .prediction { background: #f2f2f7; border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .label { font-size: 10px; color: var(--light); text-transform: uppercase; font-weight: 800; }
-        .bet { font-size: 14px; font-weight: 800; display: block; }
-        .conf { background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="header">Apostador <span>PRO</span></div>
-    
-    <div class="summary">
-        <div style="font-size: 11px; color: var(--light); font-weight: 800;">ASSERTIVIDADE 30 DIAS</div>
-        <div class="win-rate">76%</div>
-        <div style="height: 6px; background: #eee; border-radius: 10px; overflow: hidden; display: flex;">
-            <div style="width: 76%; background: var(--primary);"></div>
-            <div style="width: 24%; background: #ff3b30;"></div>
-        </div>
-    </div>
-
-    <div id="lista"></div>
-</div>
-
-<script>
-    Papa.parse("palpites.csv", {
-        download: true, header: true, skipEmptyLines: true,
-        complete: function(res) {
-            let html = "";
-            res.data.forEach(row => {
-                if(!row.Confronto) return;
-                const times = row.Confronto.split(" vs ");
-                html += `
-                    <div class="card">
-                        <div class="card-meta">
-                            <span>${row.Hora}</span>
-                            <span style="color: var(--primary)">CONFIRMADO</span>
-                        </div>
-                        <div class="teams">
-                            <div class="team"><div class="dot"></div> ${times[0]}</div>
-                            <div class="team" style="justify-content: flex-end;">${times[1]} <div class="dot"></div></div>
-                        </div>
-                        <div class="prediction">
-                            <div><span class="label">Melhor Entrada</span><span class="bet">${row.Palpite}</span></div>
-                            <div class="conf">${row.Confianca}</div>
-                        </div>
-                    </div>`;
-            });
-            document.getElementById("lista").innerHTML = html;
+        :root {
+            --bg: #ffffff;
+            --card-bg: #ffffff;
+            --primary: #34c759; /* Verde Apple */
+            --text-dark: #1c1c1e;
+            --text-light: #8e8e93;
+            --border: #f2f2f7;
         }
-    });
-</script>
-</body>
-</html>
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); 
+            color: var(--text-dark); 
+            margin: 0; padding: 0;
+            line-height: 1.4;
+        }
+
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .container { max-width: 480px; margin: 0 auto; padding: 20px; }
+
+        /* Card de Performance do Topo */
+        .stats-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .stats-label { font-size: 11px; font-weight: 800; color: var(--text-light); letter-spacing: 0.5px; }
+        .win-rate { font-size: 32px; font-weight: 800; color: var(--primary); margin: 5px 0; }
+        .bar-container { height: 8px; background: #f2f2f7; border-radius: 10px; margin-top: 15px; overflow: hidden; display: flex; }
+        .bar-green { background: var(--primary); width: 76%; }
+        .bar-red { background: #ff3b30; width: 24%; }
+
+        /* Filtros */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { 
+            padding: 10px 20px; border-radius: 12px; border: none; 
+            background: #f2f2f7; font-weight: 700; font-size: 13px; color: var(--text-dark);
+        }
+        .tab.active { background: #000; color: #fff; }
+
+        /* Card de Jogo (O "Hit" Único) */
+        .match-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+        .match-card:active { transform: scale(0.98); }
+
+        .match-info { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--text-light); margin-bottom: 15px; }
+        .badge-live { color: var(--primary); display: flex; align-items: center; gap: 4px; }
+
+        .teams { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .team { display: flex; align-items: center; gap: 12px; width: 42%; }
+        .team img { width: 35px; height: 35px; border-radius: 50%; background: #f2f2f7; }
+        .team span { font-weight: 800; font-size: 14px; }
+
+        /* Área da Entrada Analisada (xG, Cantos, etc) */
+        .prediction-box {
+            background: #f8f9fa;
+            border-radius: 18px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .prediction-text span { display: block; font-size: 10px; color: var(--text-light); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+        .prediction-text strong { font-size: 15px; font-weight: 800; color: #000; }
+        
+        .conf-circle { 
+            background: var(--primary); color: #fff; 
+            width: 45px; height: 45px; border-radius: 12px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 12px; font-
