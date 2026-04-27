@@ -2,25 +2,31 @@ name: Automacao Total Palpites
 
 on:
   schedule:
-    - cron: '0 3 * * *' # Roda meia-noite
-  workflow_dispatch: # Botão para rodar agora
+    - cron: '0 3 * * *' # Roda às 00:00 do Brasil
+  workflow_dispatch: # Botão para rodar na hora
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Baixar codigo do GitHub
+        uses: actions/checkout@v3
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - name: Instalando Pandas
+
+      - name: Instalar Pandas
         run: pip install pandas
-      - name: Executando Robô
+
+      - name: Executar o Robo
         run: python bot.py
-      - name: Atualizando Site
+
+      - name: Salvar os novos palpites
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add palpites.csv
-          git commit -m "Site atualizado: $(date)" || exit 0
+          git commit -m "Update palpites" || exit 0
           git push
