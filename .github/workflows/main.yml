@@ -1,30 +1,30 @@
-name: Analise Meia Noite
+name: Automacao Total Palpites
 
 on:
   schedule:
-    - cron: '0 3 * * *'
-  workflow_dispatch:
+    - cron: '0 3 * * *' # Roda todo dia às 00:00 (Horário de Brasília)
+  workflow_dispatch: # Permite que você rode na mão quando quiser
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixar codigo
+      - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Instalar Tesseract
-        run: sudo apt-get update && sudo apt-get install -y tesseract-ocr
+      - name: Instalar Python e Tesseract
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-por
+          pip install pandas selenium webdriver-manager pytesseract Pillow
 
-      - name: Instalar Bibliotecas Python
-        run: pip install pandas selenium webdriver-manager pytesseract Pillow
+      - name: Rodar o Robo Analista
+        run: python bot_ocr_git.py # Verifique se o nome do seu arquivo é esse mesmo
 
-      - name: Rodar Robo
-        run: python bot.py
-
-      - name: Salvar Resultados
+      - name: Salvar resultados no GitHub
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add .
-          git commit -m "Update automatico" || echo "Sem mudanças"
+          git add palpites.csv
+          git commit -m "Planilha atualizada por IA" || exit 0
           git push
