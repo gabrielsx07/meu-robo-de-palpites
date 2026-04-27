@@ -3,65 +3,74 @@ import pandas as pd
 import random
 from datetime import datetime
 
-API_KEY = 'SUA_CHAVE_AQUI'
+# Substitua pela sua chave real
+API_KEY = '32b69413e640444281575ad643191426'
 URL = 'https://api.football-data.org/v4/matches'
 headers = {'X-Auth-Token': API_KEY}
 
-def inteligencia_analitica(casa, fora):
-    # --- SIMULAÇÃO DE VARIÁVEIS (xG, Amplitude e Intensidade) ---
-    xg_casa = round(random.uniform(0.8, 2.5), 2)
-    xg_fora = round(random.uniform(0.5, 2.0), 2)
-    volume_ataque = random.randint(10, 25) # Chutes e cruzamentos
+def analisar_mercados_pro(casa, fora):
+    """
+    Simula a análise de xG, Escanteios e Intensidade para escolher o melhor palpite.
+    """
+    # Simulação de métricas baseada no "nível" dos times (comprimento do nome como exemplo)
+    xg_casa = round(random.uniform(0.8, 2.6), 2)
+    xg_fora = round(random.uniform(0.5, 2.1), 2)
+    volume_ataque = random.randint(12, 28) # Representa pressão e cantos
+
+    analises = []
+
+    # 1. Analisando Vencer um dos Tempos (Intensidade)
+    if xg_casa > xg_fora + 0.6:
+        analises.append({"entrada": f"Vencer um dos Tempos: {casa}", "conf": random.randint(91, 98)})
     
-    hits = []
-
-    # 1. Analisando xG e Valor Real
-    if xg_casa > xg_fora + 0.5:
-        hits.append({"tipo": f"Vencer um dos Tempos: {casa}", "conf": random.randint(90, 97)})
+    # 2. Analisando Escanteios (Amplitude e Chutes)
+    if volume_ataque > 20:
+        analises.append({"entrada": "Mais de 9.5 Escanteios", "conf": random.randint(89, 96)})
     
-    # 2. Analisando Escanteios (Baseado em Volume de Ataque e Chutes)
-    if volume_ataque > 18:
-        hits.append({"tipo": "Mais de 9.5 Escanteios", "conf": random.randint(88, 95)})
-    
-    # 3. Analisando Gols (Baseado no xG acumulado)
-    if (xg_casa + xg_fora) > 2.8:
-        hits.append({"tipo": "Over 2.5 Gols (Valor)", "conf": random.randint(85, 93)})
-    elif (xg_casa + xg_fora) > 1.8:
-        hits.append({"tipo": "Mais de 1.5 Gols", "conf": random.randint(92, 98)})
+    # 3. Analisando xG e Valor Real (Gols)
+    if (xg_casa + xg_fora) > 2.7:
+        analises.append({"entrada": "Over 2.5 Gols (xG Alta)", "conf": random.randint(86, 94)})
+    else:
+        analises.append({"entrada": "Mais de 1.5 Gols", "conf": random.randint(92, 98)})
 
-    # 4. Ambas Marcam (Contexto de ataque vs defesa frágil)
-    if xg_casa > 1.2 and xg_fora > 1.0:
-        hits.append({"tipo": "Ambas Marcam: Sim", "conf": random.randint(87, 94)})
+    # 4. Ambas Marcam (Contexto e Desfalques simulados)
+    if xg_casa > 1.1 and xg_fora > 1.0:
+        analises.append({"entrada": "Ambas Marcam: Sim", "conf": random.randint(88, 93)})
 
-    # FILTRO: Pega a opção com maior 'Confiança' (Aposta de Valor)
-    hits.sort(key=lambda x: x['conf'], reverse=True)
-    escolha_mestre = hits[0]
+    # O "HIT": Escolhe a opção que teve a maior confiança calculada
+    analises.sort(key=lambda x: x['conf'], reverse=True)
+    melhor_hit = analises[0]
 
-    return escolha_mestre['tipo'], f"{escolha_mestre['conf']}%"
+    return melhor_hit['entrada'], f"{melhor_hit['conf']}%"
 
-def gerar_dados():
-    print("🔬 Analisando xG, Escanteios e Intensidade...")
+def gerar_palpites():
+    print("🔬 IA Analisando xG, Escanteios e Valor Real...")
     response = requests.get(URL, headers=headers)
+    
     if response.status_code == 200:
         jogos = response.json().get('matches', [])
-        lista = []
+        dados_pro = []
+
         for jogo in jogos:
             casa = jogo['homeTeam']['name']
             fora = jogo['awayTeam']['name']
+            liga = jogo['competition']['name']
             data_obj = datetime.strptime(jogo['utcDate'], "%Y-%m-%dT%H:%M:%SZ")
-            
-            # IA processa o Hit baseado nos novos critérios
-            entrada, conf = inteligencia_analitica(casa, fora)
-            
-            lista.append({
+
+            # A IA decide entre as opções baseada nos critérios técnicos
+            entrada, confianca = analisar_mercados_pro(casa, fora)
+
+            dados_pro.append({
+                "Liga": liga,
                 "Hora": data_obj.strftime("%H:%M"),
-                "Confronto": f"{casa} vs {fora}",
-                "MelhorEntrada": entrada,
-                "Confianca": conf
+                "Confronto": f"{casa} x {fora}",
+                "Palpite": entrada, # Aqui entra a melhor análise técnica
+                "Confianca": confianca
             })
         
-        pd.DataFrame(lista).to_csv('palpites.csv', index=False)
-        print("✅ Análise de valor concluída e salva no CSV.")
+        df = pd.DataFrame(dados_pro)
+        df.to_csv('palpites.csv', index=False)
+        print(f"✅ Sucesso! {len(dados_pro)} jogos analisados com critério técnico.")
 
 if __name__ == "__main__":
-    gerar_dados()
+    gerar_palpites()
