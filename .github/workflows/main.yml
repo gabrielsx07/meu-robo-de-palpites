@@ -1,0 +1,18 @@
+name: Analise Meia Noite
+on:
+  schedule:
+    - cron: '0 3 * * *' # Roda 00:00 no Brasil
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - sudo apt-get update && sudo apt-get install -y tesseract-ocr
+      - pip install pandas selenium webdriver-manager pytesseract Pillow
+      - python bot.py # Nome do seu script principal
+      - run: |
+          git config --global user.name "Bot"
+          git add .
+          git commit -m "Update"
+          git push
