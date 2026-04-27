@@ -1,167 +1,43 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apostador PRO</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --bg: #ffffff;
-            --card-bg: #f8f9fa;
-            --primary: #34c759;
-            --text-dark: #1a1a1a;
-            --text-light: #8e8e93;
-            --border: #efeff4;
-        }
+Papa.parse("palpites.csv", {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(res) {
+        let html = "";
+        res.data.forEach(row => {
+            if(!row.Confronto) return;
+            const times = row.Confronto.split(" vs ");
+            
+            // Agora ele lê 'Entrada' que o Python gerou
+            const palpiteMestre = row.Entrada || "Analisando...";
+            const confMestre = row.Confianca || "90%";
 
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg); 
-            color: var(--text-dark); 
-            margin: 0; padding: 0;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Header Estilo App */
-        header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .user-profile { display: flex; align-items: center; gap: 10px; font-weight: 600; }
-        .avatar { width: 35px; height: 35px; border-radius: 50%; background: #eee; }
-
-        .container { max-width: 500px; margin: 0 auto; padding: 0 20px; }
-
-        /* Card de Assertividade */
-        .summary-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-        .summary-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text-light); margin-bottom: 15px; }
-        .win-rate { font-size: 28px; font-weight: 800; color: var(--primary); }
-        
-        .progress-bar { height: 8px; background: #eee; border-radius: 10px; margin-top: 15px; overflow: hidden; display: flex; }
-        .progress-green { height: 100%; background: var(--primary); width: 76%; }
-        .progress-red { height: 100%; background: #ff3b30; width: 24%; }
-
-        /* Filtros */
-        .filters { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .filter-btn { 
-            padding: 10px 20px; border-radius: 25px; border: none; 
-            background: #f2f2f7; font-weight: 600; font-size: 14px; color: var(--text-dark);
-            cursor: pointer; white-space: nowrap;
-        }
-        .filter-btn.active { background: #000; color: #fff; }
-
-        /* Card de Jogo Profissional */
-        .match-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-            position: relative;
-        }
-        .match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 11px; font-weight: 600; color: var(--text-light); }
-        .confirmed-tag { color: var(--primary); display: flex; align-items: center; gap: 4px; }
-
-        .teams-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .team { display: flex; align-items: center; gap: 12px; width: 45%; }
-        .team img { width: 32px; height: 32px; }
-        .team span { font-weight: 700; font-size: 14px; }
-
-        /* Botão de Palpite Estilo "Gerar Bilhete" */
-        .prediction-box {
-            background: #f2f2f7;
-            padding: 12px 15px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .tip-info span { display: block; font-size: 10px; color: var(--text-light); font-weight: 700; text-transform: uppercase; }
-        .tip-info strong { font-size: 15px; color: var(--text-dark); }
-        .conf-badge { background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; }
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="user-profile">
-        <div class="avatar"></div>
-        <span>Olá, Visitante</span>
-    </div>
-    <i class="fa-regular fa-moon"></i>
-</header>
-
-<div class="container">
-    <div class="summary-card">
-        <div class="summary-header">
-            <span>ÚLTIMOS 30 DIAS</span>
-            <span style="color:var(--text-dark)">285 GREEN / 91 RED</span>
-        </div>
-        <div class="win-rate">76% <span style="font-size: 14px; color:var(--text-light)">de acerto</span></div>
-        <div class="progress-bar">
-            <div class="progress-green"></div>
-            <div class="progress-red"></div>
-        </div>
-    </div>
-
-    <div class="filters">
-        <button class="filter-btn">Ontem</button>
-        <button class="filter-btn active">Hoje</button>
-        <button class="filter-btn">Amanhã</button>
-    </div>
-
-    <div id="lista-jogos"></div>
-</div>
-
-<script>
-    Papa.parse("palpites.csv", {
-        download: true, header: true, skipEmptyLines: true,
-        complete: function(res) {
-            let html = "";
-            res.data.forEach(row => {
-                if(!row.Confronto) return;
-                const times = row.Confronto.split(" vs ");
-                
-                html += `
-                    <div class="match-card">
-                        <div class="match-header">
-                            <span><i class="far fa-clock"></i> ${row.Hora || '11:00'}</span>
-                            <span class="confirmed-tag"><i class="fas fa-check-circle"></i> CONFIRMADO</span>
+            html += `
+                <div class="match-card">
+                    <div class="match-header">
+                        <span><i class="far fa-clock"></i> ${row.Hora || '00:00'}</span>
+                        <span class="confirmed-tag"><i class="fas fa-check-circle"></i> CONFIRMADO</span>
+                    </div>
+                    <div class="teams-row">
+                        <div class="team">
+                            <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[0]}">
+                            <span>${times[0]}</span>
                         </div>
-                        <div class="teams-row">
-                            <div class="team">
-                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[0]}">
-                                <span>${times[0]}</span>
-                            </div>
-                            <div style="color:#eee">|</div>
-                            <div class="team" style="justify-content: flex-end; text-align: right;">
-                                <span>${times[1]}</span>
-                                <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[1]}">
-                            </div>
+                        <div style="color:#eee">|</div>
+                        <div class="team" style="justify-content: flex-end; text-align: right;">
+                            <span>${times[1]}</span>
+                            <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[1]}">
                         </div>
-                        <div class="prediction-box">
-                            <div class="tip-info">
-                                <span>Entrada Recomendada</span>
-                                <strong>${row["Chance Dupla"] || row.Entrada}</strong>
-                            </div>
-                            <div class="conf-badge">${row.Confianca || '92%'}</div>
+                    </div>
+                    <div class="prediction-box">
+                        <div class="tip-info">
+                            <span>ENTRADA RECOMENDADA</span>
+                            <strong>${palpiteMestre}</strong>
                         </div>
-                    </div>`;
-            });
-            document.getElementById("lista-jogos").innerHTML = html;
-        }
-    });
-</script>
-</body>
-</html>
+                        <div class="conf-badge">${confMestre}</div>
+                    </div>
+                </div>`;
+        });
+        document.getElementById("lista-jogos").innerHTML = html;
+    }
+});
