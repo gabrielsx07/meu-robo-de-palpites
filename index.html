@@ -3,116 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apostador PRO - Dark Mode</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Apostador PRO - Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #0f172a; /* Slate profundo */
-            --card-bg: #1e293b;
-            --primary: #10b981; /* Verde Esmeralda */
-            --text: #f1f5f9;
-            --dim: #94a3b8;
-            --border: #334155;
-        }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            margin: 0; padding: 20px;
-        }
-
-        .container { max-width: 1200px; margin: 0 auto; }
-
-        .header-section { margin-bottom: 30px; }
-        .win-rate { font-size: 36px; font-weight: 800; color: var(--primary); }
-
-        /* Mágica para os palpites ficarem lado a lado */
-        .grid-palpites {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        .match-card {
-            background: var(--card-bg); 
-            border-radius: 24px; 
-            padding: 20px;
-            border: 1px solid var(--border);
-            transition: transform 0.2s;
-        }
-        .match-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-
-        .match-time { font-size: 11px; font-weight: 700; color: var(--dim); margin-bottom: 15px; display: block; }
-
-        .teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .team { width: 45%; text-align: center; }
-        .team-logo { 
-            width: 50px; height: 50px; background: #334155; border-radius: 14px; 
-            margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
-            font-weight: 800; color: var(--primary); font-size: 20px;
-        }
-        .team-name { font-size: 14px; font-weight: 700; color: #fff; }
-
-        .prediction-box {
-            background: #0f172a; border-radius: 18px; padding: 18px;
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid var(--border);
-        }
-        .label-tip { font-size: 10px; color: var(--dim); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px; }
-        .val-tip { font-size: 14px; font-weight: 800; color: #fff; }
-        .badge-conf { background: var(--primary); color: #064e3b; padding: 5px 12px; border-radius: 10px; font-size: 12px; font-weight: 900; }
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --success: #10b981; --text: #f1f5f9; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .header { text-align: left; width: 100%; max-width: 1200px; margin-bottom: 30px; }
+        .header h1 { font-size: 14px; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; }
+        .header .main-val { font-size: 48px; font-weight: 900; color: var(--success); margin: 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; width: 100%; max-width: 1200px; }
+        .match-card { background: var(--card); border-radius: 24px; padding: 24px; border: 1px solid #334155; }
+        .teams-display { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .team { text-align: center; flex: 1; }
+        .team-logo { width: 50px; height: 50px; background: #334155; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--accent); }
+        .analysis-box { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
+        .prediction { font-size: 18px; font-weight: 900; }
+        .odds-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; color: #94a3b8; }
+        .odds-row b { color: var(--accent); }
+        .bar-bg { height: 8px; background: #334155; border-radius: 4px; overflow: hidden; margin-top: 10px; }
+        .bar-fill { height: 100%; background: var(--success); }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="header-section">
-        <span style="color: var(--dim); font-weight: 700; font-size: 12px; text-transform: uppercase;">Assertividade IA</span>
-        <div class="win-rate">76.4%</div>
+    <div class="header">
+        <h1>Análise de Hoje</h1>
+        <p class="main-val">LIVE ODDS</p>
     </div>
+    <div class="grid" id="matchGrid"></div>
 
-    <div class="grid-palpites" id="lista-jogos"></div>
-</div>
-
-<script>
-    Papa.parse("palpites.csv", {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            let html = "";
-            results.data.forEach(row => {
-                if (!row.Confronto) return;
-                const times = row.Confronto.split(" x ");
-                html += `
-                    <div class="match-card">
-                        <span class="match-time">● HOJE • ${row.Hora || 'LIVE'}</span>
-                        <div class="teams">
-                            <div class="team">
-                                <div class="team-logo">${times[0][0]}</div>
-                                <div class="team-name">${times[0]}</div>
-                            </div>
-                            <div style="font-weight: 900; color: var(--border);">VS</div>
-                            <div class="team">
-                                <div class="team-logo">${times[1] ? times[1][0] : '?'}</div>
-                                <div class="team-name">${times[1] || '---'}</div>
-                            </div>
-                        </div>
-                        <div class="prediction-box">
-                            <div>
-                                <span class="label-tip">Analise IA</span>
-                                <span class="val-tip">${row.Palpite}</span>
-                            </div>
-                            <div class="badge-conf">${row.Confianca}</div>
-                        </div>
-                    </div>
-                `;
+    <script>
+        function loadPalpites() {
+            Papa.parse('palpites.csv', {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const grid = document.getElementById('matchGrid');
+                    grid.innerHTML = '';
+                    results.data.forEach(row => {
+                        if (!row.TimeCasa) return;
+                        grid.innerHTML += `
+                            <div class="match-card">
+                                <div class="teams-display">
+                                    <div class="team"><div class="team-logo">${row.TimeCasa[0]}</div><div>${row.TimeCasa}</div></div>
+                                    <div style="color:#64748b; font-weight:800">VS</div>
+                                    <div class="team"><div class="team-logo">${row.TimeFora[0]}</div><div>${row.TimeFora}</div></div>
+                                </div>
+                                <div class="odds-row">
+                                    <span>Odd Casa: <b>${row.OddCasa}</b></span>
+                                    <span>xG: <b>${row.xG}</b></span>
+                                    <span>Odd Fora: <b>${row.OddFora}</b></span>
+                                </div>
+                                <div class="analysis-box">
+                                    <div style="font-size:10px; color:var(--accent); font-weight:800">PALPITE IA</div>
+                                    <div class="prediction">${row.Entrada}</div>
+                                </div>
+                                <div style="display:flex; justify-content:flex-end; font-size:12px; color:var(--success); font-weight:800">${row.Assertividade}% Confiança</div>
+                                <div class="bar-bg"><div class="bar-fill" style="width:${row.Assertividade}%"></div></div>
+                            </div>`;
+                    });
+                }
             });
-            document.getElementById("lista-jogos").innerHTML = html;
         }
-    });
-</script>
+        loadPalpites();
+        setInterval(loadPalpites, 60000);
+    </script>
 </body>
 </html>
