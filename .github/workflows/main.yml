@@ -1,18 +1,30 @@
 name: Analise Meia Noite
+
 on:
   schedule:
-    - cron: '0 3 * * *' # Roda 00:00 no Brasil
+    - cron: '0 3 * * *'
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - sudo apt-get update && sudo apt-get install -y tesseract-ocr
-      - pip install pandas selenium webdriver-manager pytesseract Pillow
-      - python bot.py # Nome do seu script principal
-      - run: |
-          git config --global user.name "Bot"
+      - name: Baixar codigo
+        uses: actions/checkout@v3
+
+      - name: Instalar Tesseract
+        run: sudo apt-get update && sudo apt-get install -y tesseract-ocr
+
+      - name: Instalar Bibliotecas Python
+        run: pip install pandas selenium webdriver-manager pytesseract Pillow
+
+      - name: Rodar Robo
+        run: python bot.py
+
+      - name: Salvar Resultados
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
           git add .
-          git commit -m "Update"
+          git commit -m "Update automatico" || echo "Sem mudanças"
           git push
