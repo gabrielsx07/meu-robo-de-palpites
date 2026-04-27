@@ -2,29 +2,25 @@ name: Automacao Total Palpites
 
 on:
   schedule:
-    - cron: '0 3 * * *' # Roda todo dia às 00:00 (Horário de Brasília)
-  workflow_dispatch: # Permite que você rode na mão quando quiser
+    - cron: '0 3 * * *' # Roda meia-noite
+  workflow_dispatch: # Botão para rodar agora
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
-
-      - name: Instalar Python e Tesseract
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y tesseract-ocr tesseract-ocr-por
-          pip install pandas selenium webdriver-manager pytesseract Pillow
-
-      - name: Rodar o Robo Analista
-        run: python bot.py # Verifique se o nome do seu arquivo é esse mesmo
-
-      - name: Salvar resultados no GitHub
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Instalando Pandas
+        run: pip install pandas
+      - name: Executando Robô
+        run: python bot.py
+      - name: Atualizando Site
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add palpites.csv
-          git commit -m "Planilha atualizada por IA" || exit 0
+          git commit -m "Site atualizado: $(date)" || exit 0
           git push
