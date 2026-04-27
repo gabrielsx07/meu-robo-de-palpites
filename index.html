@@ -3,44 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Palpites de Hoje</title>
+    <title>VIP Predictor - Cards</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; text-align: center; }
-        table { width: 90%; margin: 20px auto; border-collapse: collapse; background: #1e1e1e; }
-        th, td { padding: 12px; border: 1px solid #333; text-align: left; }
-        th { background: #00ff88; color: black; }
-        tr:nth-child(even) { background: #252525; }
-        .live { color: #ff4444; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <h1>⚽ Jogos e Palpites do Dia</h1>
-    <div id="tabela-container">Carregando jogos...</div>
-
-    <script>
-        // O script lê o arquivo palpites.csv que o robô gera
-        Papa.parse("palpites.csv", {
-            download: true,
-            header: true,
-            complete: function(results) {
-                let data = results.data;
-                let html = "<table><tr><th>Hora</th><th>Jogo</th><th>Liga</th><th>Status</th></tr>";
-                
-                data.forEach(row => {
-                    if(row.Mandante) { // Verifica se a linha não está vazia
-                        html += `<tr>
-                            <td>${row.Horario || ''}</td>
-                            <td>${row.Mandante} x ${row.Visitante}</td>
-                            <td>${row.Liga}</td>
-                            <td>${row.Status}</td>
-                        </tr>`;
-                    }
-                });
-                html += "</table>";
-                document.getElementById("tabela-container").innerHTML = html;
-            }
-        });
-    </script>
-</body>
-</html>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; margin: 0; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: auto; }
+        
+        /* O "Balão" do Jogo */
+        .card { 
+            background: #1e293b; border-radius: 15px; padding: 20px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #334155;
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        
+        .header { display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; margin-bottom: 15px; border-bottom
