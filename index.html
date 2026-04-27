@@ -2,90 +2,45 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>IA Palpites - Automacao Total</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Palpites de Hoje</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --success: #10b981; --text: #f1f5f9; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .main-val { font-size: 40px; font-weight: 900; color: var(--success); margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; width: 100%; max-width: 1200px; }
-        .match-card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid #334155; transition: 0.3s; }
-        .match-card:hover { border-color: var(--accent); }
-        .teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-weight: 700; }
-        .team { display: flex; flex-direction: column; align-items: center; flex: 1; text-align: center; }
-        
-        /* Estilo dos Escudos */
-        .team-logo { 
-            width: 60px; 
-            height: 60px; 
-            background: #334155; 
-            border-radius: 12px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-bottom: 8px; 
-            overflow: hidden;
-        }
-        .team-logo img { width: 80%; height: 80%; object-fit: contain; }
-
-        .odds-row { display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; margin-bottom: 15px; }
-        .odds-row b { color: var(--accent); }
-        .prediction-box { background: rgba(56, 189, 248, 0.1); border-radius: 12px; padding: 12px; text-align: center; font-weight: 900; border: 1px solid rgba(56, 189, 248, 0.2); font-size: 18px; }
-        .bar-bg { height: 6px; background: #334155; border-radius: 3px; margin-top: 10px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--success); box-shadow: 0 0 10px var(--success); }
+        body { font-family: sans-serif; background: #121212; color: white; text-align: center; }
+        table { width: 90%; margin: 20px auto; border-collapse: collapse; background: #1e1e1e; }
+        th, td { padding: 12px; border: 1px solid #333; text-align: left; }
+        th { background: #00ff88; color: black; }
+        tr:nth-child(even) { background: #252525; }
+        .live { color: #ff4444; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="main-val">LIVE ANALYSIS</div>
-    <div class="grid" id="matchGrid"></div>
+    <h1>⚽ Jogos e Palpites do Dia</h1>
+    <div id="tabela-container">Carregando jogos...</div>
 
     <script>
-        function load() {
-            Papa.parse('palpites.csv', {
-                download: true, header: true, skipEmptyLines: true,
-                complete: function(r) {
-                    const g = document.getElementById('matchGrid');
-                    g.innerHTML = '';
-                    r.data.forEach(row => {
-                        if(!row.TimeCasa) return;
-                        
-                        // Link mágico para os escudos (Busca pelo nome do time)
-                        const logoCasa = `https://img.buymeacoffee.com/button-api/?text=${row.TimeCasa[0]}&emoji=⚽&slug=bot&button_colour=38bdf8&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00`;
-                        const logoFora = `https://img.buymeacoffee.com/button-api/?text=${row.TimeFora[0]}&emoji=⚽&slug=bot&button_colour=38bdf8&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00`;
-
-                        g.innerHTML += `
-                        <div class="match-card">
-                            <div class="teams">
-                                <div class="team">
-                                    <div class="team-logo">
-                                        <img src="https://tmssl.akamaized.net/images/wappen/head/${row.TimeCasa.toLowerCase().replace(/ /g, '-')}.png" onerror="this.src='${logoCasa}'">
-                                    </div>
-                                    ${row.TimeCasa}
-                                </div>
-                                <div style="color:#475569; font-size: 12px;">VS</div>
-                                <div class="team">
-                                    <div class="team-logo">
-                                        <img src="https://tmssl.akamaized.net/images/wappen/head/${row.TimeFora.toLowerCase().replace(/ /g, '-')}.png" onerror="this.src='${logoFora}'">
-                                    </div>
-                                    ${row.TimeFora}
-                                </div>
-                            </div>
-                            <div class="odds-row">
-                                <span>Odd Casa: <b>${row.OddCasa}</b></span>
-                                <span>xG: <b>${row.xG}</b></span>
-                                <span>Odd Fora: <b>${row.OddFora}</b></span>
-                            </div>
-                            <div class="prediction-box">${row.Entrada}</div>
-                            <div style="text-align:right; font-size:11px; color:var(--success); margin-top:10px; font-weight:800">${row.Assertividade}% Confiança</div>
-                            <div class="bar-bg"><div class="bar-fill" style="width:${row.Assertividade}%"></div></div>
-                        </div>`;
-                    });
-                }
-            });
-        }
-        load();
-        setInterval(load, 60000);
+        // O script lê o arquivo palpites.csv que o robô gera
+        Papa.parse("palpites.csv", {
+            download: true,
+            header: true,
+            complete: function(results) {
+                let data = results.data;
+                let html = "<table><tr><th>Hora</th><th>Jogo</th><th>Liga</th><th>Status</th></tr>";
+                
+                data.forEach(row => {
+                    if(row.Mandante) { // Verifica se a linha não está vazia
+                        html += `<tr>
+                            <td>${row.Horario || ''}</td>
+                            <td>${row.Mandante} x ${row.Visitante}</td>
+                            <td>${row.Liga}</td>
+                            <td>${row.Status}</td>
+                        </tr>`;
+                    }
+                });
+                html += "</table>";
+                document.getElementById("tabela-container").innerHTML = html;
+            }
+        });
     </script>
 </body>
 </html>
