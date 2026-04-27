@@ -1,43 +1,77 @@
-Papa.parse("palpites.csv", {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(res) {
-        let html = "";
-        res.data.forEach(row => {
-            if(!row.Confronto) return;
-            const times = row.Confronto.split(" vs ");
-            
-            // Agora ele lê 'Entrada' que o Python gerou
-            const palpiteMestre = row.Entrada || "Analisando...";
-            const confMestre = row.Confianca || "90%";
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostador PRO</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #ffffff; --primary: #34c759; --text: #1a1a1a; --light: #8e8e93; --border: #efeff4; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 800; }
+        .summary { border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .win-rate { font-size: 32px; font-weight: 800; color: var(--primary); margin: 10px 0; }
 
-            html += `
-                <div class="match-card">
-                    <div class="match-header">
-                        <span><i class="far fa-clock"></i> ${row.Hora || '00:00'}</span>
-                        <span class="confirmed-tag"><i class="fas fa-check-circle"></i> CONFIRMADO</span>
-                    </div>
-                    <div class="teams-row">
-                        <div class="team">
-                            <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[0]}">
-                            <span>${times[0]}</span>
+        .card { border: 1px solid var(--border); border-radius: 18px; padding: 16px; margin-bottom: 12px; }
+        .card-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--light); font-weight: 700; margin-bottom: 12px; }
+        
+        .teams { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .team { width: 45%; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .dot { width: 8px; height: 8px; background: #eee; border-radius: 50%; }
+
+        .prediction { background: #f2f2f7; border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .label { font-size: 10px; color: var(--light); text-transform: uppercase; font-weight: 800; }
+        .bet { font-size: 14px; font-weight: 800; display: block; }
+        .conf { background: var(--primary); color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">Apostador <span>PRO</span></div>
+    
+    <div class="summary">
+        <div style="font-size: 11px; color: var(--light); font-weight: 800;">ASSERTIVIDADE 30 DIAS</div>
+        <div class="win-rate">76%</div>
+        <div style="height: 6px; background: #eee; border-radius: 10px; overflow: hidden; display: flex;">
+            <div style="width: 76%; background: var(--primary);"></div>
+            <div style="width: 24%; background: #ff3b30;"></div>
+        </div>
+    </div>
+
+    <div id="lista"></div>
+</div>
+
+<script>
+    Papa.parse("palpites.csv", {
+        download: true, header: true, skipEmptyLines: true,
+        complete: function(res) {
+            let html = "";
+            res.data.forEach(row => {
+                if(!row.Confronto) return;
+                const times = row.Confronto.split(" vs ");
+                html += `
+                    <div class="card">
+                        <div class="card-meta">
+                            <span>${row.Hora}</span>
+                            <span style="color: var(--primary)">CONFIRMADO</span>
                         </div>
-                        <div style="color:#eee">|</div>
-                        <div class="team" style="justify-content: flex-end; text-align: right;">
-                            <span>${times[1]}</span>
-                            <img src="https://api.dicebear.com/7.x/initials/svg?seed=${times[1]}">
+                        <div class="teams">
+                            <div class="team"><div class="dot"></div> ${times[0]}</div>
+                            <div class="team" style="justify-content: flex-end;">${times[1]} <div class="dot"></div></div>
                         </div>
-                    </div>
-                    <div class="prediction-box">
-                        <div class="tip-info">
-                            <span>ENTRADA RECOMENDADA</span>
-                            <strong>${palpiteMestre}</strong>
+                        <div class="prediction">
+                            <div><span class="label">Melhor Entrada</span><span class="bet">${row.Palpite}</span></div>
+                            <div class="conf">${row.Confianca}</div>
                         </div>
-                        <div class="conf-badge">${confMestre}</div>
-                    </div>
-                </div>`;
-        });
-        document.getElementById("lista-jogos").innerHTML = html;
-    }
-});
+                    </div>`;
+            });
+            document.getElementById("lista").innerHTML = html;
+        }
+    });
+</script>
+</body>
+</html>
