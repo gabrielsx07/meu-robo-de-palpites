@@ -9,28 +9,31 @@
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --success: #10b981; --text: #f1f5f9; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .main-title { font-size: 40px; font-weight: 900; color: var(--success); margin-bottom: 30px; letter-spacing: -1px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; width: 100%; max-width: 1100px; }
-        .match-card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid #334155; position: relative; }
-        .teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .team { text-align: center; flex: 1; font-weight: 700; font-size: 14px; }
-        .team-logo { width: 45px; height: 45px; background: #334155; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; color: var(--accent); font-weight: 900; }
-        .odds-bar { display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; background: rgba(15, 23, 42, 0.5); padding: 8px 12px; border-radius: 10px; margin-bottom: 15px; }
-        .odds-bar b { color: var(--accent); }
-        .prediction-box { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 12px; text-align: center; font-weight: 900; color: #fff; }
-        .conf-label { display: flex; justify-content: space-between; font-size: 11px; margin-top: 15px; color: var(--success); font-weight: 800; text-transform: uppercase; }
-        .bar-bg { height: 6px; background: #0f172a; border-radius: 3px; margin-top: 5px; overflow: hidden; }
+        .header { text-align: left; width: 100%; max-width: 1200px; margin-bottom: 30px; }
+        .header .main-val { font-size: 48px; font-weight: 900; color: var(--success); margin: 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; width: 100%; max-width: 1200px; }
+        .match-card { background: var(--card); border-radius: 24px; padding: 24px; border: 1px solid #334155; }
+        .teams-display { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .team { text-align: center; flex: 1; font-weight: 700; }
+        .team-logo { width: 50px; height: 50px; background: #334155; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--accent); font-size: 20px; }
+        .analysis-box { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 15px; margin-bottom: 15px; }
+        .prediction { font-size: 18px; font-weight: 900; text-align: center; }
+        .odds-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 15px; color: #94a3b8; }
+        .odds-row b { color: var(--accent); }
+        .bar-bg { height: 8px; background: #334155; border-radius: 4px; overflow: hidden; margin-top: 10px; }
         .bar-fill { height: 100%; background: var(--success); box-shadow: 0 0 10px var(--success); }
     </style>
 </head>
 <body>
-    <div class="main-title">LIVE ANALYSIS</div>
+    <div class="header">
+        <p class="main-val">LIVE ODDS</p>
+    </div>
     <div class="grid" id="matchGrid"></div>
 
     <script>
-        function loadData() {
-            // Puxa o CSV da mesma pasta onde está o HTML
-            Papa.parse('palpites.csv', {
+        function loadPalpites() {
+            // O './' ajuda o GitHub Pages a encontrar o arquivo na mesma pasta
+            Papa.parse('./palpites.csv', {
                 download: true,
                 header: true,
                 skipEmptyLines: true,
@@ -38,29 +41,33 @@
                     const grid = document.getElementById('matchGrid');
                     grid.innerHTML = '';
                     results.data.forEach(row => {
-                        if(!row.TimeCasa) return;
+                        if (!row.TimeCasa) return;
                         grid.innerHTML += `
-                        <div class="match-card">
-                            <div class="teams">
-                                <div class="team"><div class="team-logo">${row.TimeCasa[0]}</div>${row.TimeCasa}</div>
-                                <div style="color:#475569; font-weight:900; font-size:12px;">VS</div>
-                                <div class="team"><div class="team-logo">${row.TimeFora[0]}</div>${row.TimeFora}</div>
-                            </div>
-                            <div class="odds-bar">
-                                <span>ODD: <b>${row.OddCasa}</b></span>
-                                <span>xG: <b>${row.xG}</b></span>
-                                <span>ODD: <b>${row.OddFora}</b></span>
-                            </div>
-                            <div class="prediction-box">🎯 ${row.Entrada}</div>
-                            <div class="conf-label"><span>Confiança IA</span><span>${row.Assertividade}%</span></div>
-                            <div class="bar-bg"><div class="bar-fill" style="width: ${row.Assertividade}%"></div></div>
-                        </div>`;
+                            <div class="match-card">
+                                <div class="teams-display">
+                                    <div class="team"><div class="team-logo">${row.TimeCasa[0]}</div><div>${row.TimeCasa}</div></div>
+                                    <div style="color:#64748b; font-weight:800">VS</div>
+                                    <div class="team"><div class="team-logo">${row.TimeFora[0]}</div><div>${row.TimeFora}</div></div>
+                                </div>
+                                <div class="odds-row">
+                                    <span>Odd Casa: <b>${row.OddCasa}</b></span>
+                                    <span>xG: <b>${row.xG}</b></span>
+                                    <span>Odd Fora: <b>${row.OddFora}</b></span>
+                                </div>
+                                <div class="analysis-box">
+                                    <div style="font-size:10px; color:var(--accent); font-weight:800; text-align:center">PALPITE IA</div>
+                                    <div class="prediction">${row.Entrada}</div>
+                                </div>
+                                <div style="display:flex; justify-content:flex-end; font-size:12px; color:var(--success); font-weight:800">${row.Assertividade}% Confiança</div>
+                                <div class="bar-bg"><div class="bar-fill" style="width:${row.Assertividade}%"></div></div>
+                            </div>`;
                     });
-                }
+                },
+                error: function() { console.log("Aguardando arquivo palpites.csv..."); }
             });
         }
-        loadData();
-        setInterval(loadData, 30000); // Atualiza a cada 30 segundos
+        loadPalpites();
+        setInterval(loadPalpites, 60000);
     </script>
 </body>
 </html>
