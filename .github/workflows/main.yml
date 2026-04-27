@@ -1,34 +1,32 @@
-name: Rodar Robo Diario
+name: Atualizar Palpites Diários
 
 on:
   schedule:
-    - cron: '0 11 * * *' # Roda todo dia as 08:00 da manhã
-  workflow_dispatch: # Permite rodar manualmente para testar
+    - cron: '0 09 * * *' # Roda todo dia às 06:00 da manhã (horário de Brasília)
+  workflow_dispatch: # Permite que você clique em um botão para atualizar na hora
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout codigo
-        uses: actions/checkout@v3
+      - name: Checkout do código
+        uses: actions/checkout@v2
 
-      - name: Instalar Python
-        uses: actions/setup-python@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v2
         with:
           python-version: '3.9'
 
-      - name: Instalar Dependencias
+      - name: Instalar bibliotecas
         run: pip install requests pandas
 
-      - name: Executar Robo
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
+      - name: Rodar o Robô
         run: python bot.py
 
-      - name: Salvar Resultados
+      - name: Salvar mudanças no GitHub
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add palpites.csv
-          git commit -m "Atualizando palpites" || exit 0
+          git commit -m "Atualizando palpites automaticamente" || exit 0
           git push
