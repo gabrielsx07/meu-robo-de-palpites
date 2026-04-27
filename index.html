@@ -3,127 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apostador PRO - Dark Mode v2</title>
+    <title>Apostador PRO - Dark Mode</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0b0f19; /* Fundo ainda mais escuro */
-            --card-bg: #111827; /* Fundo do card */
-            --primary: #10b981; /* Verde esmeralda para os acertos */
-            --text: #f9fafb;
-            --dim: #9ca3af;
-            --border: #374151;
+            --bg: #0f172a; /* Slate profundo */
+            --card-bg: #1e293b;
+            --primary: #10b981; /* Verde Esmeralda */
+            --text: #f1f5f9;
+            --dim: #94a3b8;
+            --border: #334155;
         }
 
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); 
             color: var(--text); 
-            margin: 0; padding: 25px;
+            margin: 0; padding: 20px;
         }
 
         .container { max-width: 1200px; margin: 0 auto; }
 
-        /* Nova Barra Superior e Título */
-        .header-bar {
-            background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border);
-            padding: 15px 25px; display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px;
-        }
-        .header-title { font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
+        .header-section { margin-bottom: 30px; }
+        .win-rate { font-size: 36px; font-weight: 800; color: var(--primary); }
 
-        /* Grid */
-        .grid-jogos {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;
+        /* Mágica para os palpites ficarem lado a lado */
+        .grid-palpites {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
         }
 
-        /* Card do Jogo Atualizado */
         .match-card {
-            background: var(--card-bg); border-radius: 28px; padding: 22px;
-            border: 1px solid var(--border); transition: all 0.2s ease;
+            background: var(--card-bg); 
+            border-radius: 24px; 
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
         }
-        .match-card:hover { transform: translateY(-7px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1); }
+        .match-card:hover { transform: translateY(-5px); border-color: var(--primary); }
 
-        .time-header { font-size: 11px; font-weight: 700; color: var(--dim); margin-bottom: 18px; display: block; text-transform: uppercase; }
+        .match-time { font-size: 11px; font-weight: 700; color: var(--dim); margin-bottom: 15px; display: block; }
 
-        .teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .team { width: 45%; text-align: center; }
-        
-        /* Nova Lógica para Imagem Real */
-        .team-logo-img { 
-            width: 60px; height: 60px; margin: 0 auto 10px; display: block; object-fit: contain;
+        .team-logo { 
+            width: 50px; height: 50px; background: #334155; border-radius: 14px; 
+            margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; color: var(--primary); font-size: 20px;
         }
-        .team-name { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.3; }
+        .team-name { font-size: 14px; font-weight: 700; color: #fff; }
 
-        /* Box de Informação da Entrada */
         .prediction-box {
-            background: #0b0f19; border-radius: 20px; padding: 20px; margin-bottom: 18px; border: 1px solid var(--border);
+            background: #0f172a; border-radius: 18px; padding: 18px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid var(--border);
         }
-        .label-entrada { font-size: 9px; color: var(--dim); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 5px; }
-        .val-entrada { font-size: 16px; font-weight: 800; color: #fff; }
-
-        /* Nova Barra de Assertividade (Progresso) */
-        .assertividade-container { margin-top: 10px; }
-        .bar-label-row { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--dim); margin-bottom: 6px; }
-        .bar-base { height: 8px; background: #374151; border-radius: 10px; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--primary); border-radius: 10px; }
-
+        .label-tip { font-size: 10px; color: var(--dim); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .val-tip { font-size: 14px; font-weight: 800; color: #fff; }
+        .badge-conf { background: var(--primary); color: #064e3b; padding: 5px 12px; border-radius: 10px; font-size: 12px; font-weight: 900; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header-bar">
-        <div class="header-title">ROBÔ DE PALPITES PRO v2.0</div>
-        <div style="font-size: 12px; font-weight: 600; color: var(--dim);">Assertividade Global (30D): <span style="color:var(--primary); font-weight:800;">76.4%</span></div>
+    <div class="header-section">
+        <span style="color: var(--dim); font-weight: 700; font-size: 12px; text-transform: uppercase;">Assertividade IA</span>
+        <div class="win-rate">76.4%</div>
     </div>
 
-    <div class="grid-jogos" id="lista-jogos"></div>
+    <div class="grid-palpites" id="lista-jogos"></div>
 </div>
 
 <script>
     Papa.parse("palpites.csv", {
-        download: true, header: true, skipEmptyLines: true,
+        download: true,
+        header: true,
+        skipEmptyLines: true,
         complete: function(results) {
             let html = "";
             results.data.forEach(row => {
-                if (!row.TimeCasa) return;
-                
-                // Pega a porcentagem (ex: "92") para desenhar a barra
-                const porc = parseInt(row.Assertividade) || 85; 
-
-                // URL para buscar os escudos reais usando o ID que salvamos no Python
-                const logoCasa = `https://crests.football-data.org/${row.IdCasa}.png`;
-                const logoFora = `https://crests.football-data.org/${row.IdFora}.png`;
-
+                if (!row.Confronto) return;
+                const times = row.Confronto.split(" x ");
                 html += `
                     <div class="match-card">
-                        <span class="time-header">● HOJE • ${row.Hora}</span>
+                        <span class="match-time">● HOJE • ${row.Hora || 'LIVE'}</span>
                         <div class="teams">
                             <div class="team">
-                                <img src="${logoCasa}" class="team-logo-img" alt="Logo ${row.TimeCasa}" onerror="this.src='https://placehold.co/60x60/333/666?text=${row.TimeCasa[0]}'">
-                                <div class="team-name">${row.TimeCasa}</div>
+                                <div class="team-logo">${times[0][0]}</div>
+                                <div class="team-name">${times[0]}</div>
                             </div>
                             <div style="font-weight: 900; color: var(--border);">VS</div>
                             <div class="team">
-                                <img src="${logoFora}" class="team-logo-img" alt="Logo ${row.TimeFora}" onerror="this.src='https://placehold.co/60x60/333/666?text=${row.TimeFora[0]}'">
-                                <div class="team-name">${row.TimeFora}</div>
+                                <div class="team-logo">${times[1] ? times[1][0] : '?'}</div>
+                                <div class="team-name">${times[1] || '---'}</div>
                             </div>
                         </div>
                         <div class="prediction-box">
-                            <span class="label-entrada">Entrada Recomendada</span>
-                            <div class="val-entrada">${row.Entrada}</div>
-                        </div>
-                        
-                        <div class="assertividade-container">
-                            <div class="bar-label-row">
-                                <span>ASSERTIVIDADE (HISTÓRICO)</span>
-                                <span style="color:var(--primary); font-weight:800;">${porc}%</span>
+                            <div>
+                                <span class="label-tip">Analise IA</span>
+                                <span class="val-tip">${row.Palpite}</span>
                             </div>
-                            <div class="bar-base">
-                                <div class="bar-fill" style="width: ${porc}%;"></div>
-                            </div>
+                            <div class="badge-conf">${row.Confianca}</div>
                         </div>
                     </div>
                 `;
@@ -132,6 +114,5 @@
         }
     });
 </script>
-
 </body>
 </html>
