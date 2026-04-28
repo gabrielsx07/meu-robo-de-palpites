@@ -1,83 +1,60 @@
 import pandas as pd
 import requests
-from datetime import datetime
-import pytz
-import os
-
-API_KEY = os.getenv('API_FOOTBALL_KEY')
+from bs4 import BeautifulSoup
 
 def rodar():
-    fuso = pytz.timezone('America/Sao_Paulo')
-    agora = datetime.now(fuso)
-    hoje = agora.strftime('%Y-%m-%d')
-    
-    headers = {
-        'x-rapidapi-host': "v3.football.api-sports.io",
-        'x-rapidapi-key': API_KEY
-    }
+    url = "https://apostadorpro.tech"
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     
     final = []
-    print(f"Buscando jogos ativos no mundo todo para hoje ({hoje})...")
+    print(f"Buscando palpites em {url}...")
 
-    # Puxa TODOS os jogos do dia de uma vez só (consome apenas 1 requisição)
-    url = f"https://v3.football.api-sports.io/fixtures?date={hoje}"
-    
     try:
-        r = requests.get(url, headers=headers, timeout=25).json()
-        
-        # Verifica se a API retornou erro de limite
-        if r.get('errors'):
-            print(f"⚠️ Erro da API: {r['errors']}")
-            return
+        response = requests.get(url, headers=headers, timeout=20)
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-        jogos = r.get('response', [])
-        print(f"Total de jogos encontrados no mundo hoje: {len(jogos)}")
+        # O site deles usa cards para os jogos. Vamos localizar cada um.
+        cards = soup.select('div.card') # Seleciona os cards de jogos
 
-        for j in jogos:
-            status = j['fixture']['status']['short']
-            # NS = Não começou, 1H/2H = Em andamento, HT = Intervalo
-            if status not in ['NS', 'TBD', '1H', 'HT', '2H']: 
+        for card in cards:
+            try:
+                # Pega a Liga e a Hora (geralmente no topo do card)
+                info = card.select_one('div.card-header').get_text(separator="|").split("|")
+                liga = info[0].strip()
+                hora = info[1].strip() if len(info) > 1 else "Hoje"
+
+                # Pega os nomes dos times
+                casa = card.select_one('div.home-team').get_text(strip=True)
+                fora = card.select_one('div.away-team').get_text(strip=True)
+
+                # Pega as logos
+                logos = card.select('img')
+                logo_casa = logos[0]['src'] if len(logos) > 0 else ""
+                logo_fora = logos[1]['src'] if len(logos) > 1 else ""
+
+                # Pega o palpite que está no botão ou área de destaque
+                palpite = card.select_one('div.tip-container, .badge-success').get_text(strip=True)
+
+                final.append({
+                    'Hora': hora,
+                    'Liga': liga,
+                    'TimeCasa': casa,
+                    'LogoCasa': logo_casa,
+                    'TimeFora': fora,
+                    'LogoFora': logo_fora,
+                    'Palpite': palpite
+                })
+            except:
                 continue
-            
-            # Converte a hora do jogo para o nosso fuso
-            dt_jogo = datetime.fromisoformat(j['fixture']['date'].replace('Z', '+00:00')).astimezone(fuso)
-            
-            # Se o jogo já acabou (FT) ou foi cancelado, pula
-            if status == 'FT' or status == 'CANCL': 
-                continue
-
-            # Lógica de Palpite Detalhado (Baseado no tipo de campeonato)
-            nome_liga = j['league']['name'].lower()
-            
-            if "cup" in nome_liga or "copa" in nome_liga:
-                palpite = "Mais de 0.5 Gols HT"
-            elif "u20" in nome_liga or "u21" in nome_liga:
-                palpite = "Escanteios: Over 9.5"
-            elif "women" in nome_liga:
-                palpite = "Vencer um dos Tempos"
-            else:
-                palpite = "Over 1.5 Gols / Cantos"
-
-            final.append({
-                'Hora': dt_jogo.strftime('%H:%M'),
-                'Liga': j['league']['name'],
-                'TimeCasa': j['teams']['home']['name'],
-                'LogoCasa': j['teams']['home']['logo'],
-                'TimeFora': j['teams']['away']['name'],
-                'LogoFora': j['teams']['away']['logo'],
-                'Palpite': palpite
-            })
 
     except Exception as e:
-        print(f"Erro na execução: {e}")
+        print(f"Erro ao clonar: {e}")
 
     if final:
-        # Ordena por horário e pega os 30 jogos mais próximos/atuais
-        df = pd.DataFrame(final).sort_values('Hora')
-        df.head(30).to_csv('palpites.csv', index=False)
-        print(f"✅ SUCESSO: {len(df.head(30))} palpites postados no site!")
+        pd.DataFrame(final).to_csv('palpites.csv', index=False)
+        print(f"✅ SUCESSO: {len(final)} palpites clonados!")
     else:
-        print("⚠️ Nenhum jogo pendente encontrado para hoje no mundo.")
+        print("⚠️ O site deles pode ter mudado a estrutura. Me avise!")
 
 if __name__ == "__main__":
     rodar()
