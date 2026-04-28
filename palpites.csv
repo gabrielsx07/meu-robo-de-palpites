@@ -1,7 +1,4 @@
 Hora,Liga,TimeCasa,LogoCasa,TimeFora,LogoFora,Palpite,Odd,Status
-05:30,Liga 1,Arema FC,https://media.api-sports.io/football/teams/2438.png,Persebaya Surabaya,https://media.api-sports.io/football/teams/2446.png,Over 8.5 Escanteios,1.6,Not Started
-05:45,Federation Cup,Fakirerpool,https://media.api-sports.io/football/teams/25416.png,Rahmatgonj MFS,https://media.api-sports.io/football/teams/5017.png,Over 8.5 Escanteios,1.6,Not Started
-05:45,Federation Cup,Abahani,https://media.api-sports.io/football/teams/5009.png,PWD Sports Club,https://media.api-sports.io/football/teams/26882.png,Over 8.5 Escanteios,1.6,Not Started
 08:00,U18 Premier League - South,Arsenal U18,https://media.api-sports.io/football/teams/15388.png,Crystal Palace U18,https://media.api-sports.io/football/teams/15392.png,Ambas Marcam: Sim,1.85,Not Started
 08:00,U18 Premier League - South,Tottenham Hotspur U18,https://media.api-sports.io/football/teams/15398.png,West Ham United U18,https://media.api-sports.io/football/teams/15400.png,Ambas Marcam: Sim,1.85,Not Started
 08:00,First League,Ararat-Armenia II,https://media.api-sports.io/football/teams/3689.png,Pyunik II,https://media.api-sports.io/football/teams/3696.png,Over 8.5 Escanteios,1.6,Not Started
@@ -12,31 +9,37 @@ Hora,Liga,TimeCasa,LogoCasa,TimeFora,LogoFora,Palpite,Odd,Status
 09:00,UEFA U17 Championship - Qualification,Luxembourg U17,https://media.api-sports.io/football/teams/17963.png,Hungary U17,https://media.api-sports.io/football/teams/12509.png,Over 8.5 Escanteios,1.6,Not Started
 09:00,First League,Bentonit Ijevan,https://media.api-sports.io/football/teams/24965.png,Noah II,https://media.api-sports.io/football/teams/21879.png,Over 8.5 Escanteios,1.6,Not Started
 09:00,3. Lig - Play-offs,Karadeniz Ereğli BSK,https://media.api-sports.io/football/teams/13369.png,Yozgat Bld Bozokspor,https://media.api-sports.io/football/teams/22448.png,Over 8.5 Escanteios,1.6,Not Started
+10:00,Premier League,Jaish,https://media.api-sports.io/football/teams/8040.png,Al Shouleh,https://media.api-sports.io/football/teams/24992.png,Ambas Marcam: Sim,1.85,Not Started
+10:00,Premier League,Wathba,https://media.api-sports.io/football/teams/9118.png,Al Taliya,https://media.api-sports.io/football/teams/9113.png,Ambas Marcam: Sim,1.85,Not Started
+10:00,Premier League,Horriya,https://media.api-sports.io/football/teams/15301.png,Al Karama,https://media.api-sports.io/football/teams/9111.png,Ambas Marcam: Sim,1.85,Not Started
+10:00,Premier League,Jabala,https://media.api-sports.io/football/teams/9116.png,Al Wahda,https://media.api-sports.io/football/teams/8035.png,Ambas Marcam: Sim,1.85,Not Started
+10:00,Premier League,Foutoua,https://media.api-sports.io/football/teams/9114.png,Shorta,https://media.api-sports.io/football/teams/9123.png,Ambas Marcam: Sim,1.85,Not Started
 10:00,Premier League,Mbarara City,https://media.api-sports.io/football/teams/12455.png,Express,https://media.api-sports.io/football/teams/12452.png,Ambas Marcam: Sim,1.85,Not Started
 10:00,Premier League,BUL,https://media.api-sports.io/football/teams/12449.png,NEC,https://media.api-sports.io/football/teams/22699.png,Ambas Marcam: Sim,1.85,Not Started
-10:00,Super League,Melaka,https://media.api-sports.io/football/teams/21038.png,Johor Darul Takzim FC,https://media.api-sports.io/football/teams/2523.png,Over 8.5 Escanteios,1.6,Not Started
 10:00,Premier League,Royal Leopards,https://media.api-sports.io/football/teams/16822.png,Green Mamba,https://media.api-sports.io/football/teams/6421.png,Ambas Marcam: Sim,1.85,Not Started
-11:00,Indian Super League,East Bengal II,https://media.api-sports.io/football/teams/21137.png,Odisha,https://media.api-sports.io/football/teams/7177.png,Over 8.5 Escanteios,1.6,Not Started
-11:00,Liga Revelação U23,Estoril U23,https://media.api-sports.io/football/teams/15463.png,Gil Vicente U23,https://media.api-sports.io/football/teams/19825.png,Over 8.5 Escanteios,1.6,Not Started
-11:00,Liga Revelação U23,União Leiria U23,https://media.api-sports.io/football/teams/26257.png,Rio Ave U23,https://media.api-sports.io/football/teams/15468.png,Over 8.5 Escanteios,1.6,Not Started
-11:00,Liga Revelação U23,Marítimo U23,https://media.api-sports.io/football/teams/15466.png,Estrela U23,https://media.api-sports.io/football/teams/19824.png,Over 8.5 Escanteios,1.6,Not Started
-11:00,Liga Revelação U23,Portimonense U23,https://media.api-sports.io/football/teams/15467.png,Farense U23,https://media.api-sports.io/football/teams/17474.png,Over 8.5 Escanteios,1.6,Not Started
-11:00,Super League,Andijan,https://media.api-sports.io/football/teams/4209.png,Dinamo Samarqand,https://media.api-sports.io/football/teams/4224.png,Over 8.5 Escanteios,1.6,Not Started
-11:00,Super League,Sogdiana,https://media.api-sports.io/football/teams/4223.png,Surkhon,https://media.api-sports.io/football/teams/4225.png,Over 8.5 Escanteios,1.6,Not Started
-11:00,Premier League,Petrojet,https://media.api-sports.io/football/teams/1041.png,Ismaily SC,https://media.api-sports.io/football/teams/1030.png,Ambas Marcam: Sim,1.85,Not Started
-11:00,Premier League,Masr,https://media.api-sports.io/football/teams/7520.png,Pharco,https://media.api-sports.io/football/teams/15736.png,Ambas Marcam: Sim,1.85,Not Started
+10:00,Super League,Melaka,https://media.api-sports.io/football/teams/21038.png,Johor Darul Takzim FC,https://media.api-sports.io/football/teams/2523.png,Over 8.5 Escanteios,1.6,Not Started
+10:00,Premier League,Damascus Al-Ahli,https://media.api-sports.io/football/teams/27269.png,Al Ittihad,https://media.api-sports.io/football/teams/8019.png,Ambas Marcam: Sim,1.85,Not Started
 11:00,Iraqi League,Gharraf,https://media.api-sports.io/football/teams/26600.png,Al Minaa Basra,https://media.api-sports.io/football/teams/11065.png,Over 8.5 Escanteios,1.6,Not Started
-11:30,Championnat D1,Bouenguidi,https://media.api-sports.io/football/teams/15564.png,US Oyem,https://media.api-sports.io/football/teams/21193.png,Over 8.5 Escanteios,1.6,Not Started
+11:00,Premier League,Masr,https://media.api-sports.io/football/teams/7520.png,Pharco,https://media.api-sports.io/football/teams/15736.png,Ambas Marcam: Sim,1.85,Not Started
+11:00,Premier League,Petrojet,https://media.api-sports.io/football/teams/1041.png,Ismaily SC,https://media.api-sports.io/football/teams/1030.png,Ambas Marcam: Sim,1.85,Not Started
+11:00,Indian Super League,East Bengal II,https://media.api-sports.io/football/teams/21137.png,Odisha,https://media.api-sports.io/football/teams/7177.png,Over 8.5 Escanteios,1.6,Not Started
+11:00,Super League,Sogdiana,https://media.api-sports.io/football/teams/4223.png,Surkhon,https://media.api-sports.io/football/teams/4225.png,Over 8.5 Escanteios,1.6,Not Started
+11:00,Super League,Andijan,https://media.api-sports.io/football/teams/4209.png,Dinamo Samarqand,https://media.api-sports.io/football/teams/4224.png,Over 8.5 Escanteios,1.6,Not Started
+11:00,Liga Revelação U23,Marítimo U23,https://media.api-sports.io/football/teams/15466.png,Estrela U23,https://media.api-sports.io/football/teams/19824.png,Over 8.5 Escanteios,1.6,Not Started
+11:00,Liga Revelação U23,União Leiria U23,https://media.api-sports.io/football/teams/26257.png,Rio Ave U23,https://media.api-sports.io/football/teams/15468.png,Over 8.5 Escanteios,1.6,Not Started
+11:00,Liga Revelação U23,Estoril U23,https://media.api-sports.io/football/teams/15463.png,Gil Vicente U23,https://media.api-sports.io/football/teams/19825.png,Over 8.5 Escanteios,1.6,Not Started
+11:00,Liga Revelação U23,Portimonense U23,https://media.api-sports.io/football/teams/15467.png,Farense U23,https://media.api-sports.io/football/teams/17474.png,Over 8.5 Escanteios,1.6,Not Started
 11:30,Ligue 2,EO Sidi Bouzid,https://media.api-sports.io/football/teams/10606.png,Korba,https://media.api-sports.io/football/teams/10617.png,Over 8.5 Escanteios,1.6,Not Started
 11:30,Championnat D1,US Oyem,https://media.api-sports.io/football/teams/21193.png,Stade Migoveen,https://media.api-sports.io/football/teams/27575.png,Over 8.5 Escanteios,1.6,Not Started
 11:30,Championnat D1,Ogooue FC,https://media.api-sports.io/football/teams/27625.png,FC 105,https://media.api-sports.io/football/teams/21190.png,Over 8.5 Escanteios,1.6,Not Started
-11:30,Ligue 2,Moknine,https://media.api-sports.io/football/teams/10624.png,Ksour Essef,https://media.api-sports.io/football/teams/10649.png,Over 8.5 Escanteios,1.6,Not Started
+11:30,Championnat D1,Bouenguidi,https://media.api-sports.io/football/teams/15564.png,US Oyem,https://media.api-sports.io/football/teams/21193.png,Over 8.5 Escanteios,1.6,Not Started
 11:30,Ligue 2,Progrès Sakiet Eddaïer,https://media.api-sports.io/football/teams/13358.png,Djelma,https://media.api-sports.io/football/teams/10661.png,Over 8.5 Escanteios,1.6,Not Started
+11:30,Ligue 2,AS Kasserine,https://media.api-sports.io/football/teams/10615.png,Stade Gabesien,https://media.api-sports.io/football/teams/985.png,Over 8.5 Escanteios,1.6,Not Started
 11:30,Ligue 2,Kalaâ Sport,https://media.api-sports.io/football/teams/10614.png,Redeyef,https://media.api-sports.io/football/teams/10665.png,Over 8.5 Escanteios,1.6,Not Started
 11:30,Ligue 2,EGS Gafsa,https://media.api-sports.io/football/teams/10604.png,Jendouba Sport,https://media.api-sports.io/football/teams/10611.png,Over 8.5 Escanteios,1.6,Not Started
 11:30,Ligue 2,Bouchamma,https://media.api-sports.io/football/teams/10643.png,Ariana,https://media.api-sports.io/football/teams/10598.png,Over 8.5 Escanteios,1.6,Not Started
 11:30,Premier League,Bars,https://media.api-sports.io/football/teams/25765.png,Ozgon,https://media.api-sports.io/football/teams/25767.png,Ambas Marcam: Sim,1.85,Not Started
-11:30,Ligue 2,AS Kasserine,https://media.api-sports.io/football/teams/10615.png,Stade Gabesien,https://media.api-sports.io/football/teams/985.png,Over 8.5 Escanteios,1.6,Not Started
+11:30,Ligue 2,Moknine,https://media.api-sports.io/football/teams/10624.png,Ksour Essef,https://media.api-sports.io/football/teams/10649.png,Over 8.5 Escanteios,1.6,Not Started
 12:00,Esiliiga B,Tallinna Kalev II,https://media.api-sports.io/football/teams/3522.png,Parnu JK Vaprus U21,https://media.api-sports.io/football/teams/25403.png,Over 8.5 Escanteios,1.6,Not Started
 12:00,Virsliga,FK Liepaja,https://media.api-sports.io/football/teams/661.png,Grobiņa,https://media.api-sports.io/football/teams/4138.png,Over 8.5 Escanteios,1.6,Not Started
 12:00,Super League,Pakhtakor,https://media.api-sports.io/football/teams/4220.png,Nasaf,https://media.api-sports.io/football/teams/4215.png,Over 8.5 Escanteios,1.6,Not Started
@@ -103,19 +106,22 @@ Hora,Liga,TimeCasa,LogoCasa,TimeFora,LogoFora,Palpite,Odd,Status
 15:00,Reserve League,Defensa y Justicia Res.,https://media.api-sports.io/football/teams/18684.png,Estudiantes La Plata Res,https://media.api-sports.io/football/teams/18685.png,Over 8.5 Escanteios,1.6,Not Started
 15:00,Pro League,Al-Hilal Saudi FC,https://media.api-sports.io/football/teams/2932.png,Damac,https://media.api-sports.io/football/teams/2956.png,Over 8.5 Escanteios,1.6,Not Started
 15:00,Pro League,Al Khaleej Saihat,https://media.api-sports.io/football/teams/2928.png,Al Najma,https://media.api-sports.io/football/teams/2992.png,Over 8.5 Escanteios,1.6,Not Started
+15:00,Premier Intermediate League,Strabane Athletic,https://media.api-sports.io/football/teams/22541.png,Lisburn Distillery,https://media.api-sports.io/football/teams/11115.png,Ambas Marcam: Sim,1.85,Not Started
+15:00,Premier Intermediate League,Knockbreda,https://media.api-sports.io/football/teams/5344.png,Portstewart,https://media.api-sports.io/football/teams/11119.png,Ambas Marcam: Sim,1.85,Not Started
 15:00,Reserve League,Gimnasia La Plata Res.,https://media.api-sports.io/football/teams/18686.png,Tigre Res.,https://media.api-sports.io/football/teams/18700.png,Over 8.5 Escanteios,1.6,Not Started
 15:30,Copa do Brasil U17,IAPE U17,https://media.api-sports.io/football/teams/27533.png,Coritiba U17,https://media.api-sports.io/football/teams/27532.png,Over 8.5 Escanteios,1.6,Not Started
 15:30,Brasileiro U20 B,Vila Nova U20,https://media.api-sports.io/football/teams/13070.png,Botafogo SP U20,https://media.api-sports.io/football/teams/12987.png,Over 8.5 Escanteios,1.6,Not Started
+15:45,Non League Premier - Northern,Hednesford Town,https://media.api-sports.io/football/teams/7721.png,Stockton Town,https://media.api-sports.io/football/teams/8953.png,Ambas Marcam: Sim,1.85,Not Started
 15:45,National League - North,Buxton,https://media.api-sports.io/football/teams/7706.png,Scarborough Athletic,https://media.api-sports.io/football/teams/7745.png,Over 8.5 Escanteios,1.6,Not Started
-15:45,National League - South,Hemel Hempstead Town,https://media.api-sports.io/football/teams/8660.png,Weston-super-Mare,https://media.api-sports.io/football/teams/4687.png,Over 8.5 Escanteios,1.6,Not Started
 15:45,National League,Scunthorpe,https://media.api-sports.io/football/teams/1340.png,Southend,https://media.api-sports.io/football/teams/1341.png,Over 8.5 Escanteios,1.6,Not Started
 15:45,Non League Premier - Northern,United of Manchester,https://media.api-sports.io/football/teams/7754.png,Rylands,https://media.api-sports.io/football/teams/8918.png,Ambas Marcam: Sim,1.85,Not Started
-15:45,Non League Premier - Northern,Hednesford Town,https://media.api-sports.io/football/teams/7721.png,Stockton Town,https://media.api-sports.io/football/teams/8953.png,Ambas Marcam: Sim,1.85,Not Started
+15:45,Premiership,Annagh United,https://media.api-sports.io/football/teams/11109.png,Crusaders FC,https://media.api-sports.io/football/teams/697.png,Ambas Marcam: Sim,1.85,Not Started
+15:45,National League - South,Hemel Hempstead Town,https://media.api-sports.io/football/teams/8660.png,Weston-super-Mare,https://media.api-sports.io/football/teams/4687.png,Over 8.5 Escanteios,1.6,Not Started
 15:45,League One,Stockport County,https://media.api-sports.io/football/teams/4686.png,Port Vale,https://media.api-sports.io/football/teams/1351.png,Over 8.5 Escanteios,1.6,Not Started
 15:45,League One,Peterborough,https://media.api-sports.io/football/teams/1350.png,Mansfield Town,https://media.api-sports.io/football/teams/1374.png,Over 8.5 Escanteios,1.6,Not Started
 15:45,League One,Northampton,https://media.api-sports.io/football/teams/1337.png,Barnsley,https://media.api-sports.io/football/teams/747.png,Over 8.5 Escanteios,1.6,Not Started
 15:45,Championship,Southampton,https://media.api-sports.io/football/teams/41.png,Ipswich,https://media.api-sports.io/football/teams/57.png,Over 8.5 Escanteios,1.6,Not Started
-15:45,Premiership,Annagh United,https://media.api-sports.io/football/teams/11109.png,Crusaders FC,https://media.api-sports.io/football/teams/697.png,Ambas Marcam: Sim,1.85,Not Started
+15:45,Premier Intermediate League,Rathfriland,https://media.api-sports.io/football/teams/17241.png,Dergview,https://media.api-sports.io/football/teams/5341.png,Ambas Marcam: Sim,1.85,Not Started
 16:00,Ligue 1,MC Alger,https://media.api-sports.io/football/teams/906.png,Olympique Akbou,https://media.api-sports.io/football/teams/10780.png,Over 8.5 Escanteios,1.6,Not Started
 16:00,Liga 3,Fafe,https://media.api-sports.io/football/teams/809.png,São João Ver,https://media.api-sports.io/football/teams/6367.png,Over 8.5 Escanteios,1.6,Not Started
 16:00,UEFA Champions League,Paris Saint Germain,https://media.api-sports.io/football/teams/85.png,Bayern München,https://media.api-sports.io/football/teams/157.png,Over 8.5 Escanteios,1.6,Not Started
