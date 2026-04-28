@@ -5,10 +5,12 @@ import pytz
 import os
 from thefuzz import fuzz
 
-# CONFIGURAÇÃO DE CHAVES (Garanta que estão nos Secrets do GitHub)
+# ================= CONFIGURAÇÕES =================
+# O código agora busca as chaves que você colocou nos Secrets do GitHub
 API_FOOTBALL_KEY = os.getenv('API_FOOTBALL_KEY')
 THE_ODDS_KEY = os.getenv('THE_ODDS_KEY')
 
+# Suas ligas favoritas
 LIGAS_CONFIG = {
     71: "soccer_brazil_campeonato", 
     72: "soccer_brazil_campeonato_serie_b",
@@ -30,6 +32,7 @@ LIGAS_CONFIG = {
     3: "soccer_europa_league",
     13: "soccer_libertadores",
     11: "soccer_sul_americana",
+    # ... adicione outras aqui se quiser
 }
 
 def rodar():
@@ -37,25 +40,24 @@ def rodar():
     hoje = datetime.now(fuso).strftime('%Y-%m-%d')
     headers_fb = {'x-rapidapi-host': "v3.football.api-sports.io", 'x-rapidapi-key': API_FOOTBALL_KEY}
     
-    # 1. BUSCAR ODDS REAIS NO THE ODDS API (Primeira Fonte)
-    odds_mercado = {}
-    print("Buscando odds reais no The Odds API...")
+    # 1. BUSCA ODDS REAIS NA BET365 (via The Odds API)
+    odds_cache = {}
+    print("Buscando odds reais...")
     for slug in LIGAS_CONFIG.values():
         try:
             url = f"https://api.the-odds-api.com/v4/sports/{slug}/odds/?apiKey={THE_ODDS_KEY}&regions=eu&markets=h2h&bookmakers=bet365"
             res = requests.get(url, timeout=15).json()
             for jogo in res:
-                home = jogo['home_team']
+                home_name = jogo['home_team']
                 if jogo.get('bookmakers'):
-                    # Pega a odd da Bet365
-                    preco = jogo['bookmakers'][0]['markets'][0]['outcomes'][0]['price']
-                    odds_mercado[home] = preco
+                    # Pega a odd da vitória do time da casa na Bet365
+                    odds_cache[home_name] = jogo['bookmakers'][0]['markets'][0]['outcomes'][0]['price']
         except: continue
 
-    # 2. BUSCAR JOGOS NA API-FOOTBALL (Segunda Fonte)
-    final = []
+    # 2. BUSCA DADOS DO JOGO NA API-FOOTBALL
+    lista_final = []
     for liga_id in LIGAS_CONFIG.keys():
-        # Testa temporadas 2026 e 2025
+        # Tenta temporada 2026 e 2025 (para cobrir Champions e Brasileirão)
         for ano in [2026, 2025]:
             url_fb = f"https://v3.football.api-sports.io/fixtures?date={hoje}&league={liga_id}&season={ano}"
             try:
@@ -63,54 +65,53 @@ def rodar():
                 jogos = res_fb.get('response', [])
                 if not jogos: continue
 
-                for j in jogos:
-                    status = j['fixture']['status']['short']
+                for item in jogos:
+                    status = item['fixture']['status']['short']
+                    # Pega apenas jogos que não começaram ou estão no começo
                     if status not in ['NS', 'TBD', '1H', 'HT']: continue
 
-                    time_casa = j['teams']['home']['name']
-                    odd_final = None
+                    time_casa = item['teams']['home']['name']
+                    odd_real = None
 
-                    # CRUZAMENTO: Tenta achar a odd exata pelo nome do time (Fuzzy Match)
-                    for nome_ext, valor in odds_mercado.items():
+                    # Sincroniza a odd real da Bet365 com o jogo da API-Football
+                    for nome_ext, valor_odd in odds_cache.items():
+                        # Usamos 'fuzzy matching' para ignorar diferenças de nome (ex: "PSG" vs "Paris Saint Germain")
                         if fuzz.token_sort_ratio(time_casa.lower(), nome_ext.lower()) > 80:
-                            odd_final = valor
+                            odd_real = valor_odd
                             break
                     
-                    # Se não achou na The Odds API, tenta buscar a odd na própria API-Football (Terceira Fonte/Validação)
-                    if not odd_final:
-                        try:
-                            f_id = j['fixture']['id']
-                            url_o = f"https://v3.football.api-sports.io/odds?fixture={f_id}&bookmaker=8"
-                            res_o = requests.get(url_o, headers=headers_fb).json()
-                            odd_final = res_o['response'][0]['bookmakers'][0]['markets'][0]['outcomes'][0]['value']
-                        except: pass
+                    # SÓ ADICIONA SE A ODD FOR ENCONTRADA (Para garantir a precisão)
+                    if odd_real:
+                        # Palpites inteligentes baseados na odd real
+                        val = float(odd_real)
+                        if val < 1.60:
+                            palpite = f"Vencer um dos tempos: {time_casa}"
+                        elif val < 2.00:
+                            palpite = "Over 0.5 Gols HT"
+                        else:
+                            palpite = "Ambas Marcam: Sim"
 
-                    # SÓ ADICIONA SE TIVER ODD REAL (Para garantir a precisão que você quer)
-                    if odd_final:
-                        val_odd = float(odd_final)
-                        hora = datetime.fromisoformat(j['fixture']['date'].replace('Z', '+00:00')).astimezone(fuso).strftime('%H:%M')
-                        
-                        # Palpite baseado na Odd Real
-                        palpite = "Casa para Vencer" if val_odd < 1.60 else "Over 0.5 Gols HT" if val_odd < 2.10 else "Ambas Marcam"
+                        hora = datetime.fromisoformat(item['fixture']['date'].replace('Z', '+00:00')).astimezone(fuso).strftime('%H:%M')
 
-                        final.append({
+                        lista_final.append({
                             'Hora': hora,
-                            'Liga': j['league']['name'],
+                            'Liga': item['league']['name'],
                             'TimeCasa': time_casa,
-                            'LogoCasa': j['teams']['home']['logo'],
-                            'TimeFora': j['teams']['away']['name'],
-                            'LogoFora': j['teams']['away']['logo'],
+                            'LogoCasa': item['teams']['home']['logo'],
+                            'TimeFora': item['teams']['away']['name'],
+                            'LogoFora': item['teams']['away']['logo'],
                             'Palpite': palpite,
-                            'Odd': str(val_odd)
+                            'Odd': str(odd_real)
                         })
-                break # Sai do loop de temporada se achou jogos
+                break
             except: continue
 
-    if final:
-        pd.DataFrame(final).sort_values('Hora').to_csv('palpites.csv', index=False)
-        print(f"✅ SUCESSO: {len(final)} jogos sincronizados com as duas APIs.")
+    # 3. SALVA O CSV PARA O SITE
+    if lista_final:
+        pd.DataFrame(lista_final).sort_values('Hora').to_csv('palpites.csv', index=False)
+        print(f"✅ SUCESSO: {len(lista_final)} jogos com odds reais gerados.")
     else:
-        print("❌ NENHUMA ODD REAL ENCONTRADA. Verifique as chaves ou se os jogos já começaram.")
+        print("⚠️ AVISO: Nenhum jogo com odd real foi encontrado hoje.")
 
 if __name__ == "__main__":
     rodar()
