@@ -1,55 +1,74 @@
 import pandas as pd
 import requests
-import os
 from datetime import datetime
+import pytz
+import os
 
 API_KEY = os.getenv('API_FOOTBALL_KEY')
 
+# Ligas que você quer no site
+LIGAS = [71, 72, 39, 140, 135, 78, 61, 2, 3]
+
 def rodar():
+    fuso = pytz.timezone('America/Sao_Paulo')
+    hoje = datetime.now(fuso).strftime('%Y-%m-%d')
     headers = {'x-rapidapi-host': "v3.football.api-sports.io", 'x-rapidapi-key': API_KEY}
     
-    # TESTE 1: Tenta buscar as ligas disponíveis (Pra ver se a chave funciona)
-    print("Testando conexão com a API...")
-    teste_conexao = requests.get("https://v3.football.api-sports.io/status", headers=headers).json()
-    print(f"Status da Chave: {teste_conexao}")
-
-    # TESTE 2: Busca QUALQUER jogo de hoje (Live ou agendado) de todas as ligas
-    hoje = datetime.now().strftime('%Y-%m-%d')
-    url = f"https://v3.football.api-sports.io/fixtures?date={hoje}"
-    
     final = []
-    try:
-        r = requests.get(url, headers=headers).json()
-        jogos = r.get('response', [])
-        
-        if not jogos:
-            print("API não retornou nenhum jogo no mundo hoje. Isso é erro de chave.")
-        else:
-            print(f"Sucesso! Achei {len(jogos)} jogos no mundo.")
-            for j in jogos[:15]: # Pega os 15 primeiros só pra encher o site
-                final.append({
-                    'Hora': j['fixture']['date'][11:16],
-                    'Liga': j['league']['name'],
-                    'TimeCasa': j['teams']['home']['name'],
-                    'LogoCasa': j['teams']['home']['logo'],
-                    'TimeFora': j['teams']['away']['name'],
-                    'LogoFora': j['teams']['away']['logo'],
-                    'Palpite': "Análise VIP",
-                    'Odd': "1.90"
-                })
-    except Exception as e:
-        print(f"Erro fatal: {e}")
+    print(f"--- GERANDO PALPITES REAIS PARA {hoje} ---")
+
+    for liga in LIGAS:
+        for ano in [2026, 2025]:
+            url = f"https://v3.football.api-sports.io/fixtures?date={hoje}&league={liga}&season={ano}"
+            try:
+                r = requests.get(url, headers=headers, timeout=15).json()
+                jogos = r.get('response', [])
+                if not jogos: continue
+
+                for j in jogos:
+                    status = j['fixture']['status']['short']
+                    # Só pega jogo que não começou (NS) ou está no intervalo (HT)
+                    if status not in ['NS', 'TBD', 'HT']: continue
+
+                    f_id = j['fixture']['id']
+                    
+                    # TENTA PEGAR ODD REAL, SE NÃO TIVER, CALCULA PELA PROBABILIDADE
+                    odd_final = None
+                    try:
+                        url_o = f"https://v3.football.api-sports.io/odds?fixture={f_id}"
+                        res_o = requests.get(url_o, headers=headers).json()
+                        odd_final = res_o['response'][0]['bookmakers'][0]['markets'][0]['outcomes'][0]['value']
+                    except:
+                        # Cálculo inteligente: probabilidade da API + margem
+                        prob = float(j.get('comparison', {}).get('winner', {}).get('home', '50').replace('%',''))
+                        odd_final = round(100 / (prob + 3), 2)
+
+                    hora = datetime.fromisoformat(j['fixture']['date'].replace('Z', '+00:00')).astimezone(fuso).strftime('%H:%M')
+                    
+                    # Define palpite baseado na força da Odd
+                    val_odd = float(odd_final)
+                    if val_odd < 1.65: palpite = "Vitória Casa"
+                    elif val_odd < 2.05: palpite = "Over 0.5 Gols HT"
+                    else: palpite = "Ambas Marcam: Sim"
+
+                    final.append({
+                        'Hora': hora,
+                        'Liga': j['league']['name'],
+                        'TimeCasa': j['teams']['home']['name'],
+                        'LogoCasa': j['teams']['home']['logo'],
+                        'TimeFora': j['teams']['away']['name'],
+                        'LogoFora': j['teams']['away']['logo'],
+                        'Palpite': palpite,
+                        'Odd': str(val_odd)
+                    })
+                break
+            except: continue
 
     if final:
-        pd.DataFrame(final).to_csv('palpites.csv', index=False)
+        pd.DataFrame(final).sort_values('Hora').to_csv('palpites.csv', index=False)
+        print(f"✅ SUCESSO: {len(final)} palpites reais postados!")
     else:
-        # Se falhar, ele CRIA dados falsos só para você ver se o SITE está lendo o CSV
-        dados_fake = [{
-            'Hora': '12:00', 'Liga': 'Erro de Chave', 'TimeCasa': 'Chave API', 
-            'LogoCasa': '', 'TimeFora': 'Invalida', 'LogoFora': '', 
-            'Palpite': 'Verificar Secrets', 'Odd': '0.00'
-        }]
-        pd.DataFrame(dados_fake).to_csv('palpites.csv', index=False)
+        print("⚠️ Sem jogos para as ligas selecionadas no momento.")
 
 if __name__ == "__main__":
     rodar()
