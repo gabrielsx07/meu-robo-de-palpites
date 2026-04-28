@@ -4,7 +4,7 @@ from datetime import datetime
 import pytz
 
 # ================= CONFIGURAÇÕES =================
-API_KEY = "SUA_CHAVE_API_FOOTBALL_AQUI"
+API_KEY = "b4533c0123994fd0a1a0d3a9d125d5ed"
 LIGAS_IDS = [71, 72, 39, 307, 140, 141, 135, 78, 61, 62, 73, 40, 143, 94, 253, 79, 2, 1, 13, 11, 3]
 
 def buscar_banco_de_odds(liga_id):
