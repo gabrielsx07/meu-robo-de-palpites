@@ -1,5 +1,11 @@
 Hora,Liga,TimeCasa,LogoCasa,TimeFora,LogoFora,Palpite,Odd,Status
-13:00,Pro League,Al Shabab,https://media.api-sports.io/football/teams/2940.png,Al-Fateh,https://media.api-sports.io/football/teams/2931.png,Vencer um dos tempos: Al Shabab,1.67,Not Started
-13:45,Pro League,NEOM,https://media.api-sports.io/football/teams/10513.png,Al-Hazm,https://media.api-sports.io/football/teams/2945.png,Ambas Marcam: Sim,1.67,Not Started
-15:00,Pro League,Al Khaleej Saihat,https://media.api-sports.io/football/teams/2928.png,Al Najma,https://media.api-sports.io/football/teams/2992.png,Over 4.5 Cantos: Al Khaleej Saihat,1.67,Not Started
-15:00,Pro League,Al-Hilal Saudi FC,https://media.api-sports.io/football/teams/2932.png,Damac,https://media.api-sports.io/football/teams/2956.png,Ambas Marcam: Sim,1.67,Not Started
+13:00,Pro League,Al Shabab,https://media.api-sports.io/football/teams/2940.png,Al-Fateh,https://media.api-sports.io/football/teams/2931.png,Over 8.5 Escanteios,1.92,NS
+13:45,Pro League,NEOM,https://media.api-sports.io/football/teams/10513.png,Al-Hazm,https://media.api-sports.io/football/teams/2945.png,Ambas Marcam: Sim,2.04,NS
+15:00,Pro League,Al Khaleej Saihat,https://media.api-sports.io/football/teams/2928.png,Al Najma,https://media.api-sports.io/football/teams/2992.png,Over 8.5 Escanteios,1.87,NS
+15:00,Pro League,Al-Hilal Saudi FC,https://media.api-sports.io/football/teams/2932.png,Damac,https://media.api-sports.io/football/teams/2956.png,Over 8.5 Escanteios,2.04,NS
+15:45,Championship,Southampton,https://media.api-sports.io/football/teams/41.png,Ipswich,https://media.api-sports.io/football/teams/57.png,Over 0.5 Gols HT,1.89,NS
+16:00,UEFA Champions League,Paris Saint Germain,https://media.api-sports.io/football/teams/85.png,Bayern München,https://media.api-sports.io/football/teams/157.png,Ambas Marcam: Sim,2.63,NS
+19:00,CONMEBOL Sudamericana,Botafogo,https://media.api-sports.io/football/teams/120.png,Independiente Petrolero,https://media.api-sports.io/football/teams/15702.png,Over 0.5 Gols HT,1.52,NS
+19:00,CONMEBOL Sudamericana,San Lorenzo,https://media.api-sports.io/football/teams/460.png,Santos,https://media.api-sports.io/football/teams/128.png,Over 8.5 Escanteios,1.95,NS
+19:00,CONMEBOL Libertadores,Lanus,https://media.api-sports.io/football/teams/446.png,LDU de Quito,https://media.api-sports.io/football/teams/1158.png,Over 8.5 Escanteios,1.78,NS
+19:00,CONMEBOL Libertadores,Libertad Asuncion,https://media.api-sports.io/football/teams/1179.png,Independiente del Valle,https://media.api-sports.io/football/teams/1153.png,Over 0.5 Gols HT,1.93,NS
