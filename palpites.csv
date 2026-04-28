@@ -1,8 +1,8 @@
 Hora,Liga,TimeCasa,LogoCasa,TimeFora,LogoFora,Palpite,Odd,Status
-13:00,Pro League,Al Shabab,https://media.api-sports.io/football/teams/2940.png,Al-Fateh,https://media.api-sports.io/football/teams/2931.png,Over 0.5 Gols no 1º Tempo,1.55 - 1.80,Not Started
-13:45,Pro League,NEOM,https://media.api-sports.io/football/teams/10513.png,Al-Hazm,https://media.api-sports.io/football/teams/2945.png,Over 0.5 Gols no 1º Tempo,1.55 - 1.80,Not Started
-15:00,Pro League,Al Khaleej Saihat,https://media.api-sports.io/football/teams/2928.png,Al Najma,https://media.api-sports.io/football/teams/2992.png,Over 0.5 Gols no 1º Tempo,1.55 - 1.80,Not Started
-15:00,Pro League,Al-Hilal Saudi FC,https://media.api-sports.io/football/teams/2932.png,Damac,https://media.api-sports.io/football/teams/2956.png,Over 0.5 Gols no 1º Tempo,1.55 - 1.80,Not Started
-16:00,UEFA Champions League,Paris Saint Germain,https://media.api-sports.io/football/teams/85.png,Bayern München,https://media.api-sports.io/football/teams/157.png,Over 0.5 Gols no 1º Tempo,1.55 - 1.80,Not Started
-19:00,CONMEBOL Libertadores,Lanus,https://media.api-sports.io/football/teams/446.png,LDU de Quito,https://media.api-sports.io/football/teams/1158.png,Over 0.5 Gols no 1º Tempo,1.55 - 1.80,Not Started
-19:00,CONMEBOL Libertadores,Libertad Asuncion,https://media.api-sports.io/football/teams/1179.png,Independiente del Valle,https://media.api-sports.io/football/teams/1153.png,Over 0.5 Gols no 1º Tempo,1.55 - 1.80,Not Started
+13:00,Pro League,Al Shabab,https://media.api-sports.io/football/teams/2940.png,Al-Fateh,https://media.api-sports.io/football/teams/2931.png,Handicap +1.5 Al-Fateh,1.7,Not Started
+13:45,Pro League,NEOM,https://media.api-sports.io/football/teams/10513.png,Al-Hazm,https://media.api-sports.io/football/teams/2945.png,Over 4.5 Cantos: NEOM,1.8,Not Started
+15:00,Pro League,Al-Hilal Saudi FC,https://media.api-sports.io/football/teams/2932.png,Damac,https://media.api-sports.io/football/teams/2956.png,Over 4.5 Cantos: Al-Hilal Saudi FC,2.01,Not Started
+15:00,Pro League,Al Khaleej Saihat,https://media.api-sports.io/football/teams/2928.png,Al Najma,https://media.api-sports.io/football/teams/2992.png,Over 1.5 Gols: Al Khaleej Saihat,1.95,Not Started
+16:00,UEFA Champions League,Paris Saint Germain,https://media.api-sports.io/football/teams/85.png,Bayern München,https://media.api-sports.io/football/teams/157.png,Over 0.5 Gols no 1º Tempo,1.58,Not Started
+19:00,CONMEBOL Libertadores,Libertad Asuncion,https://media.api-sports.io/football/teams/1179.png,Independiente del Valle,https://media.api-sports.io/football/teams/1153.png,Over 4.5 Cantos: Libertad Asuncion,2.01,Not Started
+19:00,CONMEBOL Libertadores,Lanus,https://media.api-sports.io/football/teams/446.png,LDU de Quito,https://media.api-sports.io/football/teams/1158.png,Over 4.5 Cantos: Lanus,2.0,Not Started
