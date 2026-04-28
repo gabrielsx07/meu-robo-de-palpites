@@ -32,9 +32,13 @@
     <div id="grid" class="grid"></div>
 
     <script>
-        Papa.parse("palpites.csv", {
-            download: true, header: true, skipEmptyLines: true,
+        // Isso adiciona um número único no fim do link para enganar o cache
+         Papa.parse("palpites.csv?v=" + new Date().getTime(), {
+            download: true,
+            header: true,
+            skipEmptyLines: true,
             complete: function(results) {
+                // O resto do teu código continua igual...
                 const games = results.data;
                 let container = document.getElementById("grid");
                 
