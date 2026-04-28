@@ -30,7 +30,7 @@ LIGAS_CONFIG = {
     1: "soccer_copa_do_mundo",
     3: "soccer_europa_league",
     13: "soccer_libertadores",
-    11: "soccer_sul_americana
+    11: "soccer_sul_americana",
 }
 
 def buscar_odd_no_cache(time_api_football, cache_odds):
