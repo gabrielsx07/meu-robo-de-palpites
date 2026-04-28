@@ -9,28 +9,7 @@ API_FOOTBALL_KEY = os.getenv('API_FOOTBALL_KEY')
 THE_ODDS_KEY = os.getenv('THE_ODDS_KEY')
 
 # Ligas (Brasil A, Champions, La Liga, etc.)
-LIGAS = [71: "soccer_brazil_campeonato", 
-    72: "soccer_brazil_campeonato_serie_b",
-    73: "soccer_brazil_copa_do_brasil",
-    39: "soccer_england_league1", 
-    40: "soccer_engalnd_league2",
-    307: "soccer_saudi_pro_league", 
-    140: "soccer_spain_la_liga",
-    141: "soccer_spain_la_liga2",
-    143: "soccer_spain_copa_del_rey",
-    61: "soccer_france_ligue1",
-    94: "soccer_portugal_primeira_liga",
-    253: "soccer_estados_unidos_mls",
-    135: "soccer_italy_serie_a",
-    78: "soccer_germany_bundesliga",
-    79: "soccer_germany_bundesliga2",
-    2: "soccer_uefa_champs_league",
-    1: "soccer_copa_do_mundo",
-    3: "soccer_europa_league",
-    13: "soccer_libertadores",
-    11: "soccer_sul_americana",
-
-         }
+LIGAS = [71, 2, 140, 39, 61, 135, 78, 72, 73, 40, 307, 141, 143, 94, 253, 135, 79, 1, 3, 13, 11]
 
 def rodar():
     fuso = pytz.timezone('America/Sao_Paulo')
