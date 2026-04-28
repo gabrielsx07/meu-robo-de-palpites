@@ -1,40 +1,36 @@
-name: Automacao de Palpites Profissional
-
+name: Atualizar Palpites
 on:
   schedule:
-    - cron: '0 * * * *'  # Roda sozinho de 1 em 1 hora
-  workflow_dispatch:      # Permite rodar manualmente clicando no botão
+    - cron: '0 */4 * * *' # Roda a cada 4 horas
+  workflow_dispatch:
+
+permissions:
+  contents: write  # ISSO AQUI É OBRIGATÓRIO
 
 jobs:
-  executar-robo:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write    # Permite que o robô escreva o arquivo no seu GitHub
-    
     steps:
-      - name: Checkout do Código
-        uses: actions/checkout@v3
-
-      - name: Configurar Python
+      - uses: actions/checkout@v3
+      
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
-      - name: Instalar Dependencias
-        run: |
-           python -m pip install --upgrade pip
-           pip install pandas requests pytz thefuzz python-Levenshtein
-      
-      - name: Rodar script de palpites
+          
+      - name: Instalar dependências
+        run: pip install pandas requests pytz thefuzz python-Levenshtein
+        
+      - name: Rodar Script
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           THE_ODDS_KEY: ${{ secrets.THE_ODDS_KEY }}
         run: python bot.py
         
-      - name: Salvar Dados no Repositorio
+      - name: Commitar mudanças
         run: |
-          git config --global user.name "Robo Autonomo"
-          git config --global user.email "bot@github.com"
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
           git add palpites.csv
-          git commit -m "Atualizacao Automatica: $(date)" || exit 0
+          git commit -m "Odds atualizadas" || exit 0
           git push
