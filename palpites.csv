@@ -1,16 +1,2 @@
-Hora,Liga,TimeCasa,LogoCasa,TimeFora,LogoFora,Palpite,Odd
-00:00,Liga Profesional Argentina,Huracan,https://media.api-sports.io/football/teams/445.png,Argentinos JRS,https://media.api-sports.io/football/teams/458.png,Análise VIP,1.90
-00:00,Primera B,Deportes Iquique,https://media.api-sports.io/football/teams/2319.png,Santiago Wanderers,https://media.api-sports.io/football/teams/2333.png,Análise VIP,1.90
-00:00,Primera División,Deportivo Garcilaso,https://media.api-sports.io/football/teams/20960.png,FBC Melgar,https://media.api-sports.io/football/teams/2554.png,Análise VIP,1.90
-00:00,Liga Pro,Aucas,https://media.api-sports.io/football/teams/1156.png,Delfin SC,https://media.api-sports.io/football/teams/1149.png,Análise VIP,1.90
-00:00,Brasileiro Women,Atlético Mineiro W,https://media.api-sports.io/football/teams/18727.png,Botafogo W,https://media.api-sports.io/football/teams/16497.png,Análise VIP,1.90
-00:00,Primera División,Aurora,https://media.api-sports.io/football/teams/3637.png,San Antonio Bulo Bulo,https://media.api-sports.io/football/teams/17760.png,Análise VIP,1.90
-00:30,Division di Honor,Nacional,https://media.api-sports.io/football/teams/8232.png,Caravel,https://media.api-sports.io/football/teams/8236.png,Análise VIP,1.90
-00:30,Premier League,Mount Pleasant Academy,https://media.api-sports.io/football/teams/3442.png,Waterhouse,https://media.api-sports.io/football/teams/3447.png,Análise VIP,1.90
-01:00,Liga de Ascenso,Inter San Carlos,https://media.api-sports.io/football/teams/24391.png,Pitbulls Santa Barbara FC,https://media.api-sports.io/football/teams/26343.png,Análise VIP,1.90
-08:30,Liga 1,Arema FC,https://media.api-sports.io/football/teams/2438.png,Persebaya Surabaya,https://media.api-sports.io/football/teams/2446.png,Análise VIP,1.90
-08:45,Federation Cup,Fakirerpool,https://media.api-sports.io/football/teams/25416.png,Rahmatgonj MFS,https://media.api-sports.io/football/teams/5017.png,Análise VIP,1.90
-08:45,Federation Cup,Abahani,https://media.api-sports.io/football/teams/5009.png,PWD Sports Club,https://media.api-sports.io/football/teams/26882.png,Análise VIP,1.90
-11:00,U18 Premier League - South,Arsenal U18,https://media.api-sports.io/football/teams/15388.png,Crystal Palace U18,https://media.api-sports.io/football/teams/15392.png,Análise VIP,1.90
-11:00,U18 Premier League - South,Tottenham Hotspur U18,https://media.api-sports.io/football/teams/15398.png,West Ham United U18,https://media.api-sports.io/football/teams/15400.png,Análise VIP,1.90
-11:00,First League,Ararat-Armenia II,https://media.api-sports.io/football/teams/3689.png,Pyunik II,https://media.api-sports.io/football/teams/3696.png,Análise VIP,1.90
+Hora,Liga,TimeCasa,LogoCasa,TimeFora,LogoFora,Palpite
+00:00,Aviso,Sem Jogos Disponiveis,,Tente Mais Tarde,,API Vazia
