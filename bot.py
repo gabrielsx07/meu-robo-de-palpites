@@ -4,32 +4,34 @@ from bs4 import BeautifulSoup
 
 def rodar():
     url = "https://apostadorpro.tech"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+    # Faz o robô fingir que é um navegador comum
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     
     final = []
-    print(f"Iniciando clonagem de: {url}")
+    print(f"Clonando palpites de: {url}")
 
     try:
-        res = requests.get(url, headers=headers, timeout=20)
-        soup = BeautifulSoup(res.text, 'html.parser')
+        response = requests.get(url, headers=headers, timeout=20)
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Procura os cards de jogos no site alvo
-        cards = soup.select('.card, .match-card') 
+        # No site deles, cada jogo fica dentro de uma 'div' com uma classe específica
+        # Aqui o robô procura todos os blocos de jogos
+        jogos = soup.find_all('div', class_='card-body') 
 
-        for card in cards:
+        for jogo in jogos:
             try:
-                # Extraindo dados (ajustado para o padrão comum de scrapers)
-                casa = card.select_one('.home-team, .team-name').get_text(strip=True)
-                fora = card.select_one('.away-team, .team-name:last-child').get_text(strip=True)
-                palpite = card.select_one('.tip, .badge, .btn-primary').get_text(strip=True)
+                # O robô "caça" os nomes dentro do código do site deles
+                casa = jogo.find('div', class_='home-team-name').get_text(strip=True)
+                fora = jogo.find('div', class_='away-team-name').get_text(strip=True)
+                palpite = jogo.find('div', class_='tip-text').get_text(strip=True)
                 
-                # Pega as logos
-                imgs = card.select('img')
-                l_casa = imgs[0]['src'] if len(imgs) > 0 else ""
-                l_fora = imgs[1]['src'] if len(imgs) > 1 else ""
+                # Pega as imagens dos times
+                fotos = jogo.find_all('img')
+                l_casa = fotos[0]['src'] if len(fotos) > 0 else ""
+                l_fora = fotos[1]['src'] if len(fotos) > 1 else ""
 
                 final.append({
-                    'Hora': 'Live',
+                    'Hora': 'Ao Vivo/Hoje',
                     'Liga': 'Análise Pro',
                     'TimeCasa': casa,
                     'LogoCasa': l_casa,
@@ -37,16 +39,17 @@ def rodar():
                     'LogoFora': l_fora,
                     'Palpite': palpite
                 })
-            except: continue
+            except:
+                continue
 
     except Exception as e:
         print(f"Erro: {e}")
 
     if final:
         pd.DataFrame(final).to_csv('palpites.csv', index=False)
-        print(f"✅ {len(final)} palpites clonados!")
+        print(f"✅ Sucesso! {len(final)} palpites clonados.")
     else:
-        print("⚠️ Estrutura do site mudou ou está vazia.")
+        print("⚠️ Não achei palpites. O site deles pode ter mudado o código.")
 
 if __name__ == "__main__":
     rodar()
