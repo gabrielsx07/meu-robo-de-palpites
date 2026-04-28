@@ -3,56 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIP'S OLIVEIRA - VIP</title>
+    <title>GORILLA VIP - Palpites</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
-        /* Fundo Preto Profundo */
-        body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; }
-        
-        /* Card Estilo Dark com borda Vermelha */
+        /* CONFIGURAÇÃO GERAL DO FUNDO */
+        body { 
+            background-color: #020617; /* Azul quase preto */
+            color: #f8fafc; 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+        }
+
+        /* CONTAINER DOS CARDS - UM EMBAIXO DO OUTRO */
+        #container-jogos {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 550px; /* Largura ideal para celular e PC */
+            margin: 0 auto;
+        }
+
+        /* ESTILO DO CARD */
         .card { 
-            background: #111111; 
-            border: 1px solid #330000; 
-            border-top: 3px solid #ff0000;
+            background-color: #1e293b; /* Cinza azulado escuro */
+            border: 1px solid #334155; 
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
             transition: transform 0.2s;
         }
-        .card:hover { transform: scale(1.02); border-color: #ff0000; }
 
-        /* Botão de Palpite Vermelho */
-        .btn-palpite { 
-            background: linear-gradient(90deg, #8b0000 0%, #ff0000 100%);
-            color: white;
+        /* DISTINTIVO DA LIGA */
+        .liga-badge {
+            background-color: #0f172a;
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 50px;
             text-transform: uppercase;
-            font-weight: 900;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+            letter-spacing: 0.5px;
         }
 
-        .liga-badge { background: #222; color: #ff0000; font-size: 10px; font-weight: bold; border: 1px solid #444; }
+        /* BOTÃO DE PALPITE VERMELHO (ESTILO OLIVEIRA) */
+        .btn-palpite { 
+            background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%);
+            color: white; 
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 16px;
+            text-align: center;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .vs-text {
+            color: #ef4444;
+            font-style: italic;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .loading-text {
+            text-align: center;
+            color: #64748b;
+            margin-top: 50px;
+        }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body>
 
-    <header class="text-center mb-12">
-        <h1 class="text-4xl font-black italic text-white tracking-tighter">
-            TIP'S <span class="text-red-600">OLIVEIRA</span>
+    <header class="text-center mb-10">
+        <h1 class="text-3xl font-black italic text-red-500 uppercase tracking-tighter">
+            Gorilla <span class="text-white">VIP</span>
         </h1>
-        <p class="text-gray-500 text-sm mt-2">ESTATÍSTICAS AVANÇADAS EM TEMPO REAL</p>
+        <p class="text-slate-500 text-xs font-bold mt-1">PALPITES ATUALIZADOS EM TEMPO REAL</p>
     </header>
 
-    <div id="container-jogos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-        <div class="col-span-full text-center text-gray-600">Carregando artilharia...</div>
+    <div id="container-jogos">
+        <div class="loading-text font-bold">CARREGANDO PALPITES...</div>
     </div>
 
     <script>
         async function carregarPalpites() {
             try {
+                // O ?v= força o navegador a pegar o arquivo novo do GitHub
                 const response = await fetch('palpites.csv?v=' + Date.now());
                 const data = await response.text();
-                const linhas = data.split('\n').filter(l => l.trim() !== "").slice(1);
                 
+                const linhas = data.split('\n').filter(row => row.trim() !== "").slice(1); 
                 const container = document.getElementById('container-jogos');
-                container.innerHTML = '';
+                
+                if (linhas.length === 0) {
+                    container.innerHTML = '<div class="text-center text-slate-500">Nenhum jogo disponível agora.</div>';
+                    return;
+                }
+
+                container.innerHTML = ''; // Limpa o carregando
 
                 linhas.forEach(linha => {
                     const col = linha.split(',');
@@ -60,43 +113,44 @@
 
                     const [hora, liga, casa, logoCasa, fora, logoFora, palpite] = col;
 
-                   container.innerHTML += `
-                     <div class="card p-5">
-                       <div class="flex justify-between mb-4">
-                        <span class="liga-badge">${liga}</span>
-                        <span class="text-xs font-bold text-slate-400">${hora}</span>
-                    </div>
-        
-                    <div class="flex items-center justify-between mb-6 px-2">
-                      <div class="text-center w-24">
-                        <img src="${logoCasa}" class="w-14 h-14 mx-auto mb-2">
-                        <p class="text-xs font-black uppercase">${casa}</p>
-                      </div>
-                      <div class="text-xl font-black text-red-500 italic">VS</div>
-                      <div class="text-center w-24">
-                        <img src="${logoFora}" class="w-14 h-14 mx-auto mb-2">
-                        <p class="text-xs font-black uppercase">${fora}</p>
-                      </div>
-                    </div>
+                    const cardHtml = `
+                        <div class="card">
+                            <div class="flex justify-between items-center mb-5">
+                                <span class="liga-badge">${liga}</span>
+                                <span class="text-xs font-black text-slate-400">${hora}</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between px-2 mb-2">
+                                <div class="text-center w-1/3">
+                                    <img src="${logoCasa}" class="w-14 h-14 mx-auto mb-2 object-contain" onerror="this.src='https://via.placeholder.com/60'">
+                                    <p class="text-[11px] font-black uppercase leading-tight">${casa}</p>
+                                </div>
 
-                    <div class="text-center mb-2">
-                      <span class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Sugestão de Entrada</span>
-                    </div>
-                    <div class="btn-palpite">
-                      ${palpite}
-                    </div>
-                  </div>
-                 `;
+                                <div class="vs-text">VS</div>
+
+                                <div class="text-center w-1/3">
+                                    <img src="${logoFora}" class="w-14 h-14 mx-auto mb-2 object-contain" onerror="this.src='https://via.placeholder.com/60'">
+                                    <p class="text-[11px] font-black uppercase leading-tight">${fora}</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <p class="text-[10px] text-center text-slate-500 font-bold uppercase mb-1 tracking-widest">Entrada Sugerida</p>
+                                <div class="btn-palpite">
+                                    ${palpite}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += cardHtml;
                 });
-            } catch (e) {
-                console.error(e);
-                document.getElementById('container-jogos').innerHTML = "Erro ao carregar dados.";
+            } catch (error) {
+                console.error("Erro ao carregar CSV:", error);
             }
         }
 
+        // Inicia a busca
         carregarPalpites();
-        // Atualiza a cada 5 minutos
-        setInterval(carregarPalpites, 300000);
     </script>
 </body>
 </html>
