@@ -3,59 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIP'S OLIVEIRA - Pro Stats</title>
+    <title>TIP'S OLIVEIRA - PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #020617; color: white; }
-        .card { background: #1e293b; border-left: 4px solid #10b981; }
-        .badge { background: #334155; padding: 2px 8px; border-radius: 4px; font-size: 10px; }
+        body { background-color: #020617; color: white; font-family: 'Inter', sans-serif; }
+        .card { background: #1e293b; border-left: 4px solid #10b981; transition: transform 0.2s; }
+        .card:hover { transform: scale(1.02); }
+        .badge { background: #334155; padding: 2px 8px; border-radius: 4px; font-size: 10px; color: #cbd5e1; }
     </style>
 </head>
-<body class="p-4">
-    <h1 class="text-2xl font-black text-center my-6 text-emerald-500 italic">TIP'S OLIVEIRA</h1>
+<body class="p-4 bg-slate-950">
+    <header class="text-center py-8">
+        <h1 class="text-2xl font-black text-emerald-500 italic tracking-tighter">TIP'S OLIVEIRA PRO 🦍</h1>
+        <p class="text-[10px] text-slate-500 uppercase tracking-widest">Análise de Dados Avançada</p>
+    </header>
     
-    <div id="container-jogos" class="grid gap-4 max-w-2xl mx-auto">
-        <p class="text-center text-slate-500">Buscando estatísticas avançadas...</p>
+    <div id="lista-palpites" class="grid gap-4 max-w-xl mx-auto">
+        <div class="text-center py-10 text-slate-600">Processando estatísticas do dia...</div>
     </div>
 
     <script>
-        async function load() {
-            const res = await fetch('palpites.csv?v=' + Date.now());
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
-            const container = document.getElementById('container-jogos');
-            container.innerHTML = '';
+        async function fetchTips() {
+            try {
+                const r = await fetch('palpites.csv?v=' + Date.now());
+                const data = await r.text();
+                const rows = data.split('\n').filter(row => row.trim() !== "").slice(1);
+                const container = document.getElementById('lista-palpites');
+                container.innerHTML = '';
 
-            rows.forEach(row => {
-                const col = row.split(',');
-                if(col.length < 7) return;
-                const [hora, liga, casa, logoC, fora, logoF, palpite] = col;
+                rows.forEach(row => {
+                    const col = row.split(',');
+                    if(col.length < 7) return;
+                    const [hora, liga, casa, logoC, fora, logoF, palpite] = col;
 
-                container.innerHTML += `
-                <div class="card p-4 rounded-lg flex flex-col gap-3">
-                    <div class="flex justify-between items-center">
-                        <span class="badge">${liga}</span>
-                        <span class="text-xs font-bold text-emerald-400">${hora}</span>
-                    </div>
-                    <div class="flex items-center justify-around">
-                        <div class="text-center">
-                            <img src="${logoC}" class="w-10 h-10 mx-auto">
-                            <p class="text-xs mt-1 font-bold">${casa}</p>
+                    container.innerHTML += `
+                    <div class="card p-5 rounded-xl shadow-2xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="badge uppercase">${liga}</span>
+                            <span class="text-xs font-mono text-emerald-400">${hora}</span>
                         </div>
-                        <div class="text-slate-500 text-xs">VS</div>
-                        <div class="text-center">
-                            <img src="${logoF}" class="w-10 h-10 mx-auto">
-                            <p class="text-xs mt-1 font-bold">${fora}</p>
+                        
+                        <div class="flex items-center justify-between gap-4 mb-5">
+                            <div class="text-center flex-1">
+                                <img src="${logoC}" class="w-12 h-12 mx-auto mb-2 drop-shadow-lg">
+                                <p class="text-[11px] font-bold truncate">${casa}</p>
+                            </div>
+                            <div class="text-[10px] font-black text-slate-700 italic">VS</div>
+                            <div class="text-center flex-1">
+                                <img src="${logoF}" class="w-12 h-12 mx-auto mb-2 drop-shadow-lg">
+                                <p class="text-[11px] font-bold truncate">${fora}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mt-2 bg-emerald-500/10 border border-emerald-500/20 p-2 rounded text-center">
-                        <span class="text-xs text-emerald-300 uppercase block font-black">Sugestão de Entrada</span>
-                        <span class="text-sm font-bold">${palpite}</span>
-                    </div>
-                </div>`;
-            });
+
+                        <div class="bg-slate-900/50 border border-emerald-500/20 p-3 rounded-lg text-center">
+                            <p class="text-[9px] text-emerald-500/60 uppercase font-black tracking-tighter mb-1">Sugestão de Entrada</p>
+                            <p class="text-sm font-black text-emerald-400 uppercase">${palpite}</p>
+                        </div>
+                    </div>`;
+                });
+            } catch (e) {
+                console.error(e);
+            }
         }
-        load();
+        fetchTips();
     </script>
 </body>
 </html>
