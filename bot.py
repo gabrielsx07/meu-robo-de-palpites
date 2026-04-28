@@ -5,8 +5,8 @@ import pytz
 from thefuzz import fuzz
 
 # ================= CONFIGURAÇÕES =================
-API_FOOTBALL_KEY = "SUA_CHAVE_FOOTBALL_AQUI"
-THE_ODDS_API_KEY = "SUA_CHAVE_THE_ODDS_AQUI"
+API_FOOTBALL_KEY = "b4533c0123994fd0a1a0d3a9d125d5ed"
+THE_ODDS_API_KEY = "8863a30041dda111e7ca463aab3f216d"
 
 LIGAS_CONFIG = {
     71: "soccer_brazil_campeonato", 
