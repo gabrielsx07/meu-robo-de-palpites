@@ -4,11 +4,8 @@ from datetime import datetime
 import pytz
 import os
 
-# Pega a chave do Cofre (Secrets)
 API_KEY = os.getenv('API_FOOTBALL_KEY')
-
-# Ligas que trazem os melhores palpites
-LIGAS = [71, 2, 140, 39, 61, 135, 78, 72, 73, 40, 307, 141, 143, 94, 253, 135, 79, 1, 3, 13, 11]
+LIGAS = [71, 72, 39, 140, 135, 78, 61, 2, 3]
 
 def rodar():
     fuso = pytz.timezone('America/Sao_Paulo')
@@ -16,45 +13,47 @@ def rodar():
     headers = {'x-rapidapi-host': "v3.football.api-sports.io", 'x-rapidapi-key': API_KEY}
     
     final = []
-    print(f"--- ANALISANDO JOGOS PARA {hoje} ---")
+    print(f"--- GERANDO PALPITES DETALHADOS PARA {hoje} ---")
 
     for liga in LIGAS:
         for ano in [2026, 2025]:
             url = f"https://v3.football.api-sports.io/fixtures?date={hoje}&league={liga}&season={ano}"
             try:
-                r = requests.get(url, headers=headers, timeout=15).json()
+                r = requests.get(url, headers=headers).json()
                 jogos = r.get('response', [])
                 if not jogos: continue
 
                 for j in jogos:
-                    status = j['fixture']['status']['short']
-                    # Só pega jogos que ainda vão começar
-                    if status not in ['NS', 'TBD']: continue
-
                     f_id = j['fixture']['id']
                     
-                    # 1. BUSCA ODD REAL
-                    odd_val = None
-                    try:
-                        url_o = f"https://v3.football.api-sports.io/odds?fixture={f_id}"
-                        res_o = requests.get(url_o, headers=headers).json()
-                        # Tenta pegar a odd da vitória do time da casa
-                        odd_val = res_o['response'][0]['bookmakers'][0]['markets'][0]['outcomes'][0]['value']
-                    except:
-                        # Se não tiver odd na API ainda, calcula uma baseada na força do time
-                        prob = float(j.get('comparison', {}).get('winner', {}).get('home', '50').replace('%',''))
-                        odd_val = round(100 / (prob + 3), 2)
+                    # BUSCA PREVISÃO DETALHADA DO JOGO
+                    url_p = f"https://v3.football.api-sports.io/predictions?fixture={f_id}"
+                    res_p = requests.get(url_p, headers=headers).json()
+                    p = res_p['response'][0] if res_p.get('response') else {}
 
-                    # 2. INTELIGÊNCIA DE PALPITE
-                    val = float(odd_val)
-                    if val < 1.60:
-                        palpite = "Vencer um dos Tempos"
-                    elif val < 1.95:
-                        palpite = "Casa Vence ou Empate"
-                    elif val < 2.30:
-                        palpite = "Over 1.5 Gols"
+                    # Lógica de Palpites Detalhados
+                    if p:
+                        # Gols e Tempos
+                        gols_previstos = p['goals']['home'] if p['goals']['home'] else "1.5"
+                        escanteios = p['comparison']['corners']['home'] if p['comparison']['corners'] else "50%"
+                        
+                        # Criando uma lista de palpites para escolher o melhor
+                        opcoes = []
+                        if float(escanteios.replace('%','')) > 60:
+                            opcoes.append(f"Mais de 8.5 Cantos")
+                            opcoes.append(f"Cantos HT (Over 3.5)")
+                        
+                        if p['comparison']['poisson']['home'] > p['comparison']['poisson']['away']:
+                            opcoes.append(f"Vencer um dos tempos: {j['teams']['home']['name']}")
+                        
+                        if p['predictions']['goals']['home'] and "-" in p['predictions']['goals']['home']:
+                            opcoes.append("Gol no 1º Tempo")
+                        
+                        opcoes.append("Mais de 1.5 Gols") # Segurança
+                        
+                        palpite_final = opcoes[0] if opcoes else "Ambas Marcam"
                     else:
-                        palpite = "Ambas Marcam: Sim"
+                        palpite_final = "Análise em Processamento"
 
                     hora = datetime.fromisoformat(j['fixture']['date'].replace('Z', '+00:00')).astimezone(fuso).strftime('%H:%M')
                     
@@ -65,18 +64,14 @@ def rodar():
                         'LogoCasa': j['teams']['home']['logo'],
                         'TimeFora': j['teams']['away']['name'],
                         'LogoFora': j['teams']['away']['logo'],
-                        'Palpite': palpite,
-                        'Odd': str(val)
+                        'Palpite': palpite_final
                     })
                 break 
             except: continue
 
     if final:
-        # Salva e ordena por horário
         pd.DataFrame(final).sort_values('Hora').to_csv('palpites.csv', index=False)
-        print(f"✅ SUCESSO: {len(final)} palpites inteligentes gerados!")
-    else:
-        print("⚠️ Nenhum jogo encontrado para hoje nas ligas selecionadas.")
+        print("✅ Sucesso! Palpites detalhados gerados.")
 
 if __name__ == "__main__":
     rodar()
