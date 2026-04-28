@@ -4,69 +4,70 @@ from datetime import datetime
 import pytz
 import os
 
-# Pega as chaves que você configurou nos Secrets do GitHub
-API_FOOTBALL_KEY = os.getenv('API_FOOTBALL_KEY')
-THE_ODDS_KEY = os.getenv('THE_ODDS_KEY')
+# Pega a chave do cofre do GitHub
+API_KEY = os.getenv('API_FOOTBALL_KEY')
 
-# Ligas (Brasil A, Champions, La Liga, etc.)
+# Ligas variadas para garantir volume de jogos
 LIGAS = [71, 2, 140, 39, 61, 135, 78, 72, 73, 40, 307, 141, 143, 94, 253, 135, 79, 1, 3, 13, 11]
 
 def rodar():
     fuso = pytz.timezone('America/Sao_Paulo')
     hoje = datetime.now(fuso).strftime('%Y-%m-%d')
-    headers_fb = {'x-rapidapi-host': "v3.football.api-sports.io", 'x-rapidapi-key': API_FOOTBALL_KEY}
+    headers = {'x-rapidapi-host': "v3.football.api-sports.io", 'x-rapidapi-key': API_KEY}
     
-    lista_final = []
-    print(f"Iniciando busca para {hoje}...")
+    dados_concluidos = []
+    print(f"Buscando jogos para: {hoje}")
 
-    for liga_id in LIGAS:
-        # Tenta pegar jogos de 2026 (Brasil) ou 2025 (Europa)
+    for liga in LIGAS:
+        # Testa temporadas 2026 e 2025
         for ano in [2026, 2025]:
-            url = f"https://v3.football.api-sports.io/fixtures?date={hoje}&league={liga_id}&season={ano}"
+            url = f"https://v3.football.api-sports.io/fixtures?date={hoje}&league={liga}&season={ano}"
             try:
-                res = requests.get(url, headers=headers_fb, timeout=20).json()
-                jogos = res.get('response', [])
+                r = requests.get(url, headers=headers, timeout=20).json()
+                jogos = r.get('response', [])
                 if not jogos: continue
 
                 for j in jogos:
                     f_id = j['fixture']['id']
-                    time_casa = j['teams']['home']['name']
-                    
-                    # BUSCA ODD REAL (Diferente da anterior, essa tenta várias fontes)
-                    odd_exata = "---"
+                    status = j['fixture']['status']['short']
+                    if status not in ['NS', 'TBD', '1H', 'HT']: continue
+
+                    # Tenta pegar a ODD real
+                    odd_val = "1.85" # Valor base
                     try:
-                        # Tenta buscar a odd diretamente na API Football
                         url_o = f"https://v3.football.api-sports.io/odds?fixture={f_id}"
-                        res_o = requests.get(url_o, headers=headers_fb).json()
-                        # Pega a primeira odd de vitória disponível
-                        odd_exata = res_o['response'][0]['bookmakers'][0]['markets'][0]['outcomes'][0]['value']
+                        res_o = requests.get(url_o, headers=headers).json()
+                        odd_val = res_o['response'][0]['bookmakers'][0]['markets'][0]['outcomes'][0]['value']
                     except:
-                        # Se falhar, calcula uma baseada na força do time (Nunca fixa!)
+                        # Se falhar a odd, calcula pela probabilidade
                         prob = float(j.get('comparison', {}).get('winner', {}).get('home', '50').replace('%',''))
-                        odd_exata = round(100 / (prob + 5), 2)
+                        odd_val = round(100 / (prob + 2), 2)
 
                     hora = datetime.fromisoformat(j['fixture']['date'].replace('Z', '+00:00')).astimezone(fuso).strftime('%H:%M')
-
-                    lista_final.append({
-                        'Hora': hora,
-                        'Liga': j['league']['name'],
-                        'TimeCasa': time_casa,
-                        'LogoCasa': j['teams']['home']['logo'],
-                        'TimeFora': j['teams']['away']['name'],
-                        'LogoFora': j['teams']['away']['logo'],
-                        'Palpite': "Vitória Casa" if float(odd_exata) < 1.70 else "Ambas Marcam",
-                        'Odd': str(odd_exata)
-                    })
-                break
+                    
+                    dados_concluidos.append([
+                        hora,
+                        j['league']['name'],
+                        j['teams']['home']['name'],
+                        j['teams']['home']['logo'],
+                        j['teams']['away']['name'],
+                        j['teams']['away']['logo'],
+                        "Vitória Casa" if float(odd_val) < 1.80 else "Ambas Marcam",
+                        str(odd_val)
+                    ])
+                break 
             except: continue
 
-    if lista_final:
-        # Salva o CSV que o seu novo HTML vai ler
-        df = pd.DataFrame(lista_final).sort_values('Hora')
-        df.to_csv('palpites.csv', index=False)
-        print(f"✅ SUCESSO: {len(lista_final)} jogos com odds reais gerados!")
+    # CRUCIAL: Criar o DataFrame com colunas certas e forçar o salvamento
+    if dados_concluidos:
+        df = pd.DataFrame(dados_concluidos, columns=['Hora', 'Liga', 'TimeCasa', 'LogoCasa', 'TimeFora', 'LogoFora', 'Palpite', 'Odd'])
+        df.to_csv('palpites.csv', index=False, encoding='utf-8')
+        print(f"✅ SUCESSO: {len(dados_concluidos)} jogos salvos no CSV!")
     else:
-        print("❌ ERRO: Nenhum jogo encontrado. Verifique sua chave API_FOOTBALL_KEY.")
+        # Cria um CSV vazio mas com cabeçalho para não quebrar o site
+        df = pd.DataFrame(columns=['Hora', 'Liga', 'TimeCasa', 'LogoCasa', 'TimeFora', 'LogoFora', 'Palpite', 'Odd'])
+        df.to_csv('palpites.csv', index=False)
+        print("⚠️ Nenhum jogo encontrado hoje.")
 
 if __name__ == "__main__":
     rodar()
