@@ -79,10 +79,23 @@ def rodar():
     final = []
 
     for jogo in data.get("response", []):
-        casa = jogo["teams"]["home"]["name"]
-        fora = jogo["teams"]["away"]["name"]
-        liga = jogo["league"]["name"]
-        hora = jogo["fixture"]["date"][11:16]
+       # STATUS (só jogos futuros)
+    if jogo["fixture"]["status"]["short"] != "NS":
+    continue
+
+       # LIGA
+       pais = jogo["league"]["country"]
+       liga = jogo["league"]["name"]
+
+     if (pais, liga) not in ligas_permitidas:
+     continue
+
+       # HORÁRIO (opcional)
+       hora_str = jogo["fixture"]["date"][11:13]
+       hora_int = int(hora_str)
+
+     if hora_int < 10 or hora_int > 23:
+     continue
 
         palpite = analisar_partida(casa, fora)
 
