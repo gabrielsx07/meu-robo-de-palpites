@@ -1,55 +1,42 @@
 import pandas as pd
-import cloudscraper
+import requests
 from bs4 import BeautifulSoup
 
 def rodar():
-    url = "https://apostadorpro.tech"
-    # O cloudscraper passa pelo bloqueio do Cloudflare que você viu nas fotos
-    scraper = cloudscraper.create_scraper()
+    # Usando a agenda do GE que é aberta e fácil de ler
+    url = "https://ge.globo.com/agenda-do-dia/"
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     
     final = []
-    print(f"Buscando palpites em {url}...")
+    print(f"Buscando jogos em: {url}")
 
     try:
-        response = scraper.get(url, timeout=30)
+        response = requests.get(url, headers=headers, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # O site deles usa 'Card_card__...' nas classes. Buscamos qualquer div de card.
-        cards = soup.find_all('div', class_=lambda x: x and 'card' in x.lower())
+        # O GE organiza os jogos por blocos de evento
+        eventos = soup.select('.agenda-item')
 
-        for card in cards:
+        for evento in eventos:
             try:
-                # Localiza times (procurando textos em negrito ou classes de team)
-                teams = card.find_all(['p', 'span', 'div'], class_=lambda x: x and ('team' in x.lower() or 'name' in x.lower()))
-                if len(teams) < 2: continue
-                
-                casa = teams[0].get_text(strip=True)
-                fora = teams[1].get_text(strip=True)
-                
-                # Pega a sugestão (palpite)
-                tip_elem = card.find(class_=lambda x: x and ('tip' in x.lower() or 'badge' in x.lower() or 'sugestao' in x.lower()))
-                original = tip_elem.get_text(strip=True).upper() if tip_elem else "OVER 1.5 GOLS"
+                # Filtrar apenas futebol
+                esporte = evento.select_one('.agenda-item__meta').get_text(strip=True)
+                if 'Futebol' not in esporte: continue
 
-                # --- Lógica de clareza do Gorilla ---
-                if "VENCER" in original or "CASA" in original:
-                    palpite = f"VENCER UM DOS TEMPOS: {casa}"
-                elif "FORA" in original:
-                    palpite = f"VENCER UM DOS TEMPOS: {fora}"
-                elif "CANTOS" in original:
-                    palpite = "MAIS DE 8.5 ESCANTEIOS"
-                else:
-                    palpite = original
+                # Times e Hora
+                casa = evento.select_one('.agenda-item__equipe--mandante').get_text(strip=True)
+                fora = evento.select_one('.agenda-item__equipe--visitante').get_text(strip=True)
+                hora = evento.select_one('.agenda-item__horario').get_text(strip=True)
+                liga = evento.select_one('.agenda-item__campeonato').get_text(strip=True)
 
-                # Logos, Liga e Hora
-                imgs = card.find_all('img')
+                # Logos (GE usa tags de imagem com src)
+                imgs = evento.select('.agenda-item__escudo')
                 l_casa = imgs[0]['src'] if len(imgs) > 0 else ""
                 l_fora = imgs[1]['src'] if len(imgs) > 1 else ""
-                
-                info = card.get_text(separator="|").split("|")
-                liga = info[0].strip() if len(info) > 0 else "Futebol"
-                hora = "Hoje"
-                for i in info:
-                    if ":" in i and len(i) <= 5: hora = i.strip()
+
+                # GERADOR DE PALPITE (Como é site de notícia, nós criamos a "Tip")
+                # Aqui você pode personalizar a lógica
+                palpite = f"Vencer um dos Tempos: {casa}" if "Flamengo" in casa or "Palmeiras" in casa else "Mais de 1.5 Gols"
 
                 final.append({
                     'Hora': hora, 'Liga': liga, 'TimeCasa': casa, 
@@ -62,11 +49,10 @@ def rodar():
         print(f"Erro: {e}")
 
     if final:
-        pd.DataFrame(final).drop_duplicates().to_csv('palpites.csv', index=False)
-        print(f"✅ SUCESSO: {len(final)} palpites extraídos!")
+        pd.DataFrame(final).to_csv('palpites.csv', index=False)
+        print(f"✅ {len(final)} jogos encontrados e processados!")
     else:
-        # Se falhar, avisa no log
-        print("⚠️ Nenhum palpite encontrado. Verifique se o site mudou as classes.")
+        print("⚠️ Nenhum jogo de futebol encontrado na agenda hoje.")
 
 if __name__ == "__main__":
     rodar()
