@@ -1,57 +1,60 @@
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-import random
 
 def rodar():
     url = "https://apostadorpro.tech"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     
     final = []
-    print(f"Buscando e detalhando palpites de {url}...")
+    print(f"Buscando palpites em {url}...")
 
     try:
         response = requests.get(url, headers=headers, timeout=20)
         soup = BeautifulSoup(response.text, 'html.parser')
-        cards = soup.select('div.card')
+
+        # O site deles usa cards para os jogos. Vamos localizar cada um.
+        cards = soup.select('div.card') # Seleciona os cards de jogos
 
         for card in cards:
             try:
-                # Extração básica
+                # Pega a Liga e a Hora (geralmente no topo do card)
+                info = card.select_one('div.card-header').get_text(separator="|").split("|")
+                liga = info[0].strip()
+                hora = info[1].strip() if len(info) > 1 else "Hoje"
+
+                # Pega os nomes dos times
                 casa = card.select_one('div.home-team').get_text(strip=True)
                 fora = card.select_one('div.away-team').get_text(strip=True)
-                palpite_base = card.select_one('div.tip-container, .badge-success').get_text(strip=True)
-                
-                # GERADOR DE DETALHES (Aqui está o segredo)
-                confianca = random.randint(82, 98) # Gera uma % de confiança realista
-                
-                # Criar um detalhe técnico baseado no palpite
-                if "Gols" in palpite_base or "Over" in palpite_base:
-                    detalhe = f"Média de {random.uniform(2.1, 3.4):.1f} gols nos últimos jogos."
-                elif "Cantos" in palpite_base or "Escanteios" in palpite_base:
-                    detalhe = f"Tendência de {random.randint(9, 12)} cantos totais verificada."
-                else:
-                    detalhe = "Forte pressão ofensiva do time da casa detectada."
+
+                # Pega as logos
+                logos = card.select('img')
+                logo_casa = logos[0]['src'] if len(logos) > 0 else ""
+                logo_fora = logos[1]['src'] if len(logos) > 1 else ""
+
+                # Pega o palpite que está no botão ou área de destaque
+                palpite = card.select_one('div.tip-container, .badge-success').get_text(strip=True)
 
                 final.append({
-                    'Hora': "Ao Vivo" if "vivo" in card.get_text().lower() else "Hoje",
-                    'Liga': "🏆 Análise VIP Gorilla",
+                    'Hora': hora,
+                    'Liga': liga,
                     'TimeCasa': casa,
-                    'LogoCasa': card.select('img')[0]['src'] if card.select('img') else "",
+                    'LogoCasa': logo_casa,
                     'TimeFora': fora,
-                    'LogoFora': card.select('img')[1]['src'] if len(card.select('img')) > 1 else "",
-                    'Palpite': palpite_base,
-                    'Detalhe': detalhe,
-                    'Confianca': f"{confianca}%"
+                    'LogoFora': logo_fora,
+                    'Palpite': palpite
                 })
-            except: continue
+            except:
+                continue
 
     except Exception as e:
-        print(f"Erro: {e}")
+        print(f"Erro ao clonar: {e}")
 
     if final:
         pd.DataFrame(final).to_csv('palpites.csv', index=False)
-        print(f"✅ SUCESSO: {len(final)} palpites detalhados gerados!")
+        print(f"✅ SUCESSO: {len(final)} palpites clonados!")
+    else:
+        print("⚠️ O site deles pode ter mudado a estrutura. Me avise!")
 
 if __name__ == "__main__":
     rodar()
