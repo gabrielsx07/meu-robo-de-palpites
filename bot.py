@@ -5,115 +5,118 @@ from datetime import datetime
 
 API_KEY = os.getenv("API_KEY")
 
-def analisar_partida(casa, fora):
-    favoritos = [
-        'Flamengo', 'Palmeiras', 'Real Madrid', 'Manchester City',
-        'Barcelona', 'Bayern', 'Liverpool', 'PSG',
-        'Arsenal', 'Inter', 'Milan', 'Juventus'
-    ]
+HEADERS = {
+    "x-apisports-key": API_KEY
+}
 
-    casa_forte = any(fav.lower() in casa.lower() for fav in favoritos)
-    fora_forte = any(fav.lower() in fora.lower() for fav in favoritos)
+# 🔥 BUSCAR ESTATÍSTICA DO TIME
+def get_stats(team_id, league_id, season):
+    url = f"https://v3.football.api-sports.io/teams/statistics?league={league_id}&season={season}&team={team_id}"
+    
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=10)
+        data = res.json()
 
-    # Palpite principal
-    if casa_forte and fora_forte:
-        principal = "Mais de 2.5 gols + Ambas marcam"
-    elif casa_forte:
-        principal = f"{casa} marca + Mais de 1.5 gols"
-    elif fora_forte:
-        principal = f"{fora} marca + Mais de 1.5 gols"
-    else:
+        if not data.get("response"):
+            return None
+
+        stats = data["response"]
+
+        gols_marcados = float(stats["goals"]["for"]["average"]["total"])
+        gols_sofridos = float(stats["goals"]["against"]["average"]["total"])
+
+        return {
+            "gols_marcados": gols_marcados,
+            "gols_sofridos": gols_sofridos
+        }
+
+    except:
+        return None
+
+
+# 🧠 ANÁLISE REAL
+def analisar_partida(casa_stats, fora_stats):
+
+    if not casa_stats or not fora_stats:
+        return ("Dados insuficientes", "-", "-", "-")
+
+    media_total = casa_stats["gols_marcados"] + fora_stats["gols_marcados"]
+
+    # 🎯 PALPITE PRINCIPAL
+    if media_total >= 2.8:
+        principal = "Mais de 2.5 gols"
+    elif media_total >= 2.2:
         principal = "Mais de 1.5 gols"
+    else:
+        principal = "Menos de 2.5 gols"
 
-    # Palpites adicionais
-    escanteios = "Mais de 8 escanteios"
-    gols_ht = "Mais de 0.5 gol no 1º tempo"
-    ambas = "Sim"
+    # ⚽ GOLS HT
+    if media_total >= 2.5:
+        gols_ht = "Mais de 0.5 HT"
+    else:
+        gols_ht = "Menos de 1.5 HT"
+
+    # 🔁 AMBAS MARCAM
+    if casa_stats["gols_marcados"] > 1.2 and fora_stats["gols_marcados"] > 1.2:
+        ambas = "Sim"
+    else:
+        ambas = "Não"
+
+    # 🚩 ESCANTEIOS (simulado com base ofensiva)
+    if media_total >= 2.5:
+        escanteios = "Mais de 9 escanteios"
+    else:
+        escanteios = "Mais de 7 escanteios"
 
     return principal, escanteios, gols_ht, ambas
 
 
 def rodar():
-    print("🤖 Buscando jogos...")
+    print("🤖 Buscando jogos com estatística real...")
 
     hoje = datetime.now().strftime("%Y-%m-%d")
+    season = datetime.now().year
 
     url = f"https://v3.football.api-sports.io/fixtures?date={hoje}"
 
-    headers = {
-        "x-apisports-key": API_KEY
-    }
-
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=HEADERS)
     data = response.json()
 
     final = []
 
-    ligas_permitidas = [
-        ("Brazil", "Serie A"),
-        ("Brazil", "Serie B"),
-
-        ("England", "Premier League"),
-        ("England", "Championship"),
-
-        ("Spain", "La Liga"),
-        ("Spain", "Segunda Division"),
-
-        ("Italy", "Serie A"),
-        ("Italy", "Serie B"),
-
-        ("Germany", "Bundesliga"),
-        ("Germany", "2. Bundesliga"),
-
-        ("France", "Ligue 1"),
-        ("France", "Ligue 2"),
-
-        ("World", "UEFA Champions League"),
-        ("World", "UEFA Europa League"),
-
-        ("USA", "Major League Soccer"),
-
-        ("Saudi Arabia", "Pro League"),
-
-        ("World", "CONMEBOL Libertadores"),
-        ("World", "CONMEBOL Sudamericana"),
-
-        ("Argentina", "Liga Profesional Argentina"),
-        ("Chile", "Primera Division"),
-        ("Colombia", "Primera A")
-    ]
+    # ⚠️ LIMITE PRA NÃO ESTOURAR API
+    limite_jogos = 10
+    contador = 0
 
     for jogo in data.get("response", []):
 
-        # STATUS (só jogos futuros)
+        if contador >= limite_jogos:
+            break
+
+        # STATUS
         if jogo["fixture"]["status"]["short"] != "NS":
             continue
 
-        # LIGA
-        pais = jogo["league"]["country"]
-        liga = jogo["league"]["name"]
-
-        if (pais, liga) not in ligas_permitidas:
-            continue
-
-        # HORÁRIO (entre 10h e 23h)
-        hora_str = jogo["fixture"]["date"][11:13]
-        hora_int = int(hora_str)
-
-        if hora_int < 10 or hora_int > 23:
-            continue
+        league_id = jogo["league"]["id"]
 
         # TIMES
         casa = jogo["teams"]["home"]["name"]
         fora = jogo["teams"]["away"]["name"]
+
+        casa_id = jogo["teams"]["home"]["id"]
+        fora_id = jogo["teams"]["away"]["id"]
+
         hora = jogo["fixture"]["date"][11:16]
 
-        # PALPITES
-        principal, escanteios, gols_ht, ambas = analisar_partida(casa, fora)
+        # 🔥 PEGAR ESTATÍSTICAS
+        casa_stats = get_stats(casa_id, league_id, season)
+        fora_stats = get_stats(fora_id, league_id, season)
+
+        principal, escanteios, gols_ht, ambas = analisar_partida(casa_stats, fora_stats)
 
         final.append({
             'Hora': hora,
-            'Liga': liga,
+            'Liga': jogo["league"]["name"],
             'TimeCasa': casa,
             'LogoCasa': jogo["teams"]["home"]["logo"],
             'TimeFora': fora,
@@ -125,10 +128,12 @@ def rodar():
             'Ambas Marcam': ambas
         })
 
+        contador += 1
+
     if final:
         df = pd.DataFrame(final).drop_duplicates()
         df.to_csv('palpites.csv', index=False)
-        print(f"✅ {len(df)} jogos salvos!")
+        print(f"✅ {len(df)} jogos analisados com estatística real!")
     else:
         print("⚠️ Nenhum jogo encontrado")
 
