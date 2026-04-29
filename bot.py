@@ -1,8 +1,9 @@
 import pandas as pd
 import requests
+import os
 from datetime import datetime
 
-API_KEY = "c721770110cd0d4f1a4157704895ffef"
+API_KEY = os.getenv("API_KEY")
 
 def analisar_partida(casa, fora):
     favoritos = [
@@ -18,7 +19,7 @@ def analisar_partida(casa, fora):
         return "MAIS DE 1.5 GOLS NO JOGO"
 
 def rodar():
-    print("🤖 Buscando jogos via API-Football...")
+    print("🤖 Buscando jogos...")
 
     hoje = datetime.now().strftime("%Y-%m-%d")
 
@@ -33,11 +34,7 @@ def rodar():
 
     final = []
 
-    if "response" not in data:
-        print("❌ Erro na API")
-        return
-
-    for jogo in data["response"]:
+    for jogo in data.get("response", []):
         casa = jogo["teams"]["home"]["name"]
         fora = jogo["teams"]["away"]["name"]
         liga = jogo["league"]["name"]
