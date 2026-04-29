@@ -3,56 +3,68 @@ import requests
 from bs4 import BeautifulSoup
 
 def rodar():
-    # Usando a agenda do GE que é aberta e fácil de ler
-    url = "https://ge.globo.com/agenda-do-dia/"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    # Placar do UOL: Estável, rápido e sem bloqueios chatos
+    url = "https://www.uol.com.br/esporte/futebol/placar-uol/"
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
     
     final = []
-    print(f"Buscando jogos em: {url}")
+    print(f"Buscando jogos no Placar UOL...")
 
     try:
-        response = requests.get(url, headers=headers, timeout=20)
+        response = requests.get(url, headers=headers, timeout=25)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # O GE organiza os jogos por blocos de evento
-        eventos = soup.select('.agenda-item')
+        # Seleciona cada bloco de jogo
+        jogos = soup.find_all('div', class_='match-card')
 
-        for evento in eventos:
+        for jogo in jogos:
             try:
-                # Filtrar apenas futebol
-                esporte = evento.select_one('.agenda-item__meta').get_text(strip=True)
-                if 'Futebol' not in esporte: continue
+                # 1. Campeonato/Liga
+                liga_elem = jogo.select_one('.match-info__competition')
+                liga = liga_elem.get_text(strip=True) if liga_elem else "Futebol"
 
-                # Times e Hora
-                casa = evento.select_one('.agenda-item__equipe--mandante').get_text(strip=True)
-                fora = evento.select_one('.agenda-item__equipe--visitante').get_text(strip=True)
-                hora = evento.select_one('.agenda-item__horario').get_text(strip=True)
-                liga = evento.select_one('.agenda-item__campeonato').get_text(strip=True)
+                # 2. Horário
+                hora_elem = jogo.select_one('.match-info__date')
+                hora = hora_elem.get_text(strip=True) if hora_elem else "Hoje"
 
-                # Logos (GE usa tags de imagem com src)
-                imgs = evento.select('.agenda-item__escudo')
-                l_casa = imgs[0]['src'] if len(imgs) > 0 else ""
-                l_fora = imgs[1]['src'] if len(imgs) > 1 else ""
+                # 3. Times
+                casa = jogo.select_one('.team-info__name--home').get_text(strip=True)
+                fora = jogo.select_one('.team-info__name--away').get_text(strip=True)
 
-                # GERADOR DE PALPITE (Como é site de notícia, nós criamos a "Tip")
-                # Aqui você pode personalizar a lógica
-                palpite = f"Vencer um dos Tempos: {casa}" if "Flamengo" in casa or "Palmeiras" in casa else "Mais de 1.5 Gols"
+                # 4. Logos
+                logos = jogo.select('.team-info__shield')
+                l_casa = logos[0]['src'] if len(logos) > 0 else ""
+                l_fora = logos[1]['src'] if len(logos) > 1 else ""
+
+                # 5. Lógica de Palpites (Gerada pelo Bot)
+                # Se for time grande ou conhecido, sugere vitória. Se não, Over gols.
+                grandes = ['Flamengo', 'Palmeiras', 'Real Madrid', 'City', 'Barcelona', 'Bayern', 'PSG', 'Inter', 'Grêmio', 'Inter']
+                if any(g in casa for g in grandes):
+                    palpite = f"VENCER UM DOS TEMPOS: {casa}"
+                elif any(g in fora for g in grandes):
+                    palpite = f"VENCER UM DOS TEMPOS: {fora}"
+                else:
+                    palpite = "MAIS DE 1.5 GOLS NO JOGO"
 
                 final.append({
                     'Hora': hora, 'Liga': liga, 'TimeCasa': casa, 
                     'LogoCasa': l_casa, 'TimeFora': fora, 
                     'LogoFora': l_fora, 'Palpite': palpite
                 })
-            except: continue
+            except Exception as e:
+                continue
 
     except Exception as e:
-        print(f"Erro: {e}")
+        print(f"Erro ao acessar: {e}")
 
     if final:
-        pd.DataFrame(final).to_csv('palpites.csv', index=False)
-        print(f"✅ {len(final)} jogos encontrados e processados!")
+        df = pd.DataFrame(final).drop_duplicates()
+        df.to_csv('palpites.csv', index=False)
+        print(f"✅ SUCESSO: {len(df)} jogos capturados!")
     else:
-        print("⚠️ Nenhum jogo de futebol encontrado na agenda hoje.")
+        # Garante que o CSV não fique vazio para não quebrar o site
+        pd.DataFrame([{'Hora': '00:00', 'Liga': 'Aviso', 'TimeCasa': 'Sem jogos', 'LogoCasa': '', 'TimeFora': 'Disponíveis', 'LogoFora': '', 'Palpite': 'AGUARDANDO ATUALIZAÇÃO'}]).to_csv('palpites.csv', index=False)
+        print("⚠️ Nenhum jogo encontrado agora.")
 
 if __name__ == "__main__":
     rodar()
