@@ -148,9 +148,11 @@ def rodar():
             continue
 
         # TIPO (remove amistoso/copa aleatória)
-        if jogo["league"]["type"] != "League":
+        tipo = jogo["league"].get("type")
+        
+        if tipo != "League":
             continue
-
+            
         pais = jogo["league"]["country"]
         liga = jogo["league"]["name"]
 
