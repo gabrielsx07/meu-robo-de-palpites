@@ -21,7 +21,7 @@ jobs:
 
       - name: Instalar dependências
         run: |
-          python -ms pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install pandas cloudscraper beautifulsoup4
 
       - name: Executar Robô de Palpites
