@@ -12,12 +12,25 @@ def analisar_partida(casa, fora):
         'Arsenal', 'Inter', 'Milan', 'Juventus'
     ]
 
-    if any(fav.lower() in casa.lower() for fav in favoritos):
-        return f"VENCER UM DOS TEMPOS: {casa}"
-    elif any(fav.lower() in fora.lower() for fav in favoritos):
-        return f"VENCER UM DOS TEMPOS: {fora}"
+    casa_forte = any(fav.lower() in casa.lower() for fav in favoritos)
+    fora_forte = any(fav.lower() in fora.lower() for fav in favoritos)
+
+    # Palpite principal
+    if casa_forte and fora_forte:
+        principal = "Mais de 2.5 gols + Ambas marcam"
+    elif casa_forte:
+        principal = f"{casa} marca + Mais de 1.5 gols"
+    elif fora_forte:
+        principal = f"{fora} marca + Mais de 1.5 gols"
     else:
-        return "MAIS DE 1.5 GOLS NO JOGO"
+        principal = "Mais de 1.5 gols"
+
+    # Palpites adicionais
+    escanteios = "Mais de 8 escanteios"
+    gols_ht = "Mais de 0.5 gol no 1º tempo"
+    ambas = "Sim"
+
+    return principal, escanteios, gols_ht, ambas
 
 
 def rodar():
@@ -95,7 +108,8 @@ def rodar():
         fora = jogo["teams"]["away"]["name"]
         hora = jogo["fixture"]["date"][11:16]
 
-        palpite = analisar_partida(casa, fora)
+        # PALPITES
+        principal, escanteios, gols_ht, ambas = analisar_partida(casa, fora)
 
         final.append({
             'Hora': hora,
@@ -104,7 +118,11 @@ def rodar():
             'LogoCasa': jogo["teams"]["home"]["logo"],
             'TimeFora': fora,
             'LogoFora': jogo["teams"]["away"]["logo"],
-            'Palpite': palpite
+
+            'Palpite Principal': principal,
+            'Escanteios': escanteios,
+            'Gols HT': gols_ht,
+            'Ambas Marcam': ambas
         })
 
     if final:
