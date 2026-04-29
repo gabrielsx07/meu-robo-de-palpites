@@ -6,10 +6,54 @@ from datetime import datetime
 API_KEY = os.getenv("API_KEY")
 
 def analisar_partida(casa, fora):
-    favoritos = [
-        'Flamengo', 'Palmeiras', 'Real Madrid', 'Manchester City',
-        'Barcelona', 'Bayern', 'Liverpool', 'PSG'
-    ]
+    ligas_permitidas = [
+    # Brasil
+    ("Brazil", "Serie A"),
+    ("Brazil", "Serie B"),
+
+    # Inglaterra
+    ("England", "Premier League"),
+    ("England", "Championship"),
+
+    # Espanha
+    ("Spain", "La Liga"),
+    ("Spain", "Segunda Division"),
+
+    # Itália
+    ("Italy", "Serie A"),
+    ("Italy", "Serie B"),
+
+    # Alemanha
+    ("Germany", "Bundesliga"),
+    ("Germany", "2. Bundesliga"),
+
+    # França
+    ("France", "Ligue 1"),
+    ("France", "Ligue 2"),
+
+    # Europa
+    ("World", "UEFA Champions League"),
+    ("World", "UEFA Europa League"),
+
+    # EUA
+    ("USA", "Major League Soccer"),
+
+    # Arábia Saudita
+    ("Saudi Arabia", "Pro League"),
+
+    # América do Sul
+    ("World", "CONMEBOL Libertadores"),
+    ("World", "CONMEBOL Sudamericana"),
+
+    # Argentina
+    ("Argentina", "Liga Profesional Argentina"),
+
+    # Chile
+    ("Chile", "Primera Division"),
+
+    # Colômbia
+    ("Colombia", "Primera A")
+]
 
     if any(fav.lower() in casa.lower() for fav in favoritos):
         return f"VENCER UM DOS TEMPOS: {casa}"
