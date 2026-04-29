@@ -79,35 +79,40 @@ def rodar():
     final = []
 
     for jogo in data.get("response", []):
-        # STATUS (só jogos futuros)
-        if jogo["fixture"]["status"]["short"] != "NS":
-            continue
 
-        # LIGA
-        pais = jogo["league"]["country"]
-        liga = jogo["league"]["name"]
+    # STATUS
+    if jogo["fixture"]["status"]["short"] != "NS":
+        continue
 
-        if (pais, liga) not in ligas_permitidas:
-            continue
+    # LIGA
+    pais = jogo["league"]["country"]
+    liga = jogo["league"]["name"]
 
-       # HORÁRIO (opcional)
-       hora_str = jogo["fixture"]["date"][11:13]
-       hora_int = int(hora_str)
+    if (pais, liga) not in ligas_permitidas:
+        continue
 
-       if hora_int < 10 or hora_int > 23:
-           continue
+    # HORÁRIO
+    hora_str = jogo["fixture"]["date"][11:13]
+    hora_int = int(hora_str)
 
-        palpite = analisar_partida(casa, fora)
+    if hora_int < 10 or hora_int > 23:
+        continue
 
-        final.append({
-            'Hora': hora,
-            'Liga': liga,
-            'TimeCasa': casa,
-            'LogoCasa': jogo["teams"]["home"]["logo"],
-            'TimeFora': fora,
-            'LogoFora': jogo["teams"]["away"]["logo"],
-            'Palpite': palpite
-        })
+    casa = jogo["teams"]["home"]["name"]
+    fora = jogo["teams"]["away"]["name"]
+    hora = jogo["fixture"]["date"][11:16]
+
+    palpite = analisar_partida(casa, fora)
+
+    final.append({
+        'Hora': hora,
+        'Liga': liga,
+        'TimeCasa': casa,
+        'LogoCasa': jogo["teams"]["home"]["logo"],
+        'TimeFora': fora,
+        'LogoFora': jogo["teams"]["away"]["logo"],
+        'Palpite': palpite
+    })
 
     if final:
         df = pd.DataFrame(final).drop_duplicates()
