@@ -1,9 +1,12 @@
 import pandas as pd
 import requests
+from datetime import datetime
+
+API_KEY = "c721770110cd0d4f1a4157704895ffef"
 
 def analisar_partida(casa, fora):
     favoritos = [
-        'Flamengo', 'Palmeiras', 'Real Madrid', 'Man City',
+        'Flamengo', 'Palmeiras', 'Real Madrid', 'Manchester City',
         'Barcelona', 'Bayern', 'Liverpool', 'PSG'
     ]
 
@@ -15,27 +18,30 @@ def analisar_partida(casa, fora):
         return "MAIS DE 1.5 GOLS NO JOGO"
 
 def rodar():
-    print("🤖 Buscando jogos via API...")
+    print("🤖 Buscando jogos via API-Football...")
 
-    url = "https://www.thesportsdb.com/api/v1/json/3/eventsday.php?s=Soccer"
+    hoje = datetime.now().strftime("%Y-%m-%d")
 
-    response = requests.get(url)
+    url = f"https://v3.football.api-sports.io/fixtures?date={hoje}"
+
+    headers = {
+        "x-apisports-key": API_KEY
+    }
+
+    response = requests.get(url, headers=headers)
     data = response.json()
 
     final = []
 
-    if not data or not data.get("events"):
-        print("⚠️ Nenhum jogo encontrado")
+    if "response" not in data:
+        print("❌ Erro na API")
         return
 
-    for jogo in data["events"]:
-        casa = jogo.get("strHomeTeam")
-        fora = jogo.get("strAwayTeam")
-        liga = jogo.get("strLeague")
-        hora = jogo.get("strTime")
-
-        if not casa or not fora:
-            continue
+    for jogo in data["response"]:
+        casa = jogo["teams"]["home"]["name"]
+        fora = jogo["teams"]["away"]["name"]
+        liga = jogo["league"]["name"]
+        hora = jogo["fixture"]["date"][11:16]
 
         palpite = analisar_partida(casa, fora)
 
@@ -43,16 +49,18 @@ def rodar():
             'Hora': hora,
             'Liga': liga,
             'TimeCasa': casa,
-            'LogoCasa': '',
+            'LogoCasa': jogo["teams"]["home"]["logo"],
             'TimeFora': fora,
-            'LogoFora': '',
+            'LogoFora': jogo["teams"]["away"]["logo"],
             'Palpite': palpite
         })
 
-    df = pd.DataFrame(final).drop_duplicates()
-    df.to_csv('palpites.csv', index=False)
-
-    print(f"✅ {len(df)} jogos salvos!")
+    if final:
+        df = pd.DataFrame(final).drop_duplicates()
+        df.to_csv('palpites.csv', index=False)
+        print(f"✅ {len(df)} jogos salvos!")
+    else:
+        print("⚠️ Nenhum jogo encontrado")
 
 if __name__ == "__main__":
     rodar()
