@@ -6,54 +6,11 @@ from datetime import datetime
 API_KEY = os.getenv("API_KEY")
 
 def analisar_partida(casa, fora):
-    ligas_permitidas = [
-    # Brasil
-    ("Brazil", "Serie A"),
-    ("Brazil", "Serie B"),
-
-    # Inglaterra
-    ("England", "Premier League"),
-    ("England", "Championship"),
-
-    # Espanha
-    ("Spain", "La Liga"),
-    ("Spain", "Segunda Division"),
-
-    # Itália
-    ("Italy", "Serie A"),
-    ("Italy", "Serie B"),
-
-    # Alemanha
-    ("Germany", "Bundesliga"),
-    ("Germany", "2. Bundesliga"),
-
-    # França
-    ("France", "Ligue 1"),
-    ("France", "Ligue 2"),
-
-    # Europa
-    ("World", "UEFA Champions League"),
-    ("World", "UEFA Europa League"),
-
-    # EUA
-    ("USA", "Major League Soccer"),
-
-    # Arábia Saudita
-    ("Saudi Arabia", "Pro League"),
-
-    # América do Sul
-    ("World", "CONMEBOL Libertadores"),
-    ("World", "CONMEBOL Sudamericana"),
-
-    # Argentina
-    ("Argentina", "Liga Profesional Argentina"),
-
-    # Chile
-    ("Chile", "Primera Division"),
-
-    # Colômbia
-    ("Colombia", "Primera A")
-]
+    favoritos = [
+        'Flamengo', 'Palmeiras', 'Real Madrid', 'Manchester City',
+        'Barcelona', 'Bayern', 'Liverpool', 'PSG',
+        'Arsenal', 'Inter', 'Milan', 'Juventus'
+    ]
 
     if any(fav.lower() in casa.lower() for fav in favoritos):
         return f"VENCER UM DOS TEMPOS: {casa}"
@@ -61,6 +18,7 @@ def analisar_partida(casa, fora):
         return f"VENCER UM DOS TEMPOS: {fora}"
     else:
         return "MAIS DE 1.5 GOLS NO JOGO"
+
 
 def rodar():
     print("🤖 Buscando jogos...")
@@ -78,41 +36,76 @@ def rodar():
 
     final = []
 
+    ligas_permitidas = [
+        ("Brazil", "Serie A"),
+        ("Brazil", "Serie B"),
+
+        ("England", "Premier League"),
+        ("England", "Championship"),
+
+        ("Spain", "La Liga"),
+        ("Spain", "Segunda Division"),
+
+        ("Italy", "Serie A"),
+        ("Italy", "Serie B"),
+
+        ("Germany", "Bundesliga"),
+        ("Germany", "2. Bundesliga"),
+
+        ("France", "Ligue 1"),
+        ("France", "Ligue 2"),
+
+        ("World", "UEFA Champions League"),
+        ("World", "UEFA Europa League"),
+
+        ("USA", "Major League Soccer"),
+
+        ("Saudi Arabia", "Pro League"),
+
+        ("World", "CONMEBOL Libertadores"),
+        ("World", "CONMEBOL Sudamericana"),
+
+        ("Argentina", "Liga Profesional Argentina"),
+        ("Chile", "Primera Division"),
+        ("Colombia", "Primera A")
+    ]
+
     for jogo in data.get("response", []):
 
-    # STATUS
-    if jogo["fixture"]["status"]["short"] != "NS":
-        continue
+        # STATUS (só jogos futuros)
+        if jogo["fixture"]["status"]["short"] != "NS":
+            continue
 
-    # LIGA
-    pais = jogo["league"]["country"]
-    liga = jogo["league"]["name"]
+        # LIGA
+        pais = jogo["league"]["country"]
+        liga = jogo["league"]["name"]
 
-    if (pais, liga) not in ligas_permitidas:
-        continue
+        if (pais, liga) not in ligas_permitidas:
+            continue
 
-    # HORÁRIO
-    hora_str = jogo["fixture"]["date"][11:13]
-    hora_int = int(hora_str)
+        # HORÁRIO (entre 10h e 23h)
+        hora_str = jogo["fixture"]["date"][11:13]
+        hora_int = int(hora_str)
 
-    if hora_int < 10 or hora_int > 23:
-        continue
+        if hora_int < 10 or hora_int > 23:
+            continue
 
-    casa = jogo["teams"]["home"]["name"]
-    fora = jogo["teams"]["away"]["name"]
-    hora = jogo["fixture"]["date"][11:16]
+        # TIMES
+        casa = jogo["teams"]["home"]["name"]
+        fora = jogo["teams"]["away"]["name"]
+        hora = jogo["fixture"]["date"][11:16]
 
-    palpite = analisar_partida(casa, fora)
+        palpite = analisar_partida(casa, fora)
 
-    final.append({
-        'Hora': hora,
-        'Liga': liga,
-        'TimeCasa': casa,
-        'LogoCasa': jogo["teams"]["home"]["logo"],
-        'TimeFora': fora,
-        'LogoFora': jogo["teams"]["away"]["logo"],
-        'Palpite': palpite
-    })
+        final.append({
+            'Hora': hora,
+            'Liga': liga,
+            'TimeCasa': casa,
+            'LogoCasa': jogo["teams"]["home"]["logo"],
+            'TimeFora': fora,
+            'LogoFora': jogo["teams"]["away"]["logo"],
+            'Palpite': palpite
+        })
 
     if final:
         df = pd.DataFrame(final).drop_duplicates()
@@ -120,6 +113,7 @@ def rodar():
         print(f"✅ {len(df)} jogos salvos!")
     else:
         print("⚠️ Nenhum jogo encontrado")
+
 
 if __name__ == "__main__":
     rodar()
