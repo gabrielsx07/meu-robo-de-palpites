@@ -1,14 +1,18 @@
-name: Atualizar Palpites Gorilla
+name: Atualizar Palpites IA
 
 on:
   schedule:
-    # Roda de 3 em 3 horas automaticamente
-    - cron: '0 */3 * * *'
-  workflow_dispatch: # Permite que você rode manualmente clicando no botão
+    # Roda a cada 6 horas automaticamente
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Permite que você rode manualmente no botão
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # Dá permissão para o robô salvar o arquivo no seu GitHub
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout do código
@@ -24,13 +28,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas requests beautifulsoup4
 
-      - name: Executar Robô de Palpites
+      - name: Rodar o Robô Analista
         run: python bot.py
 
-      - name: Salvar alterações no GitHub
+      - name: Salvar mudanças no GitHub
         run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add palpites.csv
-          git commit -m "Palpites atualizados via Robô" || exit 0
-          git push
+          # O commit só acontece se houver mudanças, evitando erros
+          git commit -m "Atualizando palpites via IA Gorilla" || echo "Sem mudanças para salvar"
+          git push origin main
