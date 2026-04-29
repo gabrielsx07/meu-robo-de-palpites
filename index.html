@@ -3,100 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIP'S OLIVEIRA</title>
+    <title>GORILLA VIP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Fundo Preto Profundo */
-        body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; }
-        
-        /* Card Estilo Dark com borda Vermelha */
+        body { background-color: #0f172a; color: white; font-family: sans-serif; }
+        .grid-jogos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            padding: 15px;
+        }
         .card { 
-            background: #111111; 
-            border: 1px solid #330000; 
-            border-top: 3px solid #ff0000;
-            transition: transform 0.2s;
+            background-color: #1e293b; 
+            border: 1px solid #334155; 
+            border-radius: 12px; 
+            padding: 15px;
         }
-        .card:hover { transform: scale(1.02); border-color: #ff0000; }
-
-        /* Botão de Palpite Vermelho */
         .btn-palpite { 
-            background: linear-gradient(90deg, #8b0000 0%, #ff0000 100%);
-            color: white;
+            background-color: #ef4444; 
+            color: white; 
+            font-weight: bold; 
+            text-align: center; 
+            padding: 10px; 
+            border-radius: 8px;
+            margin-top: 10px;
             text-transform: uppercase;
-            font-weight: 900;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
         }
-
-        .liga-badge { background: #222; color: #ff0000; font-size: 10px; font-weight: bold; border: 1px solid #444; }
+        .liga-tag { font-size: 10px; color: #94a3b8; font-weight: bold; }
     </style>
 </head>
-<body class="p-4 md:p-8">
-
-    <header class="text-center mb-12">
-        <h1 class="text-4xl font-black italic text-white tracking-tighter">
-            TIP'S <span class="text-red-600">OLIVEIRA</span>
-        </h1>
-        <p class="text-gray-500 text-sm mt-2">ESTATÍSTICAS AVANÇADAS EM TEMPO REAL</p>
+<body>
+    <header class="p-6 text-center">
+        <h1 class="text-2xl font-black text-red-500">GORILLA <span class="text-white">VIP</span></h1>
     </header>
 
-    <div id="container-jogos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-        <div class="col-span-full text-center text-gray-600">Carregando artilharia...</div>
-    </div>
+    <div id="container-jogos" class="grid-jogos">
+        </div>
 
     <script>
-        async function carregarPalpites() {
-            try {
-                const response = await fetch('palpites.csv?v=' + Date.now());
-                const data = await response.text();
-                const linhas = data.split('\n').filter(l => l.trim() !== "").slice(1);
-                
-                const container = document.getElementById('container-jogos');
-                container.innerHTML = '';
+        async function carregar() {
+            const res = await fetch('palpites.csv?v=' + Date.now());
+            const csv = await res.text();
+            const linhas = csv.split('\n').slice(1);
+            const container = document.getElementById('container-jogos');
+            container.innerHTML = '';
 
-                linhas.forEach(linha => {
-                    const col = linha.split(',');
-                    if (col.length < 7) return;
-
-                    const [hora, liga, casa, logoCasa, fora, logoFora, palpite] = col;
-
-                    container.innerHTML += `
-                        <div class="card p-5 rounded-xl shadow-2xl">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="liga-badge px-2 py-1 rounded">${liga}</span>
-                                <span class="text-xs font-mono text-gray-400">${hora}</span>
-                            </div>
-
-                            <div class="flex items-center justify-between gap-4 mb-6">
-                                <div class="text-center w-1/3">
-                                    <img src="${logoCasa}" class="w-12 h-12 mx-auto object-contain mb-2" onerror="this.src='https://via.placeholder.com/50/000/fff?text=?'">
-                                    <p class="text-xs font-bold truncate uppercase">${casa}</p>
-                                </div>
-
-                                <div class="text-red-600 font-black text-xl italic">VS</div>
-
-                                <div class="text-center w-1/3">
-                                    <img src="${logoFora}" class="w-12 h-12 mx-auto object-contain mb-2" onerror="this.src='https://via.placeholder.com/50/000/fff?text=?'">
-                                    <p class="text-xs font-bold truncate uppercase">${fora}</p>
-                                </div>
-                            </div>
-
-                            <div class="btn-palpite py-3 rounded-lg text-center shadow-inner">
-                                <span class="block text-[10px] opacity-80 leading-none">SUGESTÃO</span>
-                                <span class="text-sm">${palpite}</span>
-                            </div>
+            linhas.forEach(l => {
+                const c = l.split(',');
+                if (c.length < 7) return;
+                container.innerHTML += `
+                    <div class="card">
+                        <div class="flex justify-between mb-3">
+                            <span class="liga-tag">${c[1]}</span>
+                            <span class="text-xs text-slate-400">${c[0]}</span>
                         </div>
-                    `;
-                });
-            } catch (e) {
-                console.error(e);
-                document.getElementById('container-jogos').innerHTML = "Erro ao carregar dados.";
-            }
+                        <div class="flex justify-around items-center">
+                            <div class="text-center"><img src="${c[3]}" class="w-10 h-10 mx-auto"><p class="text-[10px] mt-1">${c[2]}</p></div>
+                            <div class="text-red-500 font-bold">VS</div>
+                            <div class="text-center"><img src="${c[5]}" class="w-10 h-10 mx-auto"><p class="text-[10px] mt-1">${c[4]}</p></div>
+                        </div>
+                        <div class="btn-palpite">${c[6]}</div>
+                    </div>
+                `;
+            });
         }
-
-        carregarPalpites();
-        // Atualiza a cada 5 minutos
-        setInterval(carregarPalpites, 300000);
+        carregar();
     </script>
 </body>
 </html>
